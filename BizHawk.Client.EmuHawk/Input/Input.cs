@@ -342,6 +342,9 @@ namespace BizHawk.Client.EmuHawk
 		{
 			for (; ; )
 			{
+			// FIXME: Disabling input polling on Linux because it causes race conditions
+			// with Mono's WinForm initialization inside the X server.
+			#if WINDOWS
 				#if WINDOWS
 				var keyEvents = KeyInput.Update().Concat(IPCKeyInput.Update());
 				GamePad.UpdateAll();
@@ -472,7 +475,7 @@ namespace BizHawk.Client.EmuHawk
 							EnqueueEvent(ie);
 					}
 				} //lock(this)
-
+			#endif // WINDOWS
 				//arbitrary selection of polling frequency:
 				Thread.Sleep(10);
 			}

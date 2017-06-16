@@ -53,6 +53,9 @@ svnrev.cs
 /output/dll/SharpCompress.dll
 /References/*.xml
 
+/output64/cgc
+/Version/svnrev.cs.tmp
+
 *.opensdf
 *.user
 *.userprefs
