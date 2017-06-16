@@ -7,13 +7,14 @@ using System.Windows.Forms;
 using BizHawk.Emulation.Common;
 using BizHawk.Emulation.Common.IEmulatorExtensions;
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 using BizHawk.Emulation.Cores.Consoles.Sega.gpgx;
 
 namespace BizHawk.Client.EmuHawk
 {
 	[ToolAttributes(false, null)]
-	public partial class GenGameGenie : Form, IToolFormAutoConfig
+	public partial class GenGameGenie : SafeForm, IToolFormAutoConfig
 	{
 		#pragma warning disable 675
 

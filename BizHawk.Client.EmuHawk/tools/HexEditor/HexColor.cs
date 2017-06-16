@@ -2,10 +2,11 @@
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-    public partial class HexColorsForm : Form, IHasShowDialog
+    public partial class HexColorsForm : SafeForm, IHasShowDialog
 	{
 		public HexColorsForm()
 		{

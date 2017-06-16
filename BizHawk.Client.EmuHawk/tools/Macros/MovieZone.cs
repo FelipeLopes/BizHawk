@@ -4,6 +4,7 @@ using System.IO;
 
 using BizHawk.Emulation.Common;
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
@@ -232,7 +233,7 @@ namespace BizHawk.Client.EmuHawk
 			{
 				if (!emuKeys.Contains(macroKeys[i]))
 				{
-					System.Windows.Forms.MessageBox.Show("The selected macro is not compatible with the current emulator core." +
+					SafeMessageBox.Show("The selected macro is not compatible with the current emulator core." +
 						"\nMacro controller: " + readText[1] + "\nMacro player count: " + readText[2], "Error");
 					return;
 				}

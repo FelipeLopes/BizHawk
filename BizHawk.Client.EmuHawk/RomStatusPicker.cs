@@ -6,11 +6,13 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+
+using BizHawk.Common;
 using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class RomStatusPicker : Form
+	public partial class RomStatusPicker : SafeForm
 	{
 		public RomStatusPicker()
 		{

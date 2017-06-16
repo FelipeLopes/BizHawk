@@ -5,10 +5,11 @@ using System.Windows.Forms;
 using System.Globalization;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class EditSubtitlesForm : Form
+	public partial class EditSubtitlesForm : SafeForm
 	{
 		public bool ReadOnly { get; set; }
 		private IMovie _selectedMovie;
@@ -48,7 +49,7 @@ namespace BizHawk.Client.EmuHawk
 			var c = SubGrid.Rows[row].Cells[column];
 			var error = "Unable to parse value: " + c.Value;
 			var caption = "Parse Error Row " + row + " Column " + column;
-			MessageBox.Show(error, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+			SafeMessageBox.Show(error, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
 		private void Ok_Click(object sender, EventArgs e)
@@ -213,7 +214,7 @@ namespace BizHawk.Client.EmuHawk
 			}
 			catch
 			{
-				MessageBox.Show(
+				SafeMessageBox.Show(
 					"Could not determine movie fps, export failed.",
 					"Error",
 					MessageBoxButtons.OK,
@@ -227,7 +228,7 @@ namespace BizHawk.Client.EmuHawk
 			File.WriteAllText(fileName, str);
 
 			// Display success
-			MessageBox.Show(
+			SafeMessageBox.Show(
 				string.Format("Subtitles succesfully exported to {0}.", fileName),
 				"Success");
 		}

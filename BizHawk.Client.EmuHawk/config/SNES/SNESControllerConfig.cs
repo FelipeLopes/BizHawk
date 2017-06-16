@@ -4,10 +4,11 @@ using System.Windows.Forms;
 using BizHawk.Emulation.Cores.Nintendo.SNES;
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk.WinFormExtensions;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class SNESControllerSettings : Form
+	public partial class SNESControllerSettings : SafeForm
 	{
 		private LibsnesCore.SnesSyncSettings _syncSettings;
 		private bool _supressDropdownChangeEvents;

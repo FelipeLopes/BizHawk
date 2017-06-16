@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 
 using BizHawk.Emulation.Common;
+using BizHawk.Common;
 using BizHawk.Common.NumberExtensions;
 using BizHawk.Client.Common;
 
@@ -343,7 +344,7 @@ namespace BizHawk.Client.EmuHawk
 			catch (Exception ex)
 			{
 				text = "";
-				MessageBox.Show("oops\n" + ex);
+				SafeMessageBox.Show("oops\n" + ex);
 			}
 		}
 

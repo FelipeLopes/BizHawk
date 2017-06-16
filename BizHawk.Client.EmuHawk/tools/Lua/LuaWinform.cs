@@ -5,10 +5,11 @@ using System.Windows.Forms;
 using LuaInterface;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class LuaWinform : Form
+	public partial class LuaWinform : SafeForm
 	{
 		public List<LuaEvent> ControlEvents { get; } = new List<LuaEvent>();
 

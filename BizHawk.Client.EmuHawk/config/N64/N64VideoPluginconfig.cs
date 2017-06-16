@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 
+using BizHawk.Common;
 using BizHawk.Common.StringExtensions;
 using BizHawk.Common.ReflectionExtensions;
 using BizHawk.Emulation.Cores.Nintendo.N64;
@@ -10,7 +11,7 @@ using BizHawk.Client.EmuHawk.WinFormExtensions;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class N64VideoPluginconfig : Form
+	public partial class N64VideoPluginconfig : SafeForm
 	{
 		private N64Settings _s;
 		private N64SyncSettings _ss;

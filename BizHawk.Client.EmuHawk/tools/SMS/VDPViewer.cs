@@ -14,7 +14,7 @@ using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class SmsVDPViewer : Form, IToolFormAutoConfig
+	public partial class SmsVDPViewer : SafeForm, IToolFormAutoConfig
 	{
 		[RequiredService]
 		private SMS sms { get; set; }

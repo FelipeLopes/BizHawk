@@ -3,11 +3,12 @@ using System.Linq;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 using BizHawk.Emulation.Cores.ColecoVision;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class ColecoControllerSettings : Form
+	public partial class ColecoControllerSettings : SafeForm
 	{
 		private ColecoVision.ColecoSyncSettings _syncSettings;
 

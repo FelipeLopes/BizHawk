@@ -14,8 +14,10 @@ using BizHawk.Client.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
+
 	static class Program
 	{
+		
 		static Program()
 		{
 			//this needs to be done before the warnings/errors show up
@@ -105,7 +107,7 @@ namespace BizHawk.Client.EmuHawk
 
 				if (thisversion != utilversion || thisversion != emulversion)
 				{
-					MessageBox.Show("Conflicting revisions found!  Don't mix .dll versions!");
+					SafeMessageBox.Show("Conflicting revisions found!  Don't mix .dll versions!");
 					return -1;
 				}
 			}
@@ -227,7 +229,7 @@ namespace BizHawk.Client.EmuHawk
 						}
 						catch (Exception e) when (!Debugger.IsAttached && !VersionInfo.DeveloperBuild && Global.MovieSession.Movie.IsActive)
 						{
-							var result = MessageBox.Show(
+							var result = SafeMessageBox.Show(
 								"EmuHawk has thrown a fatal exception and is about to close.\nA movie has been detected. Would you like to try to save?\n(Note: Depending on what caused this error, this may or may not succeed)",
 								"Fatal error: " + e.GetType().Name,
 								MessageBoxButtons.YesNo,

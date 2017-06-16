@@ -9,10 +9,11 @@ using System.Windows.Forms;
 
 using BizHawk.Emulation.Common;
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class PlatformChooser : Form
+	public partial class PlatformChooser : SafeForm
 	{
 		public RomGame RomGame { get; set; }
 		public string PlatformChoice { get; set; }

@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-using BizHawk.Common.NumberExtensions;
 using BizHawk.Client.Common;
+using BizHawk.Common;
+using BizHawk.Common.NumberExtensions;
+using BizHawk.Emulation.Common;
 using BizHawk.Emulation.Cores.Nintendo.Gameboy;
 using BizHawk.Emulation.Cores.Nintendo.GBA;
-using System.Collections.Generic;
-using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class GBAGPUView : Form, IToolFormAutoConfig
+	public partial class GBAGPUView : SafeForm, IToolFormAutoConfig
 	{
 		[RequiredService]
 		IGBAGPUViewable gba { get; set; }

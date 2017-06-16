@@ -12,7 +12,7 @@ using BizHawk.Client.EmuHawk.WinFormExtensions;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class ControllerConfig : Form
+	public partial class ControllerConfig : SafeForm
 	{
 		private const int MAXPLAYERS = 8;
 		private static readonly Dictionary<string, Bitmap> ControllerImages = new Dictionary<string, Bitmap>();
@@ -406,7 +406,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			// this doesn't work anymore, as it stomps out any defaults for buttons that aren't currently active on the console
 			// there are various ways to fix it, each with its own semantic problems
-			var result = MessageBox.Show(this, "OK to overwrite defaults for current control scheme?", "Save Defaults", MessageBoxButtons.YesNo);
+			var result = SafeMessageBox.Show(this, "OK to overwrite defaults for current control scheme?", "Save Defaults", MessageBoxButtons.YesNo);
 			if (result == DialogResult.Yes)
 			{
 				var cd = ConfigService.Load<ControlDefaults>(Config.ControlDefaultPath);

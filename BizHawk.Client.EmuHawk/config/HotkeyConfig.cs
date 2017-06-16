@@ -5,10 +5,11 @@ using System.Linq;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class HotkeyConfig : Form
+	public partial class HotkeyConfig : SafeForm
 	{
 		public HotkeyConfig()
 		{

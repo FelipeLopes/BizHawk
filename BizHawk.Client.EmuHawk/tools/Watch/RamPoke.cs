@@ -5,10 +5,11 @@ using System.Linq;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class RamPoke : Form, IHasShowDialog
+	public partial class RamPoke : SafeForm, IHasShowDialog
 	{
 		// TODO: don't use textboxes as labels
 		private List<Watch> _watchList = new List<Watch>();
@@ -29,7 +30,7 @@ namespace BizHawk.Client.EmuHawk
 
 		private void UnSupportedConfiguration()
 		{
-			MessageBox.Show("RAM Poke does not support mixed types", "Unsupported Options", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			SafeMessageBox.Show("RAM Poke does not support mixed types", "Unsupported Options", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			Close();
 		}
 

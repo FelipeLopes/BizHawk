@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using BizHawk.Common;
 using BizHawk.Emulation.Cores.PCEngine;
 using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class PceBgViewer : Form, IToolFormAutoConfig
+	public partial class PceBgViewer : SafeForm, IToolFormAutoConfig
 	{
 		[RequiredService]
 		private PCEngine _pce { get; set; }

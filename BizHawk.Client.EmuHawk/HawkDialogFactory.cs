@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using BizHawk.Common;
+
 namespace BizHawk.Client.EmuHawk
 {
 	public static class HawkDialogFactory
@@ -117,11 +119,19 @@ namespace BizHawk.Client.EmuHawk
 		}
 		public System.Windows.Forms.DialogResult ShowDialog()
 		{
-			return _capsule.ShowDialog();
+			DialogResult result;
+			lock (XLock.GetLock()) {
+				result = _capsule.ShowDialog ();
+			}
+			return result;
 		}
 		public System.Windows.Forms.DialogResult ShowDialog(System.Windows.Forms.Form form)
 		{
-			return _capsule.ShowDialog(form);
+			DialogResult result;
+			lock (XLock.GetLock ()) {
+				result = _capsule.ShowDialog (form);
+			}
+			return result;
 		}
 		public string FileName 
 		{
@@ -167,7 +177,11 @@ namespace BizHawk.Client.EmuHawk
 		}
 		public System.Windows.Forms.DialogResult ShowDialog()
 		{
-			return _capsule.ShowDialog();
+			DialogResult result;
+			lock (XLock.GetLock ()) {
+				result = _capsule.ShowDialog ();
+			}
+			return result;
 		}
 	}
 }

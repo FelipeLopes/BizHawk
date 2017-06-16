@@ -7,9 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using BizHawk.Common;
+
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class ExceptionBox : Form
+	public partial class ExceptionBox : SafeForm
 	{
 		public ExceptionBox(Exception ex)
 		{

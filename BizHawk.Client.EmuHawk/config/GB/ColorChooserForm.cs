@@ -5,11 +5,12 @@ using System.Windows.Forms;
 using System.IO;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 using BizHawk.Emulation.Cores.Nintendo.Gameboy;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class ColorChooserForm : Form
+	public partial class ColorChooserForm : SafeForm
 	{
 		private ColorChooserForm()
 		{
@@ -283,7 +284,7 @@ namespace BizHawk.Client.EmuHawk
 			{
 				if (alert)
 				{
-					MessageBox.Show(this, "Error loading .pal file!");
+					SafeMessageBox.Show(this, "Error loading .pal file!");
 				}
 			}
 		}
@@ -306,7 +307,7 @@ namespace BizHawk.Client.EmuHawk
 			}
 			catch
 			{
-				MessageBox.Show(this, "Error saving .pal file!");
+				SafeMessageBox.Show(this, "Error saving .pal file!");
 			}
 		}
 

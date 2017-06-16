@@ -1,6 +1,8 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
+using BizHawk.Common;
+
 namespace BizHawk.Client.EmuHawk
 {
 	public class TextDebugView : Control
@@ -34,7 +36,7 @@ namespace BizHawk.Client.EmuHawk
 		}
 	}
 
-	public class TextDebugForm : Form
+	public class TextDebugForm : SafeForm
 	{
 		public TextDebugView view = new TextDebugView();
 		public TextDebugForm()

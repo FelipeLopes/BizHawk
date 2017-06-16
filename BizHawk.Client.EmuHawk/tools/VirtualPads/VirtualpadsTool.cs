@@ -7,10 +7,11 @@ using System.Windows.Forms;
 
 using BizHawk.Emulation.Common;
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class VirtualpadTool : Form, IToolFormAutoConfig
+	public partial class VirtualpadTool : SafeForm, IToolFormAutoConfig
 	{
 		[RequiredService]
 		private IEmulator Emulator { get; set; }
@@ -145,7 +146,7 @@ namespace BizHawk.Client.EmuHawk
 					}
 					if (!searchset.Contains(button.Name))
 					{
-						MessageBox.Show(this,
+						SafeMessageBox.Show(this,
 							string.Format("Schema warning: Schema entry '{0}':'{1}' will not correspond to any control in definition '{2}'", schema.DisplayName, button.Name, def.Name),
 							"Dev Warning");
 					}

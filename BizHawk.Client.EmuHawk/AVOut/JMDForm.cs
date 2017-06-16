@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using BizHawk.Common;
+
 namespace BizHawk.Client.EmuHawk
 {
 	/// <summary>
 	/// implements a minimal dialog for configuring JMDWriter
 	/// </summary>
-	public partial class JMDForm : Form
+	public partial class JMDForm : SafeForm
 	{
 		public JMDForm()
 		{

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using BizHawk.Common;
 using BizHawk.Emulation.Cores.Nintendo.NES;
 using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class NESSoundConfig : Form, IToolForm
+	public partial class NESSoundConfig : SafeForm, IToolForm
 	{
 		[RequiredService]
 		private NES NES { get; set; }

@@ -3,9 +3,11 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
+using BizHawk.Common;
+
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class HexFind : Form
+	public partial class HexFind : SafeForm
 	{
 		public HexFind()
 		{

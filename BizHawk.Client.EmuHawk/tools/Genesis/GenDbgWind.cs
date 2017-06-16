@@ -7,11 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BizHawk.Emulation.Cores.Consoles.Sega.gpgx;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk.tools.Genesis
 {
 	// see GenDbgHlp.cs for a general overview of this
-	public partial class GenDbgWind : Form
+	public partial class GenDbgWind : SafeForm
 	{
 		GenDbgHlp dbg;
 

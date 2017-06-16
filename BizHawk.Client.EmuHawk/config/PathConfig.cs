@@ -6,10 +6,11 @@ using System.Windows.Forms;
 
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk.WinFormExtensions;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class PathConfig : Form
+	public partial class PathConfig : SafeForm
 	{
 		// All path text boxes should do some kind of error checking
 		// Config path under base, config will default to %exe%
@@ -169,7 +170,7 @@ namespace BizHawk.Client.EmuHawk
 						{
 							if (Owner is FirmwaresConfig)
 							{
-								MessageBox.Show("C-C-C-Combo Breaker!", "Nice try, but");
+								SafeMessageBox.Show("C-C-C-Combo Breaker!", "Nice try, but");
 								return;
 							}
 

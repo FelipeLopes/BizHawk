@@ -11,12 +11,13 @@ using System.Windows.Forms;
 using BizHawk.Emulation.Cores;
 using BizHawk.Emulation.Cores.Libretro;
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 //these match strings from OpenAdvance. should we make them constants in there?
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class OpenAdvancedChooser : Form, IHasShowDialog
+	public partial class OpenAdvancedChooser : SafeForm, IHasShowDialog
 	{
 		MainForm mainForm;
 
@@ -103,7 +104,7 @@ namespace BizHawk.Client.EmuHawk
 			{
 				if (!bootstrap)
 				{
-					MessageBox.Show("Couldn't load the selected Libretro core for analysis. It won't be available.\n\nError:\n\n" + ex.ToString());
+					SafeMessageBox.Show("Couldn't load the selected Libretro core for analysis. It won't be available.\n\nError:\n\n" + ex.ToString());
 				}
 			}
 		}

@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
@@ -119,7 +120,7 @@ namespace BizHawk.Client.EmuHawk
 			if (CurrentTasMovie != null && CurrentTasMovie.Changes)
 			{
 				GlobalWin.Sound.StopSound();
-				var result = MessageBox.Show(
+				var result = SafeMessageBox.Show(
 					"Save Changes?",
 					"Tastudio",
 					MessageBoxButtons.YesNoCancel,

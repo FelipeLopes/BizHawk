@@ -96,7 +96,7 @@ namespace BizHawk.Client.EmuHawk
 			var movie = MovieImport.ImportFile(filename, out errorMsg, out warningMsg);
 			if (!string.IsNullOrEmpty(errorMsg))
 			{
-				MessageBox.Show(errorMsg, "Conversion error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				SafeMessageBox.Show(errorMsg, "Conversion error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			else
 			{

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
+using BizHawk.Common;
 using BizHawk.Common.NumberExtensions;
 using BizHawk.Client.Common;
 using BizHawk.Emulation.Cores.Nintendo.Gameboy;
@@ -12,7 +13,7 @@ using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class GBGPUView : Form, IToolFormAutoConfig
+	public partial class GBGPUView : SafeForm, IToolFormAutoConfig
 	{
 		[RequiredService]
 		public Gameboy Gb { get; private set; }

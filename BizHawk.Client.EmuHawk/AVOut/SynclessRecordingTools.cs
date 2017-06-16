@@ -6,10 +6,11 @@ using System.Windows.Forms;
 
 using BizHawk.Bizware.BizwareGL;
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class SynclessRecordingTools : Form
+	public partial class SynclessRecordingTools : SafeForm
 	{
 		public SynclessRecordingTools()
 		{

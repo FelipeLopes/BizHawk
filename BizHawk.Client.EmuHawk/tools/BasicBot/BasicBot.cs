@@ -9,6 +9,7 @@ using BizHawk.Client.EmuHawk.ToolExtensions;
 
 using BizHawk.Emulation.Common;
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
@@ -1053,7 +1054,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			if (!CanStart())
 			{
-				MessageBox.Show("Unable to run with current settings");
+				SafeMessageBox.Show("Unable to run with current settings");
 				return;
 			}
 

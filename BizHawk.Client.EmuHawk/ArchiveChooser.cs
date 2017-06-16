@@ -10,7 +10,7 @@ using BizHawk.Client.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class ArchiveChooser : Form
+	public partial class ArchiveChooser : SafeForm
 	{
 		IList<ListViewItem> archiveItems = new List<ListViewItem>();
 		ToolTip errorBalloon = new ToolTip();

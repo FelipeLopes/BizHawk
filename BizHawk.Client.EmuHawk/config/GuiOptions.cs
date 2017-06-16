@@ -2,10 +2,11 @@
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class EmuHawkOptions : Form
+	public partial class EmuHawkOptions : SafeForm
 	{
 		public EmuHawkOptions()
 		{

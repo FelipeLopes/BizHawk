@@ -1,12 +1,14 @@
-﻿using BizHawk.Emulation.Common;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
+using BizHawk.Common;
+using BizHawk.Emulation.Common;
+
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class BizBox : Form
+	public partial class BizBox : SafeForm
 	{
 		public BizBox()
 		{

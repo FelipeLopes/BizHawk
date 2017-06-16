@@ -2,11 +2,12 @@
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 using BizHawk.Emulation.Cores.Sega.MasterSystem;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class SMSGraphicsConfig : Form
+	public partial class SMSGraphicsConfig : SafeForm
 	{
 		public SMSGraphicsConfig()
 		{

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class FileExtensionPreferences : Form
+	public partial class FileExtensionPreferences : SafeForm
 	{
 		public FileExtensionPreferences()
 		{

@@ -12,10 +12,11 @@ using System.Xml.Linq;
 using BizHawk.Emulation.Common;
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk.WinFormExtensions;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class MultiDiskBundler : Form, IToolFormAutoConfig
+	public partial class MultiDiskBundler : SafeForm, IToolFormAutoConfig
 	{
 		private XElement _currentXml = null;
 
@@ -102,7 +103,7 @@ namespace BizHawk.Client.EmuHawk
 				var fileInfo = new FileInfo(NameBox.Text);
 				if (fileInfo.Exists)
 				{
-					var result = MessageBox.Show(this, "File already exists, overwrite?", "File exists", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+					var result = SafeMessageBox.Show(this, "File already exists, overwrite?", "File exists", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 					if (result != DialogResult.OK)
 					{
 						return;

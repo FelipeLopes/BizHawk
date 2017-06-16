@@ -97,8 +97,11 @@ namespace BizHawk.Bizware.BizwareGL.Drivers.OpenTK
 		void IDisposable.Dispose()
 		{
 			//TODO - a lot of analysis here
+			//For some reason, this causes an unclean exit on Linux.
+			#if WINDOWS
 			OffscreenNativeWindow.Dispose(); OffscreenNativeWindow = null;
 			GraphicsContext.Dispose(); GraphicsContext = null;
+			#endif
 		}
 
 		public void Clear(ClearBufferMask mask)
@@ -345,11 +348,14 @@ namespace BizHawk.Bizware.BizwareGL.Drivers.OpenTK
 
 		public void FreePipeline(Pipeline pipeline)
 		{
+			//For some reason, this causes an unclean exit on Linux
+			#if WINDOWS
 			var pw = pipeline.Opaque as PipelineWrapper;
 			GL.DeleteProgram(pw.pid);
 
 			pw.FragmentShader.Release();
 			pw.VertexShader.Release();
+			#endif
 		}
 
 		public void Internal_FreeShader(Shader shader)

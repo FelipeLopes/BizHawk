@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using BizHawk.Common;
+
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class NameStateForm : Form
+	public partial class NameStateForm : SafeForm
 	{
 		public string Result;
 		public bool OK;

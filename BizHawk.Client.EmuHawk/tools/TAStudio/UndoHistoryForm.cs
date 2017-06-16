@@ -2,10 +2,11 @@
 using System.Drawing;
 using System.Windows.Forms;
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class UndoHistoryForm : Form
+	public partial class UndoHistoryForm : SafeForm
 	{
 		private readonly TAStudio _tastudio;
 		private string _lastUndoAction;

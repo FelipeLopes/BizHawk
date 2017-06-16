@@ -4,10 +4,11 @@ using System.Linq;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class SoundConfig : Form
+	public partial class SoundConfig : SafeForm
 	{
 		private bool _programmaticallyChangingValue;
 
@@ -45,7 +46,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			if (rbOutputMethodDirectSound.Checked && (int)BufferSizeNumeric.Value < 60)
 			{
-				MessageBox.Show("Buffer size must be at least 60 milliseconds for DirectSound.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				SafeMessageBox.Show("Buffer size must be at least 60 milliseconds for DirectSound.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			var oldOutputMethod = Global.Config.SoundOutputMethod;

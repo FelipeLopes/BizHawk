@@ -4,11 +4,12 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
+using BizHawk.Common;
 using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class NewHexEditor : Form, IToolFormAutoConfig
+	public partial class NewHexEditor : SafeForm, IToolFormAutoConfig
 	{
 		#region Initialize and Dependencies
 

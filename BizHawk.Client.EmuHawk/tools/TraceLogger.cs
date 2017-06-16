@@ -9,10 +9,11 @@ using System.Windows.Forms;
 using BizHawk.Emulation.Common;
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk.WinFormExtensions;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class TraceLogger : Form, IToolFormAutoConfig
+	public partial class TraceLogger : SafeForm, IToolFormAutoConfig
 	{
 		[RequiredService]
 		private ITraceable Tracer { get; set; }

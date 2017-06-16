@@ -342,39 +342,34 @@ namespace BizHawk.Client.EmuHawk
 		{
 			for (; ; )
 			{
-			// FIXME: Disabling input polling on Linux because it causes race conditions
-			// with Mono's WinForm initialization inside the X server.
-			#if WINDOWS
-				#if WINDOWS
+				lock(XLock.GetLock()) {
+#if WINDOWS
 				var keyEvents = KeyInput.Update().Concat(IPCKeyInput.Update());
 				GamePad.UpdateAll();
 				GamePad360.UpdateAll();
-				#else
-				OTK_Keyboard.Update();
-				OTK_GamePad.UpdateAll();
-				#endif
+#else
+					OTK_Keyboard.Update ();
+					OTK_GamePad.UpdateAll ();
+#endif
 
-				//this block is going to massively modify data structures that the binding method uses, so we have to lock it all
-				lock (this)
-				{
-					_NewEvents.Clear();
+					//this block is going to massively modify data structures that the binding method uses, so we have to lock it all
+					lock (this) {
+						_NewEvents.Clear ();
 
-					#if WINDOWS
+#if WINDOWS
 					//analyze keys
 					foreach (var ke in keyEvents)
 						HandleButton(ke.Key.ToString(), ke.Pressed);
-					#else
-					foreach(Key kb in Enum.GetValues(typeof(Key)))
-					{
-						HandleButton(kb.ToString(), OTK_Keyboard.IsPressed(kb));
-					}
-					#endif
+#else
+						foreach (Key kb in Enum.GetValues (typeof (Key))) {
+							HandleButton (kb.ToString (), OTK_Keyboard.IsPressed (kb));
+						}
+#endif
 
-					lock (FloatValues)
-					{
-						//FloatValues.Clear();
+						lock (FloatValues) {
+							//FloatValues.Clear();
 
-						#if WINDOWS
+#if WINDOWS
 						//analyze xinput
 						foreach (var pad in GamePad360.EnumerateDevices())
 						{
@@ -408,74 +403,63 @@ namespace BizHawk.Client.EmuHawk
 								FloatValues[n] = f;
 							}
 						}
-						#else
-						//analyze joysticks
-						for (int i = 0; i < OTK_GamePad.Devices.Count; i++)
-						{
-							var pad = OTK_GamePad.Devices[i];
-							string jname = "J" + (i + 1) + " ";
+#else
+							//analyze joysticks
+							for (int i = 0; i < OTK_GamePad.Devices.Count; i++) {
+								var pad = OTK_GamePad.Devices [i];
+								string jname = "J" + (i + 1) + " ";
 
-							for (int b = 0; b < pad.NumButtons; b++)
-								HandleButton(jname + pad.ButtonName(b), pad.Pressed(b));
-							foreach (var sv in pad.GetFloats())
-							{
-								string n = jname + sv.Item1;
-								float f = sv.Item2;
-								if (trackdeltas)
-									FloatDeltas[n] += Math.Abs(f - FloatValues[n]);
-								FloatValues[n] = f;
+								for (int b = 0; b < pad.NumButtons; b++)
+									HandleButton (jname + pad.ButtonName (b), pad.Pressed (b));
+								foreach (var sv in pad.GetFloats ()) {
+									string n = jname + sv.Item1;
+									float f = sv.Item2;
+									if (trackdeltas)
+										FloatDeltas [n] += Math.Abs (f - FloatValues [n]);
+									FloatValues [n] = f;
+								}
 							}
-						}
-						#endif
-						// analyse moose
-						// other sorts of mouse api (raw input) could easily be added as a separate listing under a different class
-						if (WantingMouseFocus.Contains(System.Windows.Forms.Form.ActiveForm))
-						{
-							var P = System.Windows.Forms.Control.MousePosition;
-							if (trackdeltas)
-							{
-								// these are relative to screen coordinates, but that's not terribly important
-								FloatDeltas["WMouse X"] += Math.Abs(P.X - FloatValues["WMouse X"]) * 50;
-								FloatDeltas["WMouse Y"] += Math.Abs(P.Y - FloatValues["WMouse Y"]) * 50;
+#endif
+							// analyse moose
+							// other sorts of mouse api (raw input) could easily be added as a separate listing under a different class
+							if (WantingMouseFocus.Contains (System.Windows.Forms.Form.ActiveForm)) {
+								var P = System.Windows.Forms.Control.MousePosition;
+								if (trackdeltas) {
+									// these are relative to screen coordinates, but that's not terribly important
+									FloatDeltas ["WMouse X"] += Math.Abs (P.X - FloatValues ["WMouse X"]) * 50;
+									FloatDeltas ["WMouse Y"] += Math.Abs (P.Y - FloatValues ["WMouse Y"]) * 50;
+								}
+								// coordinate translation happens later
+								FloatValues ["WMouse X"] = P.X;
+								FloatValues ["WMouse Y"] = P.Y;
+
+								var B = System.Windows.Forms.Control.MouseButtons;
+								HandleButton ("WMouse L", (B & System.Windows.Forms.MouseButtons.Left) != 0);
+								HandleButton ("WMouse C", (B & System.Windows.Forms.MouseButtons.Middle) != 0);
+								HandleButton ("WMouse R", (B & System.Windows.Forms.MouseButtons.Right) != 0);
+								HandleButton ("WMouse 1", (B & System.Windows.Forms.MouseButtons.XButton1) != 0);
+								HandleButton ("WMouse 2", (B & System.Windows.Forms.MouseButtons.XButton2) != 0);
+							} else {
+								//dont do this: for now, it will interfere with the virtualpad. dont do something similar for the mouse position either
+								//unpress all buttons
+								//HandleButton("WMouse L", false);
+								//HandleButton("WMouse C", false);
+								//HandleButton("WMouse R", false);
+								//HandleButton("WMouse 1", false);
+								//HandleButton("WMouse 2", false);
 							}
-							// coordinate translation happens later
-							FloatValues["WMouse X"] = P.X;
-							FloatValues["WMouse Y"] = P.Y;
 
-							var B = System.Windows.Forms.Control.MouseButtons;
-							HandleButton("WMouse L", (B & System.Windows.Forms.MouseButtons.Left) != 0);
-							HandleButton("WMouse C", (B & System.Windows.Forms.MouseButtons.Middle) != 0);
-							HandleButton("WMouse R", (B & System.Windows.Forms.MouseButtons.Right) != 0);
-							HandleButton("WMouse 1", (B & System.Windows.Forms.MouseButtons.XButton1) != 0);
-							HandleButton("WMouse 2", (B & System.Windows.Forms.MouseButtons.XButton2) != 0);
-						}
-						else
-						{
-							//dont do this: for now, it will interfere with the virtualpad. dont do something similar for the mouse position either
-							//unpress all buttons
-							//HandleButton("WMouse L", false);
-							//HandleButton("WMouse C", false);
-							//HandleButton("WMouse R", false);
-							//HandleButton("WMouse 1", false);
-							//HandleButton("WMouse 2", false);
 						}
 
-					}
+						bool swallow = !GlobalWin.MainForm.AllowInput (false);
 
-					bool swallow = !GlobalWin.MainForm.AllowInput(false);
-
-					foreach (var ie in _NewEvents)
-					{
-						//events are swallowed in some cases:
-						if (ie.LogicalButton.Alt && !GlobalWin.MainForm.AllowInput(true))
-						{ }
-						else if (ie.EventType == InputEventType.Press && swallow)
-						{ }
-						else
-							EnqueueEvent(ie);
-					}
-				} //lock(this)
-			#endif // WINDOWS
+						foreach (var ie in _NewEvents) {
+							//events are swallowed in some cases:
+							if (ie.LogicalButton.Alt && !GlobalWin.MainForm.AllowInput (true)) { } else if (ie.EventType == InputEventType.Press && swallow) { } else
+								EnqueueEvent (ie);
+						}
+					} //lock(this)
+				} // lock(XLock.GetLock())
 				//arbitrary selection of polling frequency:
 				Thread.Sleep(10);
 			}

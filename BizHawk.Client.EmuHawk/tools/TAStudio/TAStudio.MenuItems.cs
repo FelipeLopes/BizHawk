@@ -9,6 +9,7 @@ using BizHawk.Client.Common;
 using BizHawk.Client.Common.MovieConversionExtensions;
 using BizHawk.Client.EmuHawk.ToolExtensions;
 using BizHawk.Client.EmuHawk.WinFormExtensions;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
@@ -74,7 +75,7 @@ namespace BizHawk.Client.EmuHawk
 					{
 						Mainform.StartNewMovie(MovieService.Get(ofd.FileName), false);
 
-						var result1 = MessageBox.Show("This is a regular movie, a new project must be created from it, in order to use in TAStudio\nProceed?", "Convert movie", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+						var result1 = SafeMessageBox.Show("This is a regular movie, a new project must be created from it, in order to use in TAStudio\nProceed?", "Convert movie", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 						if (result1 == DialogResult.OK)
 						{
 							ConvertCurrentMovieToTasproj();
@@ -85,7 +86,7 @@ namespace BizHawk.Client.EmuHawk
 					}
 					else
 					{
-						MessageBox.Show("This is not a BizHawk movie!", "Movie load error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						SafeMessageBox.Show("This is not a BizHawk movie!", "Movie load error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
 			}
@@ -718,7 +719,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			if (TasView.SelectedRows.Count() > 50)
 			{
-				var result = MessageBox.Show("Are you sure you want to add more than 50 markers?", "Add markers", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+				var result = SafeMessageBox.Show("Are you sure you want to add more than 50 markers?", "Add markers", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 				if (result != DialogResult.OK)
 				{
 					return;
@@ -757,7 +758,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			if (!Emulator.DeterministicEmulation)
 			{
-				if (MessageBox.Show("The emulator is not deterministic. It might fail even if the difference isn't enough to cause a desync.\nContinue with check?", "Not Deterministic", MessageBoxButtons.YesNo) == DialogResult.No)
+				if (SafeMessageBox.Show("The emulator is not deterministic. It might fail even if the difference isn't enough to cause a desync.\nContinue with check?", "Not Deterministic", MessageBoxButtons.YesNo) == DialogResult.No)
 				{
 					return;
 				}
@@ -777,7 +778,7 @@ namespace BizHawk.Client.EmuHawk
 
 					if (!state.SequenceEqual(greenzone))
 					{
-						MessageBox.Show("Bad data between frames " + lastState + " and " + Emulator.Frame);
+						SafeMessageBox.Show("Bad data between frames " + lastState + " and " + Emulator.Frame);
 						return;
 					}
 
@@ -786,7 +787,7 @@ namespace BizHawk.Client.EmuHawk
 			}
 			while (Emulator.Frame < goToFrame);
 
-			MessageBox.Show("Integrity Check passed");
+			SafeMessageBox.Show("Integrity Check passed");
 		}
 
 		#endregion

@@ -2,13 +2,14 @@
 using System.Windows.Forms;
 
 using BizHawk.Client.EmuHawk.WinFormExtensions;
+using BizHawk.Common;
 
 // todo - display details on the current resolution status
 // todo - check(mark) the one thats selected
 // todo - turn top info into textboxes i guess, labels suck
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class FirmwaresConfigInfo : Form
+	public partial class FirmwaresConfigInfo : SafeForm
 	{
 		public const int idIdeal = 0;
 		public const int idAcceptable = 1;

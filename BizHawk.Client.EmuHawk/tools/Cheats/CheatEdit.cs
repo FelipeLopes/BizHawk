@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 using BizHawk.Emulation.Common.IEmulatorExtensions;
 
 using Emu = BizHawk.Emulation.Common;
@@ -349,7 +350,7 @@ namespace BizHawk.Client.EmuHawk
 			}
 			else
 			{
-				MessageBox.Show(address + " is not a valid address for the domain " + domain.Name, "Index out of range", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				SafeMessageBox.Show(address + " is not a valid address for the domain " + domain.Name, "Index out of range", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return Cheat.Separator;
 			}
 		}

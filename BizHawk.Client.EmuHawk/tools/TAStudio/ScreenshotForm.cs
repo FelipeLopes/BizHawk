@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
+using BizHawk.Common;
 
 // We pretend it's a tooltip kind of thing, so show only the actual contents
 // and avoid stealing forcus, while still being topmost
@@ -9,7 +10,7 @@ using BizHawk.Client.Common;
 // This is not an actual tooltip, because they can't reliably fade in and out with trasparency
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class ScreenshotForm : Form
+	public partial class ScreenshotForm : SafeForm
 	{
 		// but still appear topmost
 		private const int WS_EX_TOPMOST = 0x00000008;

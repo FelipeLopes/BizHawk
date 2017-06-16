@@ -7,11 +7,12 @@ using BizHawk.Emulation.Common;
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk.WinFormExtensions;
 using BizHawk.Client.EmuHawk.ToolExtensions;
+using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
 	[ToolAttributes(false, null)]
-	public partial class MacroInputTool : Form, IToolFormAutoConfig
+	public partial class MacroInputTool : SafeForm, IToolFormAutoConfig
 	{
 		[RequiredService]
 		private IEmulator Emulator { get; set; }
@@ -41,7 +42,7 @@ namespace BizHawk.Client.EmuHawk
 			// which resets tools before the movie session becomes active)
 			if (!Global.MovieSession.Movie.IsActive && !GlobalWin.Tools.IsLoaded<TAStudio>())
 			{
-				MessageBox.Show("In order to use this tool you must be recording a movie.");
+				SafeMessageBox.Show("In order to use this tool you must be recording a movie.");
 				Close();
 				DialogResult = DialogResult.Cancel;
 				return;
@@ -117,7 +118,7 @@ namespace BizHawk.Client.EmuHawk
 			}
 			else
 			{
-				DialogResult result = MessageBox.Show("You have unsaved macro(s). Do you wish to save them?", "Save?", MessageBoxButtons.YesNoCancel);
+				DialogResult result = SafeMessageBox.Show("You have unsaved macro(s). Do you wish to save them?", "Save?", MessageBoxButtons.YesNoCancel);
 				if (result == DialogResult.Cancel)
 				{
 					return false;
@@ -145,7 +146,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			if (StartNum.Value >= CurrentMovie.InputLogLength || EndNum.Value >= CurrentMovie.InputLogLength)
 			{
-				MessageBox.Show("Start and end frames must be inside the movie.");
+				SafeMessageBox.Show("Start and end frames must be inside the movie.");
 				return;
 			}
 
@@ -252,7 +253,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			if (selectedZone == null)
 			{
-				MessageBox.Show("Please select a zone first.");
+				SafeMessageBox.Show("Please select a zone first.");
 				return;
 			}
 

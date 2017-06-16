@@ -3,9 +3,11 @@ using System.Drawing;
 using System.Media;
 using System.Windows.Forms;
 
+using BizHawk.Common;
+
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class AboutBox : Form
+	public partial class AboutBox : SafeForm
 	{
 		private readonly SoundPlayer sfx;
 		private readonly Random r = new Random();
