@@ -812,6 +812,7 @@ namespace BizHawk.Client.EmuHawk
 			for (;;)
 			{
 				// loop through all available events
+				Input.Instance.UpdateThreadProc ();
 				var ie = Input.Instance.DequeueEvent();
 				if (ie == null)
 				{

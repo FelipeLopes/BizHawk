@@ -116,12 +116,13 @@ namespace BizHawk.Client.EmuHawk
 
 		private Input()
 		{
+			/*
 			UpdateThread = new Thread(UpdateThreadProc)
 			{
 				IsBackground = true, 
 				Priority = ThreadPriority.AboveNormal //why not? this thread shouldn't be very heavy duty, and we want it to be responsive
 			};
-			UpdateThread.Start();
+			UpdateThread.Start(); */
 		}
 
 		public static void Initialize()
@@ -338,11 +339,10 @@ namespace BizHawk.Client.EmuHawk
 			return FloatValuesCopy;
 		}
 		
-		void UpdateThreadProc()
+		public void UpdateThreadProc()
 		{
-			for (; ; )
-			{
-#if false				
+			//for (; ; )
+			//{
 				lock(XLock.GetLock()) {
 #if WINDOWS
 				var keyEvents = KeyInput.Update().Concat(IPCKeyInput.Update());
@@ -461,10 +461,9 @@ namespace BizHawk.Client.EmuHawk
 						}
 					} //lock(this)
 				} // lock(XLock.GetLock())
-#endif
 				//arbitrary selection of polling frequency:
-				Thread.Sleep(10);
-			}
+				//Thread.Sleep(10);
+			//}
 		}
 
 		public void StartListeningForFloatEvents()
