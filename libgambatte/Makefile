@@ -11,8 +11,14 @@ else
 	$(error Unknown arch)
 endif
 
-CXXFLAGS = -Wall -Iinclude -Isrc -O3 -std=c++11 -fno-exceptions -flto
-TARGET = libgambatte.dll
+
+ifeq ($(OS),Windows_NT)
+	CXXFLAGS = -Wall -Iinclude -Isrc -O3 -std=c++11 -fno-exceptions -flto
+	TARGET = libgambatte.dll
+else
+	CXXFLAGS = -Wall -Iinclude -Isrc -O3 -std=c++11 -fno-exceptions -fPIC
+	TARGET = libgambatte.so
+endif
 LDFLAGS_32 = -static -static-libgcc -static-libstdc++
 LDFLAGS_64 =
 LDFLAGS = -shared $(LDFLAGS_$(ARCH)) $(CXXFLAGS)
