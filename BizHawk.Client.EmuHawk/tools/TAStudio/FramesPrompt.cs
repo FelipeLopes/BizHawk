@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using BizHawk.Common;
-
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class FramesPrompt : SafeForm
+	public partial class FramesPrompt : Form
 	{
 		public FramesPrompt()
 		{

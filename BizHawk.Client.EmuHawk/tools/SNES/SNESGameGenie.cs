@@ -7,12 +7,11 @@ using System.Windows.Forms;
 using BizHawk.Emulation.Common;
 using BizHawk.Emulation.Cores.Nintendo.SNES;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
 	[ToolAttributes(false, null)]
-	public partial class SNESGameGenie : SafeForm, IToolFormAutoConfig
+	public partial class SNESGameGenie : Form, IToolFormAutoConfig
 	{
 		[RequiredService]
 		public LibsnesCore Emulator { get; set; }

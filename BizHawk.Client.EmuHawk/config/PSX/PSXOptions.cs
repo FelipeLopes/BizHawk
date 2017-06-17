@@ -4,11 +4,10 @@ using System.Windows.Forms;
 
 using BizHawk.Emulation.Cores.Sony.PSX;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class PSXOptions : SafeForm
+	public partial class PSXOptions : Form
 	{
 		// backups of the labels for string replacing
 		private readonly string lblPixelPro_text, lblMednafen_text, lblTweakedMednafen_text;
@@ -64,7 +63,7 @@ namespace BizHawk.Client.EmuHawk
 		private void BtnNiceDisplayConfig_Click(object sender, EventArgs e)
 		{
 			_dispSettingsSet = true;
-			SafeMessageBox.Show("Finetuned Display Options will take effect if you OK from PSX Options");
+			MessageBox.Show("Finetuned Display Options will take effect if you OK from PSX Options");
 		}
 
 		public static DialogResult DoSettingsDialog(IWin32Window owner)
@@ -179,7 +178,7 @@ namespace BizHawk.Client.EmuHawk
 
 		private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			SafeMessageBox.Show(@"These options control BizHawk's Display Options to make it act quite a lot like Mednafen:
+			MessageBox.Show(@"These options control BizHawk's Display Options to make it act quite a lot like Mednafen:
 
 DispManagerAR = System (Use emulator-recommended AR)
 DispFixAspectRatio = true (Maintain aspect ratio [letterbox main window as needed])

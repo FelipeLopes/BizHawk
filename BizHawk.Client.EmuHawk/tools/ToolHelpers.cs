@@ -9,12 +9,11 @@ using BizHawk.Emulation.Common.IEmulatorExtensions;
 
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk.WinFormExtensions;
-using BizHawk.Common;
 using System.Drawing;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public class ToolFormBase : SafeForm
+	public class ToolFormBase : Form
 	{
 		public static FileInfo OpenFileDialog(string currentFile, string path, string fileType, string fileExt)
 		{

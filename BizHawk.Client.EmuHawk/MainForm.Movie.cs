@@ -3,7 +3,6 @@ using System.IO;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 using BizHawk.Emulation.Common;
 using BizHawk.Emulation.Common.IEmulatorExtensions;
 using BizHawk.Emulation.Cores.Consoles.Nintendo.QuickNES;
@@ -38,7 +37,7 @@ namespace BizHawk.Client.EmuHawk
 			}
 			catch (MoviePlatformMismatchException ex)
 			{
-				SafeMessageBox.Show(new Form(){TopMost = true}, ex.Message, "Movie/Platform Mismatch", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(new Form(){TopMost = true}, ex.Message, "Movie/Platform Mismatch", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return false;
 			}
 

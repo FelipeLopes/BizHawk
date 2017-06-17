@@ -29,7 +29,6 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
-using BizHawk.Common;
 using BizHawk.Common.NumberExtensions;
 using BizHawk.Client.Common;
 using BizHawk.Emulation.Cores.Nintendo.SNES;
@@ -38,7 +37,7 @@ using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public unsafe partial class SNESGraphicsDebugger : SafeForm, IToolFormAutoConfig
+	public unsafe partial class SNESGraphicsDebugger : Form, IToolFormAutoConfig
 	{
 		List<DisplayTypeItem> displayTypeItems = new List<DisplayTypeItem>();
 

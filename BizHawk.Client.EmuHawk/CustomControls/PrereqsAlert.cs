@@ -7,11 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using BizHawk.Common;
-
 namespace BizHawk.Client.EmuHawk.CustomControls
 {
-	public partial class PrereqsAlert : SafeForm
+	public partial class PrereqsAlert : Form
 	{
 		public PrereqsAlert(bool warn_only)
 		{

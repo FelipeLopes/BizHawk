@@ -2,11 +2,10 @@
 
 using BizHawk.Emulation.Cores.Nintendo.Gameboy;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class GBPrefs : SafeForm
+	public partial class GBPrefs : Form
 	{
 		private GBPrefs()
 		{

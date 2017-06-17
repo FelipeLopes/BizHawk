@@ -3,11 +3,9 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-using BizHawk.Common;
-
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class LuaRegisteredFunctionsList : SafeForm
+	public partial class LuaRegisteredFunctionsList : Form
 	{
 		public Point StartLocation { get; set; } = new Point(0, 0);
 		public LuaRegisteredFunctionsList()

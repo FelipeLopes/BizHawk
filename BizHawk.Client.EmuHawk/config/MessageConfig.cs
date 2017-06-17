@@ -4,11 +4,10 @@ using System.Windows.Forms;
 
 using BizHawk.Emulation.Common.IEmulatorExtensions;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class MessageConfig : SafeForm
+	public partial class MessageConfig : Form
 	{
 		private int _dispFpSx = Global.Config.DispFPSx;
 		private int _dispFpSy = Global.Config.DispFPSy;

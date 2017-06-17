@@ -7,11 +7,10 @@ using System.Windows.Forms;
 
 using BizHawk.Emulation.Common;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class ToolBox : SafeForm, IToolForm
+	public partial class ToolBox : Form, IToolForm
 	{
 		[RequiredService]
 		private IEmulator Emulator { get; set; }

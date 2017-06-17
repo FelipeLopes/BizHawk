@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
+using BizHawk.Emulation.Common;
+using BizHawk.Client.Common;
 using System.Globalization;
 using System.Collections.Generic;
-
-using BizHawk.Client.Common;
-using BizHawk.Common;
-using BizHawk.Emulation.Common;
-
 
 namespace BizHawk.Client.EmuHawk
 {
@@ -24,7 +21,7 @@ namespace BizHawk.Client.EmuHawk
 
 
 	[ToolAttributes(released: true, supportedSystems: new[] { "GB", "GBA", "GEN", "N64", "NES", "PSX", "SAT", "SMS", "SNES" })]
-	public partial class GameShark : SafeForm, IToolForm, IToolFormAutoConfig
+	public partial class GameShark : Form, IToolForm, IToolFormAutoConfig
 	{
 		#region " Game Genie Dictionary "
 		private readonly Dictionary<char, int> _GBGGgameGenieTable = new Dictionary<char, int>
@@ -320,14 +317,14 @@ namespace BizHawk.Client.EmuHawk
 			//Game Genie
 			else if (SingleCheat.Contains("-") == true && SingleCheat.LastIndexOf("-") != 7 && SingleCheat.IndexOf("-") != 3)
 			{
-				SafeMessageBox.Show("All GameBoy Game Geneie Codes need to have a dash after the third character and seventh character.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("All GameBoy Game Geneie Codes need to have a dash after the third character and seventh character.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 
 			//Game Shark codes
 			if (SingleCheat.Length != 8 && SingleCheat.Contains("-") == false)
 			{
-				SafeMessageBox.Show("All GameShark Codes need to be Eight characters in Length", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("All GameShark Codes need to be Eight characters in Length", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			else if (SingleCheat.Length == 8 && SingleCheat.Contains("-") == false)
@@ -343,7 +340,7 @@ namespace BizHawk.Client.EmuHawk
 						break;
 					default:
 						//No.
-						SafeMessageBox.Show("All GameShark Codes for GameBoy need to start with 00 or 01", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MessageBox.Show("All GameShark Codes for GameBoy need to start with 00 or 01", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						return;
 				}
 				//Sample Input for GB/GBC:
@@ -384,7 +381,7 @@ namespace BizHawk.Client.EmuHawk
 			//Someone broke the world?
 			catch (Exception ex)
 			{
-				SafeMessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 		//Provided by mGBA and endrift
@@ -499,20 +496,20 @@ namespace BizHawk.Client.EmuHawk
 						blnEncrypted = true;
 						GBAActionReplay();
 					}
-					//SafeMessageBox.Show(blnActionReplayMax.ToString());
+					//MessageBox.Show(blnActionReplayMax.ToString());
 					//We don't do Else If after the if here because it won't allow us to verify the second code check.
 					if (blnActionReplayMax == true)
 					{
 						//We got a Valid Action Replay Max Code.  Hopefully.
 						AddGBA();
-						//SafeMessageBox.Show("ARM");
+						//MessageBox.Show("ARM");
 						return;
 					}
 				}
 				//Detect CodeBreaker/GameShark SP/Xploder codes
 				if (SingleCheat.Length == 12 && SingleCheat.IndexOf(" ") != 8)
 				{
-					SafeMessageBox.Show("Codebreaker/GameShark SP/Xploder codes are not supported by this tool.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+					MessageBox.Show("Codebreaker/GameShark SP/Xploder codes are not supported by this tool.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 					return;
 
 					//WARNING!!
@@ -546,8 +543,8 @@ namespace BizHawk.Client.EmuHawk
 					//	string test2;
 					//	test1 = parseString.Remove(5, 6);
 					//	test2 = parseString.Remove(0, 6);
-					//	SafeMessageBox.Show(test1.ToString());
-					//	SafeMessageBox.Show(test2.ToString());
+					//	MessageBox.Show(test1.ToString());
+					//	MessageBox.Show(test2.ToString());
 					//	op1 = UInt32.Parse(parseString.Remove(5, 6), NumberStyles.HexNumber);
 					//	op2 = UInt32.Parse(parseString.Remove(0, 6), NumberStyles.HexNumber);
 
@@ -577,7 +574,7 @@ namespace BizHawk.Client.EmuHawk
 
 					//if (SingleCheat.IndexOf(" ") != 8 && SingleCheat.Length != 12)
 					//{
-					//	SafeMessageBox.Show("ALL Codes for Action Replay, Action Replay MAX, Codebreaker, GameShark Advance, GameShark SP, Xploder have a Space after the 8th character.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					//	MessageBox.Show("ALL Codes for Action Replay, Action Replay MAX, Codebreaker, GameShark Advance, GameShark SP, Xploder have a Space after the 8th character.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					//	return;
 					//}
 					////We have a code
@@ -619,7 +616,7 @@ namespace BizHawk.Client.EmuHawk
 				//30000004 01010101 03001FF0 03001FF4 03001FF8 00000000
 				//write 01010101 to 3 addresses - 01010101, 03001FF0, 03001FF4, and 03001FF8. '00000000' is used for padding, to ensure the last code encrypts correctly.
 				//Note: The device improperly writes the Value, to the address.  We should ignore that.
-				SafeMessageBox.Show("Sorry, this tool does not support 3000XXXX codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				MessageBox.Show("Sorry, this tool does not support 3000XXXX codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				blnUnhandled = true;
 				return;
 			}
@@ -658,42 +655,42 @@ namespace BizHawk.Client.EmuHawk
 			else if (RAMAddress.StartsWith("80F00000") == true)
 			{
 				//80F00000 0000xxxx  Slow down when GS Button Pushed.
-				SafeMessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnneeded = true;
 				return;
 			}
 			else if (RAMAddress.StartsWith("D") == true && RAMAddress.StartsWith("DEADFACE") == false && RAMValue.StartsWith("0000") == true)
 			{
 				//Daaaaaaa 0000xxxx  2 Byte If Equal, Activate next code
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
 			else if (RAMAddress.StartsWith("E0") == true)
 			{
 				//E0zzxxxx aaaaaaaa  2 Byte if Equal, Activate ZZ Lines.
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
 			else if (RAMAddress.StartsWith("F") == true && RAMValue.StartsWith("0000") == true)
 			{
 				//Faaaaaaa 0000xxxx  Hook Routine.  Probably not necessary?
-				SafeMessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnneeded = true;
 				return;
 			}
 			else if (RAMAddress.StartsWith("001DC0DE") == true)
 			{
 				//xxxxxxxx 001DC0DE  Auto-Detect Game.  Useless for Us.
-				SafeMessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnneeded = true;
 				return;
 			}
 			else if (RAMAddress.StartsWith("DEADFACE") == true)
 			{
 				//DEADFACE 0000xxxx  Change Encryption Seeds.  Unsure how this works.
-				SafeMessageBox.Show("Sorry, this tool does not support DEADFACE codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				MessageBox.Show("Sorry, this tool does not support DEADFACE codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				blnUnhandled = true;
 				return;
 			}
@@ -786,7 +783,7 @@ namespace BizHawk.Client.EmuHawk
 				// 000000ZZ
 				//RAMAddress = RAMAddress.Replace("8022", "020");
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -798,7 +795,7 @@ namespace BizHawk.Client.EmuHawk
 				// 0000ZZZZ
 				//RAMAddress = RAMAddress.Replace("822", "020");
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -812,7 +809,7 @@ namespace BizHawk.Client.EmuHawk
 				// ZZZZZZZZ
 				//RAMAddress = RAMAddress.Replace("842", "020");
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -847,7 +844,7 @@ namespace BizHawk.Client.EmuHawk
 				// 000000ZZ
 				RAMAddress = RAMAddress.Replace("082", "020");
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -859,7 +856,7 @@ namespace BizHawk.Client.EmuHawk
 				// 000000ZZ
 				RAMAddress = RAMAddress.Replace("482", "020");
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -871,7 +868,7 @@ namespace BizHawk.Client.EmuHawk
 				// 000000ZZ
 				RAMAddress = RAMAddress.Replace("882", "020");
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -883,7 +880,7 @@ namespace BizHawk.Client.EmuHawk
 				// 000000ZZ
 				RAMAddress = RAMAddress.Replace("C82", "020");
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -895,7 +892,7 @@ namespace BizHawk.Client.EmuHawk
 				// 0000ZZZZ
 				RAMAddress = RAMAddress.Replace("0A2", "020");
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -907,7 +904,7 @@ namespace BizHawk.Client.EmuHawk
 				// 0000ZZZZ
 				RAMAddress = RAMAddress.Replace("4A2", "020");
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -919,7 +916,7 @@ namespace BizHawk.Client.EmuHawk
 				// 0000ZZZZ
 				RAMAddress = RAMAddress.Replace("8A2", "020");
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -931,7 +928,7 @@ namespace BizHawk.Client.EmuHawk
 				// 0000ZZZZ
 				RAMAddress = RAMAddress.Replace("CA2", "020");
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -943,7 +940,7 @@ namespace BizHawk.Client.EmuHawk
 				// ZZZZZZZZ
 				RAMAddress = RAMAddress.Replace("0C2", "020");
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -955,7 +952,7 @@ namespace BizHawk.Client.EmuHawk
 				// ZZZZZZZZ
 				RAMAddress = RAMAddress.Replace("4C2", "020");
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -967,7 +964,7 @@ namespace BizHawk.Client.EmuHawk
 				// ZZZZZZZZ
 				RAMAddress = RAMAddress.Replace("8C2", "020");
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -979,7 +976,7 @@ namespace BizHawk.Client.EmuHawk
 				// ZZZZZZZZ
 				RAMAddress = RAMAddress.Replace("CC2", "020");
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -992,7 +989,7 @@ namespace BizHawk.Client.EmuHawk
 				// 000000ZZ
 				RAMAddress = RAMAddress.Replace("102", "020");
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1004,7 +1001,7 @@ namespace BizHawk.Client.EmuHawk
 				// 000000ZZ
 				RAMAddress = RAMAddress.Replace("502", "020");
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1016,7 +1013,7 @@ namespace BizHawk.Client.EmuHawk
 				// 000000ZZ
 				RAMAddress = RAMAddress.Replace("902", "020");
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1028,7 +1025,7 @@ namespace BizHawk.Client.EmuHawk
 				// 000000ZZ
 				RAMAddress = RAMAddress.Replace("D02", "020");
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1040,7 +1037,7 @@ namespace BizHawk.Client.EmuHawk
 				// 0000ZZZZ
 				RAMAddress = RAMAddress.Replace("122", "020");
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1052,7 +1049,7 @@ namespace BizHawk.Client.EmuHawk
 				// 0000ZZZZ
 				RAMAddress = RAMAddress.Replace("522", "020");
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1064,7 +1061,7 @@ namespace BizHawk.Client.EmuHawk
 				// 0000ZZZZ
 				RAMAddress = RAMAddress.Replace("922", "020");
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1076,7 +1073,7 @@ namespace BizHawk.Client.EmuHawk
 				// 0000ZZZZ
 				RAMAddress = RAMAddress.Replace("D22", "020");
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1088,7 +1085,7 @@ namespace BizHawk.Client.EmuHawk
 				// ZZZZZZZZ
 				RAMAddress = RAMAddress.Replace("142", "020");
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1100,7 +1097,7 @@ namespace BizHawk.Client.EmuHawk
 				// ZZZZZZZZ
 				RAMAddress = RAMAddress.Replace("542", "020");
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1112,7 +1109,7 @@ namespace BizHawk.Client.EmuHawk
 				// ZZZZZZZZ
 				RAMAddress = RAMAddress.Replace("942", "020");
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1124,7 +1121,7 @@ namespace BizHawk.Client.EmuHawk
 				// ZZZZZZZZ
 				RAMAddress = RAMAddress.Replace("D42", "020");
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1144,7 +1141,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("182", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1159,7 +1156,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("582", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1174,7 +1171,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("982", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1193,7 +1190,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("E82", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1207,7 +1204,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("1A2", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1221,7 +1218,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("5A2", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1235,7 +1232,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("9A2", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1249,7 +1246,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("DA2", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1263,7 +1260,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("1C2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1277,7 +1274,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("5C2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1291,7 +1288,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("9C2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1305,7 +1302,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("DC2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1324,7 +1321,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("202", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1339,7 +1336,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("602", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1354,7 +1351,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("A02", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1369,7 +1366,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("E02", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1383,7 +1380,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("222", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1397,7 +1394,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("622", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1411,7 +1408,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("A22", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1425,7 +1422,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("E22", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1439,7 +1436,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("242", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1453,7 +1450,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("642", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1467,7 +1464,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("A42", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1481,7 +1478,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("E42", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1500,7 +1497,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("282", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1514,7 +1511,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("682", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1528,7 +1525,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("A82", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1542,7 +1539,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("2A2", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1556,7 +1553,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("6A2", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1570,7 +1567,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("AA2", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1584,7 +1581,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("EA2", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1598,7 +1595,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("2C2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1612,7 +1609,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("6C2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1626,7 +1623,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("AC2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1640,7 +1637,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("EC2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1657,7 +1654,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("302", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1671,7 +1668,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("702", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1685,7 +1682,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("B02", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1699,7 +1696,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("F02", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1713,7 +1710,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("322", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1727,7 +1724,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("722", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1741,7 +1738,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("B22", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1755,7 +1752,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("F22", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1770,7 +1767,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("342", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1784,7 +1781,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("742", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1798,7 +1795,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("B42", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1812,7 +1809,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("F42", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1828,7 +1825,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("382", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1843,7 +1840,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("782", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1858,7 +1855,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("B82", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1873,7 +1870,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("F82", "020");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1888,7 +1885,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("3A2", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1903,7 +1900,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("7A2", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1918,7 +1915,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("3C2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1933,7 +1930,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("7C2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1948,7 +1945,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("BC2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1963,7 +1960,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("FC2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1981,7 +1978,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("0E2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -1995,7 +1992,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("4E2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -2009,7 +2006,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("8E2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -2023,7 +2020,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("CE2", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -2054,12 +2051,12 @@ namespace BizHawk.Client.EmuHawk
 				string RealAddress = null;
 				string realValue = null;
 				RealAddress = RAMValue.Remove(0, 1);
-				//SafeMessageBox.Show("Real Address: " + RealAddress);
+				//MessageBox.Show("Real Address: " + RealAddress);
 				//We need the next line
 				try
 				{
 					loopValue += 1;
-					//SafeMessageBox.Show("Loop Value: " + loopValue.ToString());
+					//MessageBox.Show("Loop Value: " + loopValue.ToString());
 					SingleCheat = txtCheat.Lines[loopValue].ToUpper();
 					//We need to parse now.
 					if (SingleCheat.Length == 17 && SingleCheat.IndexOf(" ") == 8)
@@ -2136,7 +2133,7 @@ namespace BizHawk.Client.EmuHawk
 				catch (Exception ex)
 				{
 					//We should warn the user.
-					SafeMessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 			else if (RAMAddress.StartsWith("080") == true)
@@ -2149,7 +2146,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("080", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnneeded = true;
 				return;
 			}
@@ -2162,7 +2159,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("0800", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnneeded = true;
 				return;
 			}
@@ -2194,7 +2191,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("40000000", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -2209,7 +2206,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("60000000", "020");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -2230,7 +2227,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("8022", "0200");
 				}
 				byteSize = 8;
-				SafeMessageBox.Show("Sorry, this tool does not support 8022 codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				MessageBox.Show("Sorry, this tool does not support 8022 codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				blnUnhandled = true;
 				return;
 			}
@@ -2247,7 +2244,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("8222", "0200");
 				}
 				byteSize = 16;
-				SafeMessageBox.Show("Sorry, this tool does not support 8222 codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				MessageBox.Show("Sorry, this tool does not support 8222 codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				blnUnhandled = true;
 				return;
 			}
@@ -2264,7 +2261,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMAddress = RAMAddress.Replace("842", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("Sorry, this tool does not support 8222 codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				MessageBox.Show("Sorry, this tool does not support 8222 codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				blnUnhandled = true;
 				return;
 			}
@@ -2288,7 +2285,7 @@ namespace BizHawk.Client.EmuHawk
 					RAMValue = RAMValue.Replace("001DC0DE", "020");
 				}
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnneeded = true;
 				return;
 			}
@@ -2298,7 +2295,7 @@ namespace BizHawk.Client.EmuHawk
 				// New Encryption seed.
 				// DEADFACE
 				// 0000XXXX
-				SafeMessageBox.Show("Sorry, this tool does not support DEADFACE codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				MessageBox.Show("Sorry, this tool does not support DEADFACE codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				blnUnhandled = true;
 				return;
 			}
@@ -2321,7 +2318,7 @@ namespace BizHawk.Client.EmuHawk
 				//Flags("yyyy"):
 				//0008 - CRC Exists(CRC is used to autodetect the inserted game)
 				//0002 - Disable Interupts
-				SafeMessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnneeded = true;
 				return;
 			}
@@ -2336,7 +2333,7 @@ namespace BizHawk.Client.EmuHawk
 				//3000 - 8 - bit(?) Long - Branch Type(Thumb)
 				//4000 - 8 - bit(?) Long - Branch Type(ARM)
 				//0020 - Unknown(Odd Effect)
-				SafeMessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnneeded = true;
 				return;
 			}
@@ -2356,7 +2353,7 @@ namespace BizHawk.Client.EmuHawk
 				//This is one of those two - line codes.The "yyyy" set is the data to store at the address (aaaaaaa), with xxxxxxxx being the number of addresses to store to, and iiii being the value to increment the addresses by.  The codetype is usually use to fill memory with a certain value.
 				RAMAddress = RAMAddress.Remove(0, 1);
 				byteSize = 32;
-				SafeMessageBox.Show("Sorry, this tool does not support 4 codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				MessageBox.Show("Sorry, this tool does not support 4 codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				blnUnhandled = true;
 				return;
 			}
@@ -2370,7 +2367,7 @@ namespace BizHawk.Client.EmuHawk
 				//Ocean Prince's note:
 				//AND means "If ALL conditions are True then Do"
 				//I don't understand how this would be applied/works.  Samples are requested.
-				SafeMessageBox.Show("Sorry, this tool does not support 6 codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				MessageBox.Show("Sorry, this tool does not support 6 codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				blnUnhandled = true;
 				return;
 			}
@@ -2380,7 +2377,7 @@ namespace BizHawk.Client.EmuHawk
 				//7aaaaaaa yyyy
 				//If the value at the specified RAM address(aaaaaaa) is equal to yyyy value, active the code on the next line.
 				byteSize = 32;
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				return;
 			}
@@ -2399,7 +2396,7 @@ namespace BizHawk.Client.EmuHawk
 				//9yyyyyyy yyyy
 				//(When 1st Code Only!)
 				//Works like the DEADFACE on GSA.Changes the encryption seeds used for the rest of the codes.
-				SafeMessageBox.Show("Sorry, this tool does not support 9 codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				MessageBox.Show("Sorry, this tool does not support 9 codes.", "Tool error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				byteSize = 32;
 				blnUnhandled = true;
 				return;
@@ -2409,7 +2406,7 @@ namespace BizHawk.Client.EmuHawk
 				//16 - Bit 'If Not Equal' Activator
 				//Axxxxxxx yyyy
 				//Basicly the opposite of an 'If Equal To' Activator.Activates the code on the next line if address xxxxxxx is NOT equal to yyyy
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				byteSize = 32;
 				return;
@@ -2420,7 +2417,7 @@ namespace BizHawk.Client.EmuHawk
 				//16 - Bit Conditional RAM Write
 				//D00000xx yyyy
 				//No Description available at this time.
-				SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				blnUnhandled = true;
 				byteSize = 32;
 				return;
@@ -2453,12 +2450,12 @@ namespace BizHawk.Client.EmuHawk
 			{
 				if (SingleCheat.IndexOf("-") != 4)
 				{
-					SafeMessageBox.Show("All Genesis Game Genie Codes need to contain a dash after the fourth character", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show("All Genesis Game Genie Codes need to contain a dash after the fourth character", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
 				if (SingleCheat.Contains("I") == true | SingleCheat.Contains("O") == true | SingleCheat.Contains("Q") == true | SingleCheat.Contains("U") == true)
 				{
-					SafeMessageBox.Show("All Genesis Game Genie Codes do not use I, O, Q or U.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show("All Genesis Game Genie Codes do not use I, O, Q or U.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
 				//This is taken from the GenGameGenie.CS file.
@@ -2502,14 +2499,14 @@ namespace BizHawk.Client.EmuHawk
 				//We start from Zero.
 				if (SingleCheat.IndexOf(":") != 6)
 				{
-					SafeMessageBox.Show("All Genesis Action Replay/Pro Action Replay Codes need to contain a colon after the sixth character", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show("All Genesis Action Replay/Pro Action Replay Codes need to contain a colon after the sixth character", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
 				//Problem: I don't know what the Non-FF Style codes are.
 				//TODO: Fix that.
 				if (SingleCheat.StartsWith("FF") == false)
 				{
-					SafeMessageBox.Show("This Action Replay Code, is not understood by this tool.", "Tool Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+					MessageBox.Show("This Action Replay Code, is not understood by this tool.", "Tool Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 					return;
 				}
 				//Now to do some work.
@@ -2540,7 +2537,7 @@ namespace BizHawk.Client.EmuHawk
 						break;
 					default:
 						//We could have checked above but here is fine, since it's a quick check due to one of three possibilities.
-						SafeMessageBox.Show("All Genesis Action Replay/Pro Action Replay Codes need to be either 9 or 11 characters in length", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MessageBox.Show("All Genesis Action Replay/Pro Action Replay Codes need to be either 9 or 11 characters in length", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						return;
 				}
 				//Try and add.
@@ -2565,7 +2562,7 @@ namespace BizHawk.Client.EmuHawk
 				//Someone broke the world?
 				catch (Exception ex)
 				{
-					SafeMessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
@@ -2574,12 +2571,12 @@ namespace BizHawk.Client.EmuHawk
 			//These codes, more or less work without Needing much work.
 			if (SingleCheat.IndexOf(" ") != 8)
 			{
-				SafeMessageBox.Show("All N64 GameShark Codes need to contain a space after the eighth character", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("All N64 GameShark Codes need to contain a space after the eighth character", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			if (SingleCheat.Length != 13)
 			{
-				SafeMessageBox.Show("All N64 GameShark Codes need to be 13 characters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("All N64 GameShark Codes need to be 13 characters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			//We need to determine what kind of cheat this is.
@@ -2625,13 +2622,13 @@ namespace BizHawk.Client.EmuHawk
 				//Byte
 				case "D3":
 					//Word
-					SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					return;
 				//These codes are for Disabling the Expansion Pak.  that's a bad thing?  Assuming bad codes, until told otherwise.
 				case "EE":
 				case "DD":
 				case "CC":
-					SafeMessageBox.Show("The code you entered is for Disabling the Expansion Pak.  This is not allowed by this tool.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show("The code you entered is for Disabling the Expansion Pak.  This is not allowed by this tool.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					return;
 				//Enable Code
 				//Not Necessary?  Think so?
@@ -2643,16 +2640,16 @@ namespace BizHawk.Client.EmuHawk
 				case "2A":
 				case "3C":
 				case "FF":
-					SafeMessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					return;
 				//TODO: Make Patch Code (5000XXYY) work.
 				case "50":
 					//Word?
-					SafeMessageBox.Show("The code you entered is not supported by this tool.  Please Submit the Game's Name, Cheat/Code and Purpose to the BizHawk forums.", "Tool Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show("The code you entered is not supported by this tool.  Please Submit the Game's Name, Cheat/Code and Purpose to the BizHawk forums.", "Tool Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					return;
 				//I hope this isn't a thing.
 				default:
-					SafeMessageBox.Show("The GameShark code entered is not a recognized format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show("The GameShark code entered is not a recognized format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					//Leave this Method, before someone gets hurt.
 					return;
 			}
@@ -2693,7 +2690,7 @@ namespace BizHawk.Client.EmuHawk
 			//Someone broke the world?
 			catch (Exception ex)
 			{
-				SafeMessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 		private void NES()
@@ -2788,7 +2785,7 @@ namespace BizHawk.Client.EmuHawk
 			if (SingleCheat.Length != 6 && SingleCheat.Length != 8)
 			{
 				//Not a proper Code
-				SafeMessageBox.Show("Game Genie codes need to be six or eight characters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("Game Genie codes need to be six or eight characters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			try
 			{
@@ -2818,7 +2815,7 @@ namespace BizHawk.Client.EmuHawk
 			//Someone broke the world?
 			catch (Exception ex)
 			{
-				SafeMessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 		private void PSX()
@@ -2826,12 +2823,12 @@ namespace BizHawk.Client.EmuHawk
 			//These codes, more or less work without Needing much work.
 			if (SingleCheat.IndexOf(" ") != 8)
 			{
-				SafeMessageBox.Show("All PSX GameShark Codes need to contain a space after the eighth character", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("All PSX GameShark Codes need to contain a space after the eighth character", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			if (SingleCheat.Length != 13)
 			{
-				SafeMessageBox.Show("All PSX GameShark Cheats need to be 13 characters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("All PSX GameShark Cheats need to be 13 characters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			//We need to determine what kind of cheat this is.
@@ -2876,22 +2873,22 @@ namespace BizHawk.Client.EmuHawk
 				//20 byteSize = 8
 				case "21":
 					//21 byteSize = 8
-					SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					return;
 				case "C0":
 				case "C1":
 				//Slow-Mo
 				case "40":
-					SafeMessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					return;
 				case "C2":
 				case "50":
 					//Word?
-					SafeMessageBox.Show("The code you entered is not supported by this tool.  Please Submit the Game's Name, Cheat/Code and Purpose to the BizHawk forums.", "Tool Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show("The code you entered is not supported by this tool.  Please Submit the Game's Name, Cheat/Code and Purpose to the BizHawk forums.", "Tool Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					return;
 				//Something wrong with their input.
 				default:
-					SafeMessageBox.Show("The GameShark code entered is not a recognized format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show("The GameShark code entered is not a recognized format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					//Leave this Method, before someone gets hurt.
 					return;
 			}
@@ -2929,7 +2926,7 @@ namespace BizHawk.Client.EmuHawk
 			//Someone broke the world?
 			catch (Exception ex)
 			{
-				SafeMessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 
 		}
@@ -2938,12 +2935,12 @@ namespace BizHawk.Client.EmuHawk
 			//Not yet.
 			if (SingleCheat.IndexOf(" ") != 8)
 			{
-				SafeMessageBox.Show("All Saturn GameShark Codes need to contain a space after the eighth character", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("All Saturn GameShark Codes need to contain a space after the eighth character", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			if (SingleCheat.Length != 13)
 			{
-				SafeMessageBox.Show("All Saturn GameShark Cheats need to be 13 characters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("All Saturn GameShark Cheats need to be 13 characters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			//This is a special test.  Only the first character really matters?  16 or 36?
@@ -2960,13 +2957,13 @@ namespace BizHawk.Client.EmuHawk
 				case "0":
 				//D is RAM Equal To Activator, do Next Value
 				case "D":
-					SafeMessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show("The code you entered is not supported by BizHawk.", "Emulator Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					return;
 				case "F":
-					SafeMessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show("The code you entered is not needed by Bizhawk.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					return;
 				default:
-					SafeMessageBox.Show("The GameShark code entered is not a recognized format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show("The GameShark code entered is not a recognized format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					//Leave this Method, before someone gets hurt.
 					return;
 			}
@@ -3005,7 +3002,7 @@ namespace BizHawk.Client.EmuHawk
 			//Someone broke the world?
 			catch (Exception ex)
 			{
-				SafeMessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 		//This also handles Game Gear due to shared hardware.  Go figure.
@@ -3036,13 +3033,13 @@ namespace BizHawk.Client.EmuHawk
 			//It's an Action Replay
 			if (SingleCheat.Length != 9 && SingleCheat.LastIndexOf("-") != 7)
 			{
-				SafeMessageBox.Show("All Master System Action Replay Codes need to be nine charaters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("All Master System Action Replay Codes need to be nine charaters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			//Game Genie
 			else if (SingleCheat.LastIndexOf("-") != 7 && SingleCheat.IndexOf("-") != 3)
 			{
-				SafeMessageBox.Show("All Master System Game Geneie Codes need to have a dash after the third character and seventh character.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("All Master System Game Geneie Codes need to have a dash after the third character and seventh character.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 			try
@@ -3065,7 +3062,7 @@ namespace BizHawk.Client.EmuHawk
 			//Someone broke the world?
 			catch (Exception ex)
 			{
-				SafeMessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 		//Original code from adelikat
@@ -3169,11 +3166,11 @@ namespace BizHawk.Client.EmuHawk
 			}
 			if (SingleCheat.Contains("-") && SingleCheat.Length != 9)
 			{
-				SafeMessageBox.Show("Game Genie Codes need to be nine characters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("Game Genie Codes need to be nine characters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			if (SingleCheat.Length != 9 && SingleCheat.Length != 8)
 			{
-				SafeMessageBox.Show("Pro Action Replay Codes need to be eight characters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("Pro Action Replay Codes need to be eight characters in length.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			try
 			{
@@ -3204,13 +3201,13 @@ namespace BizHawk.Client.EmuHawk
 			//Someone broke the world?
 			catch (Exception ex)
 			{
-				SafeMessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("An Error occured: " + ex.GetType().ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 		private void btnClear_Click(object sender, EventArgs e)
 		{
 			//Clear old Inputs
-			DialogResult result = SafeMessageBox.Show("Are you sure you want to clear this form?", "Clear Form", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			DialogResult result = MessageBox.Show("Are you sure you want to clear this form?", "Clear Form", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 			if (result == DialogResult.Yes)
 			{
 				txtDescription.Clear();

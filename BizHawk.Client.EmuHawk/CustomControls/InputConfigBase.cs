@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
-using BizHawk.Common;
-
 namespace BizHawk.Client.EmuHawk
 {
-	public class InputConfigBase : SafeForm
+	public class InputConfigBase : Form
 	{
 		public void CheckDups()
 		{
@@ -16,7 +14,7 @@ namespace BizHawk.Client.EmuHawk
 				if (stbc == null) continue;
 				if (dups.ContainsKey(stbc.Text))
 				{
-					SafeMessageBox.Show("DUP!");
+					MessageBox.Show("DUP!");
 					return;
 				}
 				dups[stbc.Text] = true;

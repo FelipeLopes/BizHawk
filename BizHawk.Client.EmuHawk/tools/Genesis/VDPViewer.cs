@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
 using BizHawk.Client.Common;
-using BizHawk.Common;
 using BizHawk.Emulation.Cores.Consoles.Sega.gpgx;
+using System.Drawing.Imaging;
 using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class GenVDPViewer : SafeForm, IToolFormAutoConfig
+	public partial class GenVDPViewer : Form, IToolFormAutoConfig
 	{
 		[RequiredService]
 		private GPGX Emu { get; set; }

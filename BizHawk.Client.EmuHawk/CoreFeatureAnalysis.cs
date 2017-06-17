@@ -5,14 +5,13 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Reflection;
 
-using BizHawk.Common;
 using BizHawk.Emulation.Common;
 using BizHawk.Emulation.Common.IEmulatorExtensions;
 using BizHawk.Client.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class CoreFeatureAnalysis : SafeForm, IToolFormAutoConfig
+	public partial class CoreFeatureAnalysis : Form, IToolFormAutoConfig
 	{
 		#region ConfigPersist
 

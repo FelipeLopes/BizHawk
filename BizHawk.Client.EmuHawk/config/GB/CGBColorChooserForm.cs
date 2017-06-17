@@ -2,12 +2,11 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-using BizHawk.Common;
 using BizHawk.Emulation.Cores.Nintendo.Gameboy;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class CGBColorChooserForm : SafeForm
+	public partial class CGBColorChooserForm : Form
 	{
 		private CGBColorChooserForm()
 		{

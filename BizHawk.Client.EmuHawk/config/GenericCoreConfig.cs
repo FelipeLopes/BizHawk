@@ -8,12 +8,11 @@ using System.Text;
 using System.Windows.Forms;
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
-using BizHawk.Common;
 using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class GenericCoreConfig : SafeForm
+	public partial class GenericCoreConfig : Form
 	{
 		object s;
 		object ss;

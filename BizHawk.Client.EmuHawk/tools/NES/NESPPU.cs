@@ -4,14 +4,13 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Windows.Forms;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 using BizHawk.Emulation.Cores.Nintendo.NES;
 using BizHawk.Emulation.Common;
 using System.Collections.Generic;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class NesPPU : SafeForm, IToolFormAutoConfig
+	public partial class NesPPU : Form, IToolFormAutoConfig
 	{
 		// TODO:
 		// If 8/16 sprite mode, mouse over should put 32x64 version of prite

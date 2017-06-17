@@ -539,3 +539,4 @@ namespace BizHawk.Client.EmuHawk
 
 	}
 }
+

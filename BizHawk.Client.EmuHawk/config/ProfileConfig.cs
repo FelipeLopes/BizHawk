@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 using BizHawk.Emulation.Common;
 
 using BizHawk.Emulation.Cores.Nintendo.N64;
@@ -16,7 +15,7 @@ using BizHawk.Emulation.Cores.Atari.Atari2600;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class ProfileConfig : SafeForm
+	public partial class ProfileConfig : Form
 	{
 		public ProfileConfig()
 		{

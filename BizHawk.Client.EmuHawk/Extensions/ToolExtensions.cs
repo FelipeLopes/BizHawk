@@ -217,12 +217,12 @@ namespace BizHawk.Client.EmuHawk.ToolExtensions
 			GlobalWin.Sound.StopSound();
 			if (recent.Frozen)
 			{
-				var result = SafeMessageBox.Show("Could not open " + path, "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				var result = MessageBox.Show("Could not open " + path, "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			else
 			{
 				// ensure topmost, not to have to minimize everything to see and use our modal window, if it somehow got covered
-				var result = SafeMessageBox.Show(new SafeForm(){TopMost = true},"Could not open " + path + "\nRemove from list?", "File not found", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+				var result = MessageBox.Show(new Form(){TopMost = true},"Could not open " + path + "\nRemove from list?", "File not found", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
 				if (result == DialogResult.Yes)
 				{
 					if (encodedPath != null)

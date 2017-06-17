@@ -11,7 +11,6 @@ using BizHawk.Emulation.Common;
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk.WinFormExtensions;
 using BizHawk.Client.EmuHawk.ToolExtensions;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
@@ -199,7 +198,7 @@ namespace BizHawk.Client.EmuHawk
 				}
 				catch (Exception ex)
 				{
-					SafeMessageBox.Show(ex.ToString());
+					MessageBox.Show(ex.ToString());
 				}
 			}
 
@@ -275,7 +274,7 @@ namespace BizHawk.Client.EmuHawk
 					}
 					catch (Exception e)
 					{
-						SafeMessageBox.Show(e.ToString());
+						MessageBox.Show(e.ToString());
 					}
 				}
 				else
@@ -330,7 +329,7 @@ namespace BizHawk.Client.EmuHawk
 					}
 					catch (Exception e)
 					{
-						SafeMessageBox.Show(e.ToString());
+						MessageBox.Show(e.ToString());
 					}
 				}
 				else
@@ -554,7 +553,7 @@ namespace BizHawk.Client.EmuHawk
 				}
 				catch (Exception ex)
 				{
-					SafeMessageBox.Show(ex.ToString());
+					MessageBox.Show(ex.ToString());
 				}
 			}
 		}
@@ -639,7 +638,7 @@ namespace BizHawk.Client.EmuHawk
 			if (LuaImp.ScriptList.Changes && !string.IsNullOrEmpty(LuaImp.ScriptList.Filename))
 			{
 				GlobalWin.Sound.StopSound();
-				var result = SafeMessageBox.Show("Save changes to session?", "Lua Console", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3);
+				var result = MessageBox.Show("Save changes to session?", "Lua Console", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3);
 				GlobalWin.Sound.StartSound();
 				if (result == DialogResult.Yes)
 				{
@@ -848,7 +847,7 @@ namespace BizHawk.Client.EmuHawk
 					}
 					catch (Exception ex)
 					{
-						SafeMessageBox.Show(ex.ToString());
+						MessageBox.Show(ex.ToString());
 					}
 				}
 				else if (!item.Enabled && item.Thread != null)
@@ -1224,7 +1223,7 @@ namespace BizHawk.Client.EmuHawk
 			}
 			catch (Exception ex)
 			{
-				SafeMessageBox.Show(ex.ToString());
+				MessageBox.Show(ex.ToString());
 			}
 		}
 

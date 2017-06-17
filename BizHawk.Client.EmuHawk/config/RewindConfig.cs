@@ -4,11 +4,10 @@ using System.Drawing;
 
 using BizHawk.Emulation.Common.IEmulatorExtensions;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class RewindConfig : SafeForm
+	public partial class RewindConfig : Form
 	{
 		private long _stateSize;
 		private int _mediumStateSize;

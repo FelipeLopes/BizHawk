@@ -878,3 +878,4 @@ namespace BizHawk.Bizware.BizwareGL.Drivers.OpenTK
 	} //class IGL_TK
 
 }
+

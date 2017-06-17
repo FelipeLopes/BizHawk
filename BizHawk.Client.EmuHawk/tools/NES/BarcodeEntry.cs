@@ -13,7 +13,7 @@ using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class BarcodeEntry : SafeForm, IToolForm
+	public partial class BarcodeEntry : Form, IToolForm
 	{
 		[RequiredService]
 		private DatachBarcode reader { get; set; }

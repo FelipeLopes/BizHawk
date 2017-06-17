@@ -2,12 +2,11 @@
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 using BizHawk.Emulation.Cores.PCEngine;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class PCEGraphicsConfig : SafeForm
+	public partial class PCEGraphicsConfig : Form
 	{
 		public PCEGraphicsConfig()
 		{

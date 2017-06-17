@@ -2,11 +2,10 @@
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class GifWriterForm : SafeForm
+	public partial class GifWriterForm : Form
 	{
 		public GifWriterForm()
 		{

@@ -3,11 +3,10 @@ using System.Windows.Forms;
 
 using BizHawk.Emulation.Cores.Sony.PSX;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class PSXControllerConfigNew : SafeForm
+	public partial class PSXControllerConfigNew : Form
 	{
 		public PSXControllerConfigNew()
 		{

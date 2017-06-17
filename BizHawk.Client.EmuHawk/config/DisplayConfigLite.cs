@@ -3,11 +3,10 @@ using System.IO;
 using System.Windows.Forms;
 using BizHawk.Emulation.Common;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class DisplayConfigLite : SafeForm
+	public partial class DisplayConfigLite : Form
 	{
 		public bool NeedReset;
 
@@ -205,7 +204,7 @@ namespace BizHawk.Client.EmuHawk
 					var cgp = new BizHawk.Client.EmuHawk.Filters.RetroShaderPreset(stream);
 					if (cgp.ContainsGLSL)
 					{
-						SafeMessageBox.Show("Specified CGP contains references to .glsl files. This is illegal. Use .cg");
+						MessageBox.Show("Specified CGP contains references to .glsl files. This is illegal. Use .cg");
 						return;
 					}
 

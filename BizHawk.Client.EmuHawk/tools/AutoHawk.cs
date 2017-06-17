@@ -7,13 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using BizHawk.Common;
 using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
 	[ToolAttributes(released: false, supportedSystems: null)]
-	public partial class AutoHawk : SafeForm, IToolFormAutoConfig
+	public partial class AutoHawk : Form, IToolFormAutoConfig
 	{
 		public AutoHawk()
 		{

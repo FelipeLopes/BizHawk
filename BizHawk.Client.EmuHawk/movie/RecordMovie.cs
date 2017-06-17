@@ -3,7 +3,6 @@ using System.IO;
 using System.Windows.Forms;
 using System.Linq;
 
-using BizHawk.Common;
 using BizHawk.Common.ReflectionExtensions;
 using BizHawk.Emulation.Common;
 using BizHawk.Emulation.Common.IEmulatorExtensions;
@@ -15,7 +14,7 @@ using BizHawk.Client.EmuHawk.WinFormExtensions;
 namespace BizHawk.Client.EmuHawk
 {
 	// TODO - Allow relative paths in record textbox
-	public partial class RecordMovie : SafeForm
+	public partial class RecordMovie : Form
 	{
 		private IEmulator Emulator;
 
@@ -78,7 +77,7 @@ namespace BizHawk.Client.EmuHawk
 				var test = new FileInfo(path);
 				if (test.Exists)
 				{
-					var result = SafeMessageBox.Show(path + " already exists, overwrite?", "Confirm overwrite", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+					var result = MessageBox.Show(path + " already exists, overwrite?", "Confirm overwrite", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 					if (result == DialogResult.Cancel)
 					{
 						return;
@@ -146,7 +145,7 @@ namespace BizHawk.Client.EmuHawk
 			}
 			else
 			{
-				SafeMessageBox.Show("Please select a movie to record", "File selection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("Please select a movie to record", "File selection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 

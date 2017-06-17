@@ -4,14 +4,13 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-using BizHawk.Common;
 using BizHawk.Emulation.Cores.PCEngine;
 using System.Drawing.Imaging;
 using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class PCETileViewer : SafeForm, IToolFormAutoConfig
+	public partial class PCETileViewer : Form, IToolFormAutoConfig
 	{
 		[RequiredService]
 		public PCEngine emu { get; private set; }

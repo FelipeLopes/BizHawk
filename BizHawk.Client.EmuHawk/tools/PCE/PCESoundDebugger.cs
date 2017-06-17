@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using BizHawk.Common;
 using BizHawk.Common.BufferExtensions;
 using BizHawk.Client.Common;
 
@@ -20,7 +19,7 @@ using ICSharpCode.SharpZipLib.Zip;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class PCESoundDebugger : SafeForm, IToolFormAutoConfig
+	public partial class PCESoundDebugger : Form, IToolFormAutoConfig
 	{
 		[RequiredService]
 		private PCEngine _pce { get; set; }

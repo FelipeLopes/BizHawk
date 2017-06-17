@@ -7,11 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using BizHawk.Common;
-
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class MobileDetailView : SafeForm
+	public partial class MobileDetailView : Form
 	{
 		public MobileDetailView()
 		{

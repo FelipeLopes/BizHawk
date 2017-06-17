@@ -164,7 +164,7 @@ namespace BizHawk.Client.EmuHawk
 					hasConsole = true;
 				}
 				else
-					SafeMessageBox.Show(string.Format("Couldn't allocate win32 console: {0}", Marshal.GetLastWin32Error()));
+					System.Windows.Forms.MessageBox.Show(string.Format("Couldn't allocate win32 console: {0}", Marshal.GetLastWin32Error()));
 			}
 
 			if(hasConsole)

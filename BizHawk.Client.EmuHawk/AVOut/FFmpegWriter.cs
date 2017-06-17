@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 using BizHawk.Emulation.Common;
 using BizHawk.Emulation.DiscSystem;
 
@@ -201,7 +200,7 @@ namespace BizHawk.Client.EmuHawk
 			}
 			catch
 			{
-				SafeMessageBox.Show("Exception! ffmpeg history:\n" + ffmpeg_geterror());
+				MessageBox.Show("Exception! ffmpeg history:\n" + ffmpeg_geterror());
 				throw;
 			}
 
@@ -287,7 +286,7 @@ namespace BizHawk.Client.EmuHawk
 			}
 			catch
 			{
-				SafeMessageBox.Show("Exception! ffmpeg history:\n" + ffmpeg_geterror());
+				MessageBox.Show("Exception! ffmpeg history:\n" + ffmpeg_geterror());
 				throw;
 			}
 		}

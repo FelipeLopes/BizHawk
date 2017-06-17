@@ -8,7 +8,6 @@ using ICSharpCode.SharpZipLib.Zip.Compression;
 
 using BizHawk.Emulation.Common;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
@@ -672,7 +671,7 @@ namespace BizHawk.Client.EmuHawk
 			}
 			catch (Exception e)
 			{
-				SafeMessageBox.Show("JMD Worker Thread died:\n\n" + e);
+				System.Windows.Forms.MessageBox.Show("JMD Worker Thread died:\n\n" + e);
 				return;
 			}
 		}

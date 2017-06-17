@@ -6,12 +6,11 @@ using System.Windows.Forms;
 
 using BizHawk.Client.Common;
 using BizHawk.Emulation.Cores.Nintendo.NES;
-using BizHawk.Common;
 using BizHawk.Common.NumberExtensions;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class NESSyncSettingsForm : SafeForm
+	public partial class NESSyncSettingsForm : Form
 	{
 		private readonly DataTableDictionaryBind<string, string> _dataTableDictionary;
 		private readonly NES.NESSyncSettings _syncSettings;
@@ -92,7 +91,7 @@ namespace BizHawk.Client.EmuHawk
 
 		private void HelpBtn_Click(object sender, EventArgs e)
 		{
-			SafeMessageBox.Show(
+			MessageBox.Show(
 				this,
 				"Board Properties are special per-mapper system settings.  They are only useful to advanced users creating Tool Assisted Superplays.  No support will be provided if you break something with them.",
 				"Help",

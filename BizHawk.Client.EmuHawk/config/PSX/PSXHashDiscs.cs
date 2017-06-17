@@ -2,13 +2,12 @@
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 using BizHawk.Emulation.DiscSystem;
 using BizHawk.Emulation.Cores.Sony.PSX;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class PSXHashDiscs : SafeForm
+	public partial class PSXHashDiscs : Form
 	{
 		public PSXHashDiscs()
 		{

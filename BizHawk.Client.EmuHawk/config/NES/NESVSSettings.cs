@@ -2,12 +2,11 @@
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 using BizHawk.Emulation.Cores.Nintendo.NES;
 
 namespace BizHawk.Client.EmuHawk
 {
-    public partial class NesVsSettings : SafeForm, IHasShowDialog
+    public partial class NesVsSettings : Form, IHasShowDialog
 	{
 		private NES.NESSyncSettings _settings;
 		private NES _nes;

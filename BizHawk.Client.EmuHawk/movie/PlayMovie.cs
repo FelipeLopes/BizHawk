@@ -13,7 +13,7 @@ using BizHawk.Client.EmuHawk.WinFormExtensions;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class PlayMovie : SafeForm
+	public partial class PlayMovie : Form
 	{
 		private readonly PlatformFrameRates PlatformFrameRates = new PlatformFrameRates();
 

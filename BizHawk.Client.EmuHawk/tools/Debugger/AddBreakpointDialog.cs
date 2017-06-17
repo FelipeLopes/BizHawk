@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using BizHawk.Common;
 using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class AddBreakpointDialog : SafeForm, IHasShowDialog
+	public partial class AddBreakpointDialog : Form, IHasShowDialog
 	{
 		public AddBreakpointDialog(BreakpointOperation op)
 		{

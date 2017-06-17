@@ -3,12 +3,11 @@ using System.Linq;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 using BizHawk.Emulation.Cores.Intellivision;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class IntvControllerSettings : SafeForm
+	public partial class IntvControllerSettings : Form
 	{
 		private Intellivision.IntvSyncSettings _syncSettings;
 

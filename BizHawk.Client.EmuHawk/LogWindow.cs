@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-using BizHawk.Common;
 using BizHawk.Common.ReflectionExtensions;
 using BizHawk.Emulation.Common;
 using BizHawk.Emulation.Common.IEmulatorExtensions;
@@ -15,7 +14,7 @@ using BizHawk.Client.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class LogWindow : SafeForm
+	public partial class LogWindow : Form
 	{
 		//TODO: only show add to game db when this is a Rom details dialog
 		//Let user decide what type (instead of always adding it as a good dump)

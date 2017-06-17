@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
-
 using BizHawk.Client.Common;
-using BizHawk.Common;
 using BizHawk.Emulation.Cores.Nintendo.NES;
 using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class NESNameTableViewer : SafeForm, IToolFormAutoConfig
+	public partial class NESNameTableViewer : Form, IToolFormAutoConfig
 	{
 		// TODO:
 		// Show Scroll Lines + UI Toggle

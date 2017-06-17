@@ -6,11 +6,10 @@ using System.Text;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class LuaFunctionsForm : SafeForm
+	public partial class LuaFunctionsForm : Form
 	{
 		private readonly Sorting _columnSort = new Sorting();
 

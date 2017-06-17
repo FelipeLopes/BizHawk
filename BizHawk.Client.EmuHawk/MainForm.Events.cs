@@ -24,7 +24,6 @@ using BizHawk.Client.EmuHawk.WinFormExtensions;
 using BizHawk.Client.EmuHawk.ToolExtensions;
 using BizHawk.Emulation.Cores.Computers.AppleII;
 using BizHawk.Client.ApiHawk;
-using BizHawk.Common;
 using BizHawk.Emulation.Cores.Computers.Commodore64;
 
 namespace BizHawk.Client.EmuHawk
@@ -459,7 +458,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			if (!Emulator.Attributes().Released)
 			{
-				var result = SafeMessageBox.Show(
+				var result = MessageBox.Show(
 					this,
 					"Thanks for using Bizhawk!  The emulation core you have selected " +
 					"is currently BETA-status.  We appreciate your help in testing Bizhawk. " +
@@ -1437,7 +1436,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			if (!Emulator.CanPollInput())
 			{
-				SafeMessageBox.Show("Current core does not support input polling. TAStudio can't be used.");
+				MessageBox.Show("Current core does not support input polling. TAStudio can't be used.");
 				return;
 			}
 
@@ -1947,7 +1946,7 @@ namespace BizHawk.Client.EmuHawk
 				{
 					var message = $"Invalid file format. Reason: {ex.Message} \nForce transfer? This may cause the calculator to crash.";
 
-					if (SafeMessageBox.Show(message, "Upload Failed", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == DialogResult.Yes)
+					if (MessageBox.Show(message, "Upload Failed", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == DialogResult.Yes)
 					{
 						ti83.LinkPort.SendFileToCalc(File.OpenRead(ofd.FileName), false);
 					}
@@ -2791,7 +2790,7 @@ namespace BizHawk.Client.EmuHawk
 		private void UpdateNotification_Click(object sender, EventArgs e)
 		{
 			GlobalWin.Sound.StopSound();
-			DialogResult result = SafeMessageBox.Show(this,
+			DialogResult result = MessageBox.Show(this,
 				"Version " + Global.Config.Update_LatestVersion + " is now available. Would you like to open the BizHawk homepage?\r\n\r\nClick \"No\" to hide the update notification for this version.",
 				"New Version Available", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 			GlobalWin.Sound.StartSound();
@@ -2927,7 +2926,7 @@ namespace BizHawk.Client.EmuHawk
 			}
 			catch (Exception ex)
 			{
-				SafeMessageBox.Show("Exception on drag and drop:\n" + ex);
+				MessageBox.Show("Exception on drag and drop:\n" + ex);
 			}
 		}
 
@@ -3017,7 +3016,7 @@ namespace BizHawk.Client.EmuHawk
 				var movie = MovieImport.ImportFile(filePaths[0], out errorMsg, out warningMsg);
 				if (!string.IsNullOrEmpty(errorMsg))
 				{
-					SafeMessageBox.Show(errorMsg, "Conversion error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(errorMsg, "Conversion error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 				else
 				{

@@ -10,11 +10,10 @@ using System.Threading;
 using System.IO;
 
 using BizHawk.Client.EmuHawk.WinFormExtensions;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class BatchRun : SafeForm
+	public partial class BatchRun : Form
 	{
 		Thread thread = null;
 		List<BatchRunner.Result> MostRecentResults = null;

@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class PatternsForm : SafeForm
+	public partial class PatternsForm : Form
 	{
 		private readonly TAStudio _tastudio;
 

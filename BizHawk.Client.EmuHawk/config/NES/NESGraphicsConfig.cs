@@ -8,7 +8,7 @@ using BizHawk.Emulation.Cores.Nintendo.NES;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class NESGraphicsConfig : SafeForm
+	public partial class NESGraphicsConfig : Form
 	{
 		// TODO:
 		// Allow selection of palette file from archive

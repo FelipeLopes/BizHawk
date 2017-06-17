@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Linq;
 
-using BizHawk.Common;
 using BizHawk.Common.StringExtensions;
 
 namespace BizHawk.Client.EmuHawk
@@ -12,7 +11,7 @@ namespace BizHawk.Client.EmuHawk
 	/// A simple form that prompts the user for a single line of input.
 	/// Supports multiline messages
 	/// </summary>
-	public partial class InputPrompt : SafeForm, IHasShowDialog
+	public partial class InputPrompt : Form, IHasShowDialog
 	{
 		public InputPrompt()
 		{

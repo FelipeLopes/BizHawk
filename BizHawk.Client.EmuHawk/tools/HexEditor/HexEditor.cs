@@ -1278,7 +1278,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			if(!_domain.CanPoke())
 			{
-				SafeMessageBox.Show("This Memory Domain can't be Poked; so importing can't work");
+				MessageBox.Show("This Memory Domain can't be Poked; so importing can't work");
 				return;
 			}
 
@@ -2374,13 +2374,13 @@ namespace BizHawk.Client.EmuHawk
 			//mat.M21 = matVals[1, 0]; mat.M22 = matVals[1, 1]; mat.M23 = matVals[1, 2]; mat.M24 = matVals[1, 3];
 			//mat.M31 = matVals[2, 0]; mat.M32 = matVals[2, 1]; mat.M33 = matVals[2, 2]; mat.M34 = matVals[2, 3];
 			//mat.M41 = matVals[3, 0]; mat.M42 = matVals[3, 1]; mat.M43 = matVals[3, 2]; mat.M44 = matVals[3, 3];
-			//SafeMessageBox.Show(mat.ToString());
+			//MessageBox.Show(mat.ToString());
 
 			StringWriter sw = new StringWriter();
 				for(int i=0;i<4;i++)
 			sw.WriteLine("{0,18:0.00000} {1,18:0.00000} {2,18:0.00000} {3,18:0.00000}", matVals[i, 0], matVals[i, 1], matVals[i, 2], matVals[i, 3]);
 			var str = sw.ToString();
-			SafeMessageBox.Show(str);
+			MessageBox.Show(str);
 
 		}
 

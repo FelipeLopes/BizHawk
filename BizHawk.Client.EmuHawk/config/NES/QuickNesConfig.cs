@@ -8,7 +8,7 @@ using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class QuickNesConfig : SafeForm
+	public partial class QuickNesConfig : Form
 	{
 		private QuickNES.QuickNESSettings _settings;
 

@@ -3,12 +3,11 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 using BizHawk.Emulation.Cores.Calculators;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class TI83PaletteConfig : SafeForm
+	public partial class TI83PaletteConfig : Form
 	{
 		public TI83PaletteConfig()
 		{

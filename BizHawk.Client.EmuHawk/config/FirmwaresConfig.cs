@@ -26,7 +26,7 @@ using BizHawk.Client.EmuHawk.WinFormExtensions;
 // TODO - display some kind if [!] if you have a user-specified file which is known but defined as incompatible by the firmware DB
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class FirmwaresConfig : SafeForm
+	public partial class FirmwaresConfig : Form
 	{
 		// friendlier names than the system Ids
 		private static readonly Dictionary<string, string> SystemGroupNames = new Dictionary<string, string>
@@ -299,7 +299,7 @@ namespace BizHawk.Client.EmuHawk
 
 		private void tbbOrganize_Click(object sender, EventArgs e)
 		{
-			if (SafeMessageBox.Show(this, "This is going to move/rename every automatically-selected firmware file under your configured firmwares directory to match our recommended organizational scheme (which is not super great right now). Proceed?", "Firmwares Organization Confirm", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+			if (MessageBox.Show(this, "This is going to move/rename every automatically-selected firmware file under your configured firmwares directory to match our recommended organizational scheme (which is not super great right now). Proceed?", "Firmwares Organization Confirm", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
 			{
 				return;
 			}
@@ -458,7 +458,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			if (Owner is PathConfig)
 			{
-				SafeMessageBox.Show("C-C-C-Combo Breaker!", "Nice try, but");
+				MessageBox.Show("C-C-C-Combo Breaker!", "Nice try, but");
 				return;
 			}
 
@@ -578,7 +578,7 @@ namespace BizHawk.Client.EmuHawk
 
 			if (!string.IsNullOrEmpty(errors))
 			{
-				SafeMessageBox.Show(errors, "Error importing these files");
+				MessageBox.Show(errors, "Error importing these files");
 			}
 
 			if (didSomething)

@@ -7,7 +7,6 @@ using System.Windows.Forms;
 
 using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk.CustomControls;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
@@ -1168,7 +1167,7 @@ namespace BizHawk.Client.EmuHawk
 							}
 							else
 							{
-								SafeMessageBox.Show("Shift click logic for individual cells has not yet implemented");
+								MessageBox.Show("Shift click logic for individual cells has not yet implemented");
 							}
 						}
 						else

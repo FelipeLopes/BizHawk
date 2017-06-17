@@ -10,13 +10,12 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 using BizHawk.Emulation.Cores.Nintendo.NES;
 using BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class NESMusicRipper : SafeForm, IToolFormAutoConfig
+	public partial class NESMusicRipper : Form, IToolFormAutoConfig
 	{
 		[RequiredService]
 		private NES nes { get; set; }

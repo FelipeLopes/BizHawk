@@ -5,11 +5,10 @@ using System.Windows.Forms;
 
 using BizHawk.Emulation.Cores.PCEngine;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class PCEControllerConfig : SafeForm
+	public partial class PCEControllerConfig : Form
 	{
 		public PCEControllerConfig()
 		{

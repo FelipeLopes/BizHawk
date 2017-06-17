@@ -5,11 +5,10 @@ using System.Windows.Forms;
 
 using BizHawk.Emulation.Cores.Nintendo.N64;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class N64ControllersSetup : SafeForm
+	public partial class N64ControllersSetup : Form
 	{
 		private List<N64ControllerSettingControl> ControllerSettingControls
 		{

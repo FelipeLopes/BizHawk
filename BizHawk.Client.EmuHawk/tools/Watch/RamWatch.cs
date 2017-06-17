@@ -14,8 +14,6 @@ using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk.WinFormExtensions;
 using BizHawk.Client.EmuHawk.ToolExtensions;
 
-using BizHawk.Common;
-
 namespace BizHawk.Client.EmuHawk
 {
 	public partial class RamWatch : ToolFormBase, IToolForm
@@ -121,7 +119,7 @@ namespace BizHawk.Client.EmuHawk
 			if (_watches.Changes)
 			{
 				GlobalWin.Sound.StopSound();
-				var result = SafeMessageBox.Show("Save Changes?", "RAM Watch", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3);
+				var result = MessageBox.Show("Save Changes?", "RAM Watch", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3);
 				GlobalWin.Sound.StartSound();
 				if (result == DialogResult.Yes)
 				{

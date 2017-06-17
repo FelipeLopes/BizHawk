@@ -34,7 +34,7 @@ using BizHawk.Emulation.DiscSystem;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class MainForm : SafeForm
+	public partial class MainForm : Form
 	{
 		#region Constructors and Initialization, and Tear down
 
@@ -330,7 +330,7 @@ namespace BizHawk.Client.EmuHawk
 					message = "Couldn't initialize DirectSound! Things may go poorly for you. Try changing your sound driver to 44.1khz instead of 48khz in mmsys.cpl.";
 				}
 
-				SafeMessageBox.Show(message, "Initialization Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(message, "Initialization Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
 				Global.Config.SoundOutputMethod = Config.ESoundOutputMethod.Dummy;
 				GlobalWin.Sound = new Sound(Handle);
@@ -363,7 +363,7 @@ namespace BizHawk.Client.EmuHawk
 				LoadRom(cmdRom, new LoadRomArgs { OpenAdvanced = new OpenAdvanced_OpenRom() });
 				if (Global.Game == null)
 				{
-					SafeMessageBox.Show("Failed to load " + cmdRom + " specified on commandline");
+					MessageBox.Show("Failed to load " + cmdRom + " specified on commandline");
 				}
 			}
 			else if (Global.Config.RecentRoms.AutoLoad && !Global.Config.RecentRoms.Empty)
@@ -399,7 +399,7 @@ namespace BizHawk.Client.EmuHawk
 						var imported = MovieImport.ImportFile(cmdMovie, out errorMsg, out warningMsg);
 						if (!string.IsNullOrEmpty(errorMsg))
 						{
-							SafeMessageBox.Show(errorMsg, "Conversion error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+							MessageBox.Show(errorMsg, "Conversion error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						}
 						else
 						{
@@ -1221,7 +1221,7 @@ namespace BizHawk.Client.EmuHawk
 #if WINDOWS
 			GlobalWin.Tools.Load<LuaConsole>();
 #else
-			SafeMessageBox.Show("Sorry, Lua is not supported on this platform.", "Lua not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			MessageBox.Show("Sorry, Lua is not supported on this platform.", "Lua not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
 		}
 
@@ -1738,7 +1738,7 @@ namespace BizHawk.Client.EmuHawk
 						{
 							// we're eating this one now.  the possible negative consequence is that a user could lose
 							// their saveram and not know why
-							// SafeMessageBox.Show("Error: tried to load saveram, but core would not accept it?");
+							// MessageBox.Show("Error: tried to load saveram, but core would not accept it?");
 							return;
 						}
 
@@ -2255,7 +2255,7 @@ namespace BizHawk.Client.EmuHawk
 					// adelikat: only show this nag if the core actually has sync settings, not all cores do
 					if (e.Settings != null && !_supressSyncSettingsWarning)
 					{
-						SafeMessageBox.Show(
+						MessageBox.Show(
 						"No sync settings found, using currently configured settings for this core.",
 						"No sync settings found",
 						MessageBoxButtons.OK,
@@ -2758,7 +2758,7 @@ namespace BizHawk.Client.EmuHawk
 
 		private static bool StateErrorAskUser(string title, string message)
 		{
-			var result = SafeMessageBox.Show(
+			var result = MessageBox.Show(
 				message,
 				title,
 				MessageBoxButtons.YesNo,
@@ -3481,7 +3481,7 @@ namespace BizHawk.Client.EmuHawk
 				}
 				catch (Exception e)
 				{
-					SafeMessageBox.Show("Video dumping died:\n\n" + e);
+					MessageBox.Show("Video dumping died:\n\n" + e);
 					AbortAv();
 				}
 
@@ -3518,14 +3518,14 @@ namespace BizHawk.Client.EmuHawk
 
 		private void ShowMessageCoreComm(string message)
 		{
-			SafeMessageBox.Show(this, message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			MessageBox.Show(this, message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 		}
 
 		private void ShowLoadError(object sender, RomLoader.RomErrorArgs e)
 		{
 			if (e.Type == RomLoader.LoadErrorType.MissingFirmware)
 			{
-				var result = SafeMessageBox.Show(
+				var result = MessageBox.Show(
 					"You are missing the needed firmware files to load this Rom\n\nWould you like to open the firmware manager now and configure your firmwares?",
 					e.Message,
 					MessageBoxButtons.YesNo,
@@ -3550,7 +3550,7 @@ namespace BizHawk.Client.EmuHawk
 					title = e.AttemptedCoreLoad + " load error";
 				}
 
-				SafeMessageBox.Show(this, e.Message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, e.Message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
@@ -3919,7 +3919,7 @@ namespace BizHawk.Client.EmuHawk
 
 		private static void ShowConversionError(string errorMsg)
 		{
-			SafeMessageBox.Show(errorMsg, "Conversion error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			MessageBox.Show(errorMsg, "Conversion error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
 		private static void ProcessMovieImport(string fn)

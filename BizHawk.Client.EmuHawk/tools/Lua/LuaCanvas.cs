@@ -3,12 +3,11 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
 	[Description("Represents a canvas object returned by the gui.createcanvas() method")]
-	public partial class LuaCanvas : SafeForm
+	public partial class LuaCanvas : Form
 	{
 		private readonly Graphics _graphics;
 

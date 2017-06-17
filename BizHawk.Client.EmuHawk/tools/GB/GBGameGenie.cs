@@ -6,12 +6,11 @@ using System.Windows.Forms;
 
 using BizHawk.Emulation.Common;
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
 	[ToolAttributes(false, null)]
-	public partial class GBGameGenie : SafeForm, IToolFormAutoConfig
+	public partial class GBGameGenie : Form, IToolFormAutoConfig
 	{
 		// TODO: fix the use of Global.Game.System and Emulator.SystemId
 		[RequiredService]

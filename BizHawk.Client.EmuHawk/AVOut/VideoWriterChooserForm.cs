@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
 	/// <summary>
 	/// implements a simple dialog which chooses an IVideoWriter to record with
 	/// </summary>
-	public partial class VideoWriterChooserForm : SafeForm
+	public partial class VideoWriterChooserForm : Form
 	{
 		private VideoWriterChooserForm()
 		{
@@ -139,13 +138,13 @@ namespace BizHawk.Client.EmuHawk
 				{
 					if (numericTextBoxW.IntValue < 1 || numericTextBoxH.IntValue < 1)
 					{
-						SafeMessageBox.Show(this, "Size must be positive!");
+						MessageBox.Show(this, "Size must be positive!");
 						DialogResult = DialogResult.None;
 					}
 				}
 				catch (FormatException)
 				{
-					SafeMessageBox.Show(this, "Size must be numeric!");
+					MessageBox.Show(this, "Size must be numeric!");
 					DialogResult = DialogResult.None;
 				}
 			}

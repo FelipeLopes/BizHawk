@@ -4,13 +4,12 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-using BizHawk.Common;
 using BizHawk.Client.Common;
 using Emu = BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class WatchEditor : SafeForm, IHasShowDialog
+	public partial class WatchEditor : Form, IHasShowDialog
 	{
 		public enum Mode { New, Duplicate, Edit };
 

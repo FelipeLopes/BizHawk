@@ -3,12 +3,11 @@ using System.Linq;
 using System.Windows.Forms;
 
 using BizHawk.Client.Common;
-using BizHawk.Common;
 using BizHawk.Emulation.Cores.Nintendo.NES;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class NesControllerSettings : SafeForm
+	public partial class NesControllerSettings : Form
 	{
 		private readonly NES.NESSyncSettings _syncSettings;
 
