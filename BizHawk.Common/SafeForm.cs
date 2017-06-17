@@ -5,14 +5,14 @@ namespace BizHawk.Common
 {
 	public partial class SafeForm : Form
 	{
-		public void Show ()
+		public new void Show ()
 		{
 			lock (XLock.GetLock ()) {
 				base.Show ();
 			}
 		}
 
-		public DialogResult ShowDialog ()
+		public new DialogResult ShowDialog ()
 		{
 			DialogResult result;
 			lock (XLock.GetLock ()) {
@@ -20,5 +20,12 @@ namespace BizHawk.Common
 			}
 			return result;
 		}
+
+        public new void Close ()
+        {
+            lock (XLock.GetLock ()) {
+                base.Close ();
+            }
+        }
 	}
 }
