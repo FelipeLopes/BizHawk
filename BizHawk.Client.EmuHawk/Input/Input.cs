@@ -327,7 +327,6 @@ namespace BizHawk.Client.EmuHawk
 		{
 			//for (; ; )
 			//{
-			lock (XLock.GetLock ()) {
 #if WINDOWS
 				var keyEvents = KeyInput.Update().Concat(IPCKeyInput.Update());
 				GamePad.UpdateAll();
@@ -444,7 +443,6 @@ namespace BizHawk.Client.EmuHawk
 							EnqueueEvent (ie);
 					}
 				} //lock(this)
-			} // lock(XLock.GetLock())
 			  //arbitrary selection of polling frequency:
 			  //Thread.Sleep(10);
 			  //}
