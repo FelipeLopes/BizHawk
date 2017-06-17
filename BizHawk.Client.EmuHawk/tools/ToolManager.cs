@@ -48,6 +48,12 @@ namespace BizHawk.Client.EmuHawk
 			
 			// The type[] in parameter is used to avoid an ambigous name exception
 			MethodInfo method = GetType().GetMethod("Load", new Type[] { typeof(bool) }).MakeGenericMethod(toolType);
+#if !WINDOWS
+			if (method.ToString ().Equals ("BizHawk.Client.EmuHawk.LuaConsole Load[LuaConsole](Boolean)")) {
+				MessageBox.Show ("Sorry, Lua is not supported on this platform.", "Lua not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return null;
+			}
+#endif			    
 			return (IToolForm)method.Invoke(this, new object[] { focus });
 		}
 
