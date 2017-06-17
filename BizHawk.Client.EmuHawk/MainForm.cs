@@ -815,7 +815,6 @@ namespace BizHawk.Client.EmuHawk
 				// event though it was originally designed for multithreading.
 				Input.Instance.UpdateThreadProc ();
 				// loop through all available events
-				Input.Instance.UpdateThreadProc ();
 				var ie = Input.Instance.DequeueEvent();
 				if (ie == null)
 				{
