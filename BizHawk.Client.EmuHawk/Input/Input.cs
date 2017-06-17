@@ -112,13 +112,14 @@ namespace BizHawk.Client.EmuHawk
 
 		private Input ()
 		{
-			/*
+#if WINDOWS			
 			UpdateThread = new Thread(UpdateThreadProc)
 			{
 				IsBackground = true, 
 				Priority = ThreadPriority.AboveNormal //why not? this thread shouldn't be very heavy duty, and we want it to be responsive
 			};
-			UpdateThread.Start(); */
+			UpdateThread.Start();
+#endif
 		}
 
 		public static void Initialize ()
@@ -325,14 +326,14 @@ namespace BizHawk.Client.EmuHawk
 
 		public void UpdateThreadProc ()
 		{
-			//for (; ; )
-			//{
 #if WINDOWS
+			for (; ; )
+			{
 				var keyEvents = KeyInput.Update().Concat(IPCKeyInput.Update());
 				GamePad.UpdateAll();
 				GamePad360.UpdateAll();
 #else
-				OTK_Keyboard.Update ();
+			OTK_Keyboard.Update ();
 				OTK_GamePad.UpdateAll ();
 #endif
 
@@ -444,8 +445,10 @@ namespace BizHawk.Client.EmuHawk
 					}
 				} //lock(this)
 			  //arbitrary selection of polling frequency:
-			  //Thread.Sleep(10);
-			  //}
+#if WINDOWS
+			  Thread.Sleep(10);
+			  }
+#endif
 		}
 
 		public void StartListeningForFloatEvents ()
