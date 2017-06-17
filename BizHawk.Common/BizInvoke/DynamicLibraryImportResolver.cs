@@ -71,28 +71,8 @@ namespace BizHawk.Common.BizInvoke
 #else
 		private static class Libdl
 		{
-			[DllImport("libc")] 
-			static extern int uname(IntPtr buf); 
-			static bool IsRunningOnMac(){
-				//Borrowed from a forum post somewhere. Cannot use Environment.Platform because Mono returns Unix for both OSX and Unix.
-				IntPtr buf = IntPtr.Zero; 
-				try{ 
-					buf = Marshal.AllocHGlobal(8192); 
-					// This is a hacktastic way of getting sysname from uname () 
-					if (uname(buf) == 0){ 
-						string os = Marshal.PtrToStringAnsi(buf); 
-						if (os == "Darwin")return true; 
-					} 
-				} 
-				catch { } 
-				finally{ 
-					if (buf != IntPtr.Zero) Marshal.FreeHGlobal(buf); 
-				} 
-				return false; 
-			}
-
 			public static IntPtr dlopen(string filename, int flags){
-				bool isMac = IsRunningOnMac();
+				bool isMac = Util.IsRunningOnMac();
 				string realFile = System.IO.Path.GetFileNameWithoutExtension(filename);
 				if (!realFile.StartsWith("lib"))
 				{
@@ -111,11 +91,11 @@ namespace BizHawk.Common.BizInvoke
 			}
 
 			public static IntPtr dlsym(IntPtr handle, string symbol){
-				return (IsRunningOnMac()) ? dlMac.dlsym(handle, symbol) : dlLinux.dlsym(handle, symbol);
+				return (Util.IsRunningOnMac()) ? dlMac.dlsym(handle, symbol) : dlLinux.dlsym(handle, symbol);
 			}
 
 			public static int dlclose(IntPtr handle){
-				return (IsRunningOnMac()) ? dlMac.dlclose(handle) : dlLinux.dlclose(handle);
+				return (Util.IsRunningOnMac()) ? dlMac.dlclose(handle) : dlLinux.dlclose(handle);
 			}
 
 			public const int RTLD_NOW = 2;

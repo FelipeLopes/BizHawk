@@ -2,12 +2,34 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace BizHawk.Common
 {
 	public static unsafe partial class Util
 	{
+#if !WINDOWS		
+		[DllImport ("libc")]
+		static extern int uname (IntPtr buf);
+		static public bool IsRunningOnMac ()
+		{
+			//Borrowed from a forum post somewhere. Cannot use Environment.Platform because Mono returns Unix for both OSX and Unix.
+			IntPtr buf = IntPtr.Zero;
+			try {
+				buf = Marshal.AllocHGlobal (8192);
+				// This is a hacktastic way of getting sysname from uname () 
+				if (uname (buf) == 0) {
+					string os = Marshal.PtrToStringAnsi (buf);
+					if (os == "Darwin") return true;
+				}
+			} catch { } finally {
+				if (buf != IntPtr.Zero) Marshal.FreeHGlobal (buf);
+			}
+			return false;
+		}
+#endif
+
 		public static void CopyStream(Stream src, Stream dest, long len)
 		{
 			const int size = 0x2000;

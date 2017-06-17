@@ -811,6 +811,9 @@ namespace BizHawk.Client.EmuHawk
 
 			for (;;)
 			{
+				// HACK: Calling the input polling function here in a single thread,
+				// event though it was originally designed for multithreading.
+				Input.Instance.UpdateThreadProc ();
 				// loop through all available events
 				Input.Instance.UpdateThreadProc ();
 				var ie = Input.Instance.DequeueEvent();

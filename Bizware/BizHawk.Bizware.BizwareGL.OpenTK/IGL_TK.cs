@@ -24,6 +24,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using otkg = OpenTK.Graphics;
+using TK = OpenTK.Configuration;
 
 namespace BizHawk.Bizware.BizwareGL.Drivers.OpenTK
 {
@@ -97,11 +98,10 @@ namespace BizHawk.Bizware.BizwareGL.Drivers.OpenTK
 		void IDisposable.Dispose()
 		{
 			//TODO - a lot of analysis here
-			//For some reason, this causes an unclean exit on Linux.
-			#if WINDOWS
-			OffscreenNativeWindow.Dispose(); OffscreenNativeWindow = null;
-			GraphicsContext.Dispose(); GraphicsContext = null;
-			#endif
+			if (!TK.RunningOnX11) {
+				OffscreenNativeWindow.Dispose (); OffscreenNativeWindow = null;
+				GraphicsContext.Dispose (); GraphicsContext = null;
+			}
 		}
 
 		public void Clear(ClearBufferMask mask)
@@ -348,14 +348,13 @@ namespace BizHawk.Bizware.BizwareGL.Drivers.OpenTK
 
 		public void FreePipeline(Pipeline pipeline)
 		{
-			//For some reason, this causes an unclean exit on Linux
-			#if WINDOWS
-			var pw = pipeline.Opaque as PipelineWrapper;
-			GL.DeleteProgram(pw.pid);
+			if (!TK.RunningOnX11) {
+				var pw = pipeline.Opaque as PipelineWrapper;
+				GL.DeleteProgram (pw.pid);
 
-			pw.FragmentShader.Release();
-			pw.VertexShader.Release();
-			#endif
+				pw.FragmentShader.Release ();
+				pw.VertexShader.Release ();
+			}
 		}
 
 		public void Internal_FreeShader(Shader shader)
