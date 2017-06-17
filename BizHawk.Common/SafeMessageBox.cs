@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace BizHawk.Common
 {
-	public static class SafeMessageBox
+	public class SafeMessageBox
 	{
 		public static DialogResult Show (string text)
 		{

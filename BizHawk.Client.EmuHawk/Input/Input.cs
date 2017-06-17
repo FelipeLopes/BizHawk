@@ -342,6 +342,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			for (; ; )
 			{
+#if false				
 				lock(XLock.GetLock()) {
 #if WINDOWS
 				var keyEvents = KeyInput.Update().Concat(IPCKeyInput.Update());
@@ -460,6 +461,7 @@ namespace BizHawk.Client.EmuHawk
 						}
 					} //lock(this)
 				} // lock(XLock.GetLock())
+#endif
 				//arbitrary selection of polling frequency:
 				Thread.Sleep(10);
 			}
