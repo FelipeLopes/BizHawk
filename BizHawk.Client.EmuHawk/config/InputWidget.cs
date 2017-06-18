@@ -130,7 +130,11 @@ namespace BizHawk.Client.EmuHawk
 		/// </summary>
 		private void ReadKeys()
 		{
+#if WINDOWS
 			Input.Instance.Update();
+#else
+			Input.Instance.UpdateThreadProc();
+#endif
 			var bindingStr = Input.Instance.GetNextBindEvent();
 			if (!string.IsNullOrEmpty(_wasPressed) && bindingStr == _wasPressed)
 			{
