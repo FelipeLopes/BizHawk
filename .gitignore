@@ -82,6 +82,7 @@ libgambatte/xcode/gambatte.xcodeproj/project.xcworkspace/xcuserdata
 libgambatte/xcode/gambatte.xcodeproj/xcuserdata
 libgambatte/libgambatte.so
 blip_buf/libblip_buf.so
+quicknes/mingw/libquicknes.so
 psx/octoshock/bizhawk/octoshock.xcodeproj/xcuserdata
 psx/octoshock/bizhawk/octoshock.xcodeproj/project.xcworkspace/xcuserdata
 /LuaInterface/Lua/src/.libs
