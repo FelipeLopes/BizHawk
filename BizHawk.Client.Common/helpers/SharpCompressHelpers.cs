@@ -1,6 +1,6 @@
 using System;
-using SharpCompress.Archive;
-using SharpCompress.Archive.Zip;
+using SharpCompress.Archives;
+using SharpCompress.Archives.Zip;
 
 namespace BizHawk.Client.Common
 {
@@ -8,7 +8,7 @@ namespace BizHawk.Client.Common
 	{
 		public static IArchiveEntry GetEntry(this IArchive arch, string name){
 			foreach (var entry in arch.Entries) {
-				if (entry.FilePath.Equals (name, StringComparison.Ordinal)) {
+				if (entry.Key.Equals (name, StringComparison.Ordinal)) {
 					return entry;
 				}
 			}

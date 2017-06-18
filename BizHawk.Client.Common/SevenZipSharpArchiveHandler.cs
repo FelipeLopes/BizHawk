@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
-using SharpCompress.Archive;
-using SharpCompress.Reader;
+using SharpCompress.Archives;
+using SharpCompress.Readers;
 
 using BizHawk.Common;
 
@@ -34,11 +35,11 @@ namespace BizHawk.Client.Common
 			isExecutable = false;
 			//I don't think I can do this very well. I have no idea why isExecutable is needed, and SharpCompress doesn't provide offsets.
 
-			using(FileStream fs = new FileStream (fileName, FileMode.Open))
+			using(FileStream fs = new FileStream (fileName, FileMode.Open, FileAccess.Read))
 			{
 				try
 				{
-					IArchive chk = ArchiveFactory.Open(fs, SharpCompress.Common.Options.None);
+					IArchive chk = ArchiveFactory.Open(fs);
 				}
 				catch
 				{
@@ -62,8 +63,8 @@ namespace BizHawk.Client.Common
 				_stream.Dispose();
 				_stream = null;
 			}
-			_stream = new FileStream(path, FileMode.Open);
-			_extractor = ArchiveFactory.Open(_stream, SharpCompress.Common.Options.None);
+			_stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+			_extractor = ArchiveFactory.Open(_stream);
 		}
         		
 		public List<HawkFileArchiveItem> Scan()
@@ -74,7 +75,7 @@ namespace BizHawk.Client.Common
 			{
 				i++;
 				if (afd.IsDirectory) continue;
-				var ai = new HawkFileArchiveItem { Name = HawkFile.Util_FixArchiveFilename(afd.FilePath), Size = (long)afd.Size, ArchiveIndex = i, Index = ret.Count };
+				var ai = new HawkFileArchiveItem { Name = HawkFile.Util_FixArchiveFilename(afd.Key), Size = (long)afd.Size, ArchiveIndex = i, Index = ret.Count };
 				ret.Add(ai);
 			}
 
