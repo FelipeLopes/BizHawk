@@ -103,7 +103,8 @@ namespace BizHawk.Client.EmuHawk
 			if (_cdl == null)
 			{
 				lvCDL.BeginUpdate();
-				lvCDL.Items.Clear();
+				// For some reason, lvCDL.Items.Clear() throws Exception in Linux
+				lvCDL.VirtualListSize = 0;
 				lvCDL.EndUpdate();
 				return;
 			}

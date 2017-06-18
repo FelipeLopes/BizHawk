@@ -1424,7 +1424,13 @@ namespace BizHawk.Client.EmuHawk
 
 		private void RamSearchMenuItem_Click(object sender, EventArgs e)
 		{
+			// Disabling RAM search because loading it would import some classes
+			// that load user32.dll, which is Windows-specific.
+#if WINDOWS			
 			GlobalWin.Tools.Load<RamSearch>();
+#else
+			MessageBox.Show ("Sorry, RAM Search is not supported on this platform.", "RAM Search not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#endif
 		}
 
 		private void LuaConsoleMenuItem_Click(object sender, EventArgs e)
@@ -1439,8 +1445,11 @@ namespace BizHawk.Client.EmuHawk
 				MessageBox.Show("Current core does not support input polling. TAStudio can't be used.");
 				return;
 			}
-
+#if WINDOWS
 			GlobalWin.Tools.Load<TAStudio>();
+#else
+			MessageBox.Show ("Sorry, TAStudio is not supported on this platform.", "TAStudio not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#endif
 		}
 
 		private void HexEditorMenuItem_Click(object sender, EventArgs e)
@@ -1480,7 +1489,13 @@ namespace BizHawk.Client.EmuHawk
 
 		private void CheatsMenuItem_Click(object sender, EventArgs e)
 		{
+			// Disabling RAM search because loading it would import some classes
+			// that load user32.dll, which is Windows-specific.
+#if WINDOWS
 			GlobalWin.Tools.Load<Cheats>();
+#else
+			MessageBox.Show ("Sorry, cheats are not supported on this platform.", "Cheats not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#endif
 		}
 
 		private void CheatCodeConverterMenuItem_Click(object sender, EventArgs e)
@@ -1505,7 +1520,11 @@ namespace BizHawk.Client.EmuHawk
 
 		private void NewHexEditorMenuItem_Click(object sender, EventArgs e)
 		{
+#if WINDOWS			
 			GlobalWin.Tools.Load<NewHexEditor>();
+#else
+			MessageBox.Show ("Sorry, new Hex Editor is not supported on this platform.", "New Hex Editor not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#endif
 		}
 
 		#endregion

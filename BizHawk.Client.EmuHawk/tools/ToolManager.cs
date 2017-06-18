@@ -45,15 +45,24 @@ namespace BizHawk.Client.EmuHawk
 			{
 				throw new ArgumentException($"Type {toolType.Name} does not implement IToolForm.");
 			}
-			
-			// The type[] in parameter is used to avoid an ambigous name exception
-			MethodInfo method = GetType().GetMethod("Load", new Type[] { typeof(bool) }).MakeGenericMethod(toolType);
+
 #if !WINDOWS
-			if (method.ToString ().Equals ("BizHawk.Client.EmuHawk.LuaConsole Load[LuaConsole](Boolean)")) {
+			if (toolType == typeof (LuaConsole)) {
 				MessageBox.Show ("Sorry, Lua is not supported on this platform.", "Lua not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return null;
+			} else if (toolType == typeof (RamSearch)) {
+				MessageBox.Show ("Sorry, RAM Search is not supported on this platform.", "RAM Search not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return null;
+			} else if (toolType == typeof (Cheats)) {
+				MessageBox.Show ("Sorry, cheats are not supported on this platform.", "Cheats not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return null;
+			} else if (toolType == typeof (TraceLogger)) {
+				MessageBox.Show ("Sorry, Trace Logger is not supported on this platform.", "Trace Logger not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return null;
 			}
-#endif			    
+#endif
+			// The type[] in parameter is used to avoid an ambigous name exception
+			MethodInfo method = GetType().GetMethod("Load", new Type[] { typeof(bool) }).MakeGenericMethod(toolType);		    
 			return (IToolForm)method.Invoke(this, new object[] { focus });
 		}
 
@@ -128,6 +137,12 @@ namespace BizHawk.Client.EmuHawk
 
 			ServiceInjector.UpdateServices(Global.Emulator.ServiceProvider, newTool);
 			string toolType = typeof(T).ToString();
+#if !WINDOWS
+			if (toolType.Equals ("BizHawk.Client.EmuHawk.TraceLogger")) {
+				MessageBox.Show ("Sorry, Trace Logger is not supported on this platform.", "Trace Logger not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return null;
+			}
+#endif
 
 			// auto settings
 			if (newTool is IToolFormAutoConfig)
