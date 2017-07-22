@@ -165,7 +165,7 @@ namespace BizHawk.Client.EmuHawk.WinFormExtensions
 				((Form)form).StartPosition = FormStartPosition.Manual;
 				((Form)form).Location = position;
 			}
-			var result = (owner == null ? form.ShowDialog() : ((CommonDialog)form).ShowDialog(owner));
+			var result = (owner == null ? form.ShowDialog() : ((Form)form).ShowDialog(owner));
 			GlobalWin.Sound.StartSound();
 			return result;
 		}
