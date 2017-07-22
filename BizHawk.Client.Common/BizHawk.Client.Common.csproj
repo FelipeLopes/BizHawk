@@ -102,7 +102,8 @@
       <HintPath>..\References\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SharpCompress">
-      <HintPath>..\output64\SharpCompress.dll</HintPath>
+      <HintPath>..\output64\dll\SharpCompress.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
