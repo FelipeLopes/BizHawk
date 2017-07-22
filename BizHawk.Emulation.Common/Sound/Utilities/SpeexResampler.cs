@@ -43,6 +43,7 @@ namespace BizHawk.Emulation.Common
 				MAX_ERROR
 			}
 
+#if WINDOWS
 			/// <summary>
 			/// Create a new resampler with integer input and output rates.
 			/// </summary>
@@ -256,6 +257,7 @@ namespace BizHawk.Emulation.Common
 			/// <returns>English string</returns>
 			[DllImport("libspeexdsp.dll", CallingConvention = CallingConvention.Cdecl)]
 			public static extern string speex_resampler_strerror(RESAMPLER_ERR err);
+#endif
 		}
 
 		// opaque pointer to state
@@ -271,6 +273,9 @@ namespace BizHawk.Emulation.Common
 		private int _inbufpos;
 
 		/// <summary>
+		uint srcRate;
+		uint dstRate;
+
 		/// throw an exception based on error state
 		/// </summary>
 		private static void CheckError(LibSpeexDSP.RESAMPLER_ERR e)
@@ -302,6 +307,7 @@ namespace BizHawk.Emulation.Common
 		/// <param name="input">source to take input from when output is requested. if null, no auto-fetching</param>
 		public SpeexResampler(Quality quality, uint rationum, uint ratioden, uint sratein, uint srateout, Action<short[], int> drainer = null, ISoundProvider input = null)
 		{
+#if WINDOWS
 			if (drainer != null && input != null)
 			{
 				throw new ArgumentException("Can't autofetch without being an ISyncSoundProvider?");
@@ -316,11 +322,15 @@ namespace BizHawk.Emulation.Common
 			}
 
 			CheckError(err);
+#endif
 
 			_drainer = drainer ?? InternalDrain;
 			_input = input;
 
 			_outbuf = new short[(_inbuf.Length * ratioden / rationum / 2 * 2) + 128];
+
+			srcRate = rationum;
+			dstRate = ratioden;
 		}
 
 		/// <summary>change sampling rate on the fly</summary>
@@ -330,8 +340,13 @@ namespace BizHawk.Emulation.Common
 		/// <param name="srateout">sampling rate out, rounded to nearest hz</param>
 		public void ChangeRate(uint rationum, uint ratioden, uint sratein, uint srateout)
 		{
+#if WINDOWS
 			CheckError(LibSpeexDSP.speex_resampler_set_rate_frac(_st, rationum, ratioden, sratein, srateout));
 			_outbuf = new short[(_inbuf.Length * ratioden / rationum / 2 * 2) + 128];
+#else
+			srcRate = rationum;
+			dstRate = ratioden;
+#endif
 		}
 
 		/// <summary>
@@ -377,7 +392,7 @@ namespace BizHawk.Emulation.Common
 		public void Flush()
 		{
 			uint inal = (uint)_inbufpos / 2;
-
+#if WINDOWS
 			uint outal = (uint)_outbuf.Length / 2;
 
 			LibSpeexDSP.speex_resampler_process_interleaved_int(_st, _inbuf, ref inal, _outbuf, ref outal);
@@ -395,16 +410,45 @@ namespace BizHawk.Emulation.Common
 
 			// dispatch outbuf
 			_drainer(_outbuf, (int)outal);
+#else
+			uint incr = (uint)(((ulong)(srcRate)*(1<<16))/dstRate);
+			uint destLoc = 0;
+			short sample0, sample1, newsample;
+			ulong inputPoint = 0;
+			while (destLoc < _outbuf.Length) {
+				uint offset = (uint)((inputPoint>>16) * 2);
+				uint fraction = (uint)(inputPoint & 0xffff);
+				if(offset+3>=_inbufpos) break; //End of input samples
+
+				sample0 = _inbuf[offset];
+				sample1 = _inbuf[offset + 2];
+				newsample = (short)(sample0 + (((sample1 - sample0) * fraction) >> 16)); 
+				_outbuf[destLoc++] = newsample;
+
+				sample0 = _inbuf[offset + 1];
+				sample1 = _inbuf[offset + 3];
+				newsample = (short)(sample0 + (((sample1 - sample0) * fraction) >> 16)); 
+				_outbuf[destLoc++] = newsample;
+
+				inputPoint += incr;
+			}
+			Buffer.BlockCopy(_inbuf, (int)inal * 2 * sizeof(short), _inbuf, 0, _inbufpos - (int)inal * 2);
+			_inbufpos -= (int)inal * 2;
+
+			_drainer(_outbuf, (int)destLoc/2);
+#endif
 		}
 
 		public void Dispose()
 		{
+#if WINDOWS
 			if (_st != IntPtr.Zero)
 			{
 				LibSpeexDSP.speex_resampler_destroy(_st);
 				_st = IntPtr.Zero;
 				GC.SuppressFinalize(this);
 			}
+#endif
 		}
 
 		~SpeexResampler()

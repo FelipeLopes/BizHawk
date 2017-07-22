@@ -16,7 +16,7 @@ using BizHawk.Client.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class OpenAdvancedChooser : Form
+	public partial class OpenAdvancedChooser : Form, IHasShowDialog
 	{
 		MainForm mainForm;
 

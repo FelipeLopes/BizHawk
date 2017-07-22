@@ -36,6 +36,8 @@ namespace BizHawk.Client.DiscoHawk
 			//otherwise, some people will have crashes at boot-up due to .net security disliking MOTW.
 			//some people are getting MOTW through a combination of browser used to download bizhawk, and program used to dearchive it
 			WhackAllMOTW(dllDir);
+#else
+			SubMain(new string[0]);
 #endif
 		}
 

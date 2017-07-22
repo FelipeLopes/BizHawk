@@ -64,8 +64,12 @@ namespace BizHawk.Client.EmuHawk
 			}
 		}
 
+		#if WINDOWS
 		[DllImport("user32")]
 		private static extern bool HideCaret(IntPtr hWnd);
+		#else
+		private static bool HideCaret(IntPtr hWnd) { return true; }
+		#endif
 
 		protected override void OnMouseClick(MouseEventArgs e)
 		{
@@ -126,7 +130,11 @@ namespace BizHawk.Client.EmuHawk
 		/// </summary>
 		private void ReadKeys()
 		{
+#if WINDOWS
 			Input.Instance.Update();
+#else
+			Input.Instance.UpdateThreadProc();
+#endif
 			var bindingStr = Input.Instance.GetNextBindEvent();
 			if (!string.IsNullOrEmpty(_wasPressed) && bindingStr == _wasPressed)
 			{

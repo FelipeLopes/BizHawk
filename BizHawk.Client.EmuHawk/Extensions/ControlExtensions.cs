@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -157,15 +157,26 @@ namespace BizHawk.Client.EmuHawk.WinFormExtensions
 		/// <summary>
 		/// Handles EmuHawk specific issues before showing a modal dialog
 		/// </summary>
-		public static DialogResult ShowHawkDialog(this Form form, IWin32Window owner = null, Point position = default(Point))
+		public static DialogResult ShowHawkDialog(this IHasShowDialog form, IWin32Window owner = null, Point position = default(Point))
 		{
 			GlobalWin.Sound.StopSound();
-			if (position != default(Point))
+			if (form is Form && position != default(Point))
 			{
-				form.StartPosition = FormStartPosition.Manual;
-				form.Location = position;
+				((Form)form).StartPosition = FormStartPosition.Manual;
+				((Form)form).Location = position;
 			}
-			var result = (owner == null ? form.ShowDialog(new Form() { TopMost = true }) : form.ShowDialog(owner));
+			var result = (owner == null ? form.ShowDialog() : ((Form)form).ShowDialog(owner));
+			GlobalWin.Sound.StartSound();
+			return result;
+		}
+
+		/// <summary>
+		/// Handles EmuHawk specific issues before showing a modal dialog
+		/// </summary>
+		public static DialogResult ShowHawkDialog(this IHasShowDialog form)
+		{
+			GlobalWin.Sound.StopSound();
+			var result = form.ShowDialog();
 			GlobalWin.Sound.StartSound();
 			return result;
 		}

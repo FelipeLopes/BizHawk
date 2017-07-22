@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BizHawk.Client.Common;
+using BizHawk.Common;
 using BizHawk.Emulation.Cores.Nintendo.Gameboy;
 using BizHawk.Emulation.Cores.PCEngine;
 using BizHawk.Emulation.Cores.Sega.MasterSystem;
@@ -63,7 +64,11 @@ namespace BizHawk.Client.ApiHawk
 		/// </summary>
 		static ClientApi()
 		{
-			clientAssembly = Assembly.GetEntryAssembly();
+			if (Util.IsRunningOnMac ()) {
+				clientAssembly = Assembly.GetCallingAssembly ();
+			} else {
+				clientAssembly = Assembly.GetEntryAssembly ();
+			}
 			clientMainFormInstance = clientAssembly.GetType("BizHawk.Client.EmuHawk.GlobalWin").GetField("MainForm").GetValue(null);
 			mainFormClass = clientAssembly.GetType("BizHawk.Client.EmuHawk.MainForm");
 		}

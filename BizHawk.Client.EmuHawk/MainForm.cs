@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -32,6 +32,7 @@ using BizHawk.Client.ApiHawk;
 using BizHawk.Emulation.Common.Base_Implementations;
 using BizHawk.Emulation.Cores.Nintendo.SNES9X;
 using BizHawk.Emulation.Cores.Consoles.SNK;
+using BizHawk.Emulation.DiscSystem;
 
 namespace BizHawk.Client.EmuHawk
 {
@@ -125,6 +126,15 @@ namespace BizHawk.Client.EmuHawk
 			}
 
 			_throttle = new Throttle();
+
+
+			FFMpeg.FFMpegPath = Path.Combine(PathManager.GetExeDirectoryAbsolute(), "dll", "ffmpeg");
+			#if !WINDOWS
+			if (OpenTK.Configuration.RunningOnMacOS && File.Exists(FFMpeg.FFMpegPath+"_osx"))
+			{
+				FFMpeg.FFMpegPath += "_osx";
+			}
+			#endif
 
 			Global.CheatList = new CheatCollection();
 			Global.CheatList.Changed += ToolFormBase.UpdateCheatRelatedTools;
@@ -231,7 +241,13 @@ namespace BizHawk.Client.EmuHawk
 			Database.LoadDatabase(Path.Combine(PathManager.GetExeDirectoryAbsolute(), "gamedb", "gamedb.txt"));
 
 			// TODO GL - a lot of disorganized wiring-up here
-			CGC.CGCBinPath = Path.Combine(PathManager.GetDllDirectory(), "cgc.exe");
+			CGC.CGCBinPath = Path.Combine(PathManager.GetDllDirectory(), "cgc");
+			#if !WINDOWS
+			if (OpenTK.Configuration.RunningOnMacOS && File.Exists(CGC.CGCBinPath+"_osx"))
+			{
+				CGC.CGCBinPath += "_osx";
+			}
+			#endif
 			PresentationPanel = new PresentationPanel();
 			PresentationPanel.GraphicsControl.MainWindow = true;
 			GlobalWin.DisplayManager = new DisplayManager(PresentationPanel);
@@ -257,6 +273,7 @@ namespace BizHawk.Client.EmuHawk
 
 					// does this need to be last for any particular reason? do tool dialogs persist settings when closing?
 					SaveConfig();
+					_exitRequestPending = true;
 				}
 				else
 				{
@@ -505,66 +522,79 @@ namespace BizHawk.Client.EmuHawk
 
 			InitializeFpsData();
 
-			for (;;)
+			for (; ; )
 			{
-				Input.Instance.Update();
-
-				// handle events and dispatch as a hotkey action, or a hotkey button, or an input button
-				ProcessInput();
-				Global.ClientControls.LatchFromPhysical(_hotkeyCoalescer);
-
-				Global.ActiveController.LatchFromPhysical(Global.ControllerInputCoalescer);
-
-				Global.ActiveController.ApplyAxisConstraints(
-					(Emulator is N64 && Global.Config.N64UseCircularAnalogConstraint) ? "Natural Circle" : null);
-
-				Global.ActiveController.OR_FromLogical(Global.ClickyVirtualPadController);
-				Global.AutoFireController.LatchFromPhysical(Global.ControllerInputCoalescer);
-
-				if (Global.ClientControls["Autohold"])
-				{
-					Global.StickyXORAdapter.MassToggleStickyState(Global.ActiveController.PressedButtons);
-					Global.AutofireStickyXORAdapter.MassToggleStickyState(Global.AutoFireController.PressedButtons);
-				}
-				else if (Global.ClientControls["Autofire"])
-				{
-					Global.AutofireStickyXORAdapter.MassToggleStickyState(Global.ActiveController.PressedButtons);
-				}
-
-				// autohold/autofire must not be affected by the following inputs
-				Global.ActiveController.Overrides(Global.LuaAndAdaptor);
-
-				if (GlobalWin.Tools.Has<LuaConsole>() && !SuppressLua)
-				{
-					GlobalWin.Tools.LuaConsole.ResumeScripts(false);
-				}
-
-				StepRunLoop_Core();
-				StepRunLoop_Throttle();
-
-				Render();
-
-				CheckMessages();
-
-				if (_exitRequestPending)
-				{
-					_exitRequestPending = false;
-					Close();
-				}
-
-				if (_exit)
-				{
-					break;
-				}
-
-				if (Global.Config.DispSpeedupFeatures != 0)
+				if (RunLoopCore())
 				{
 					Thread.Sleep(0);
 				}
+				else
+				{
+					Shutdown();
+					return _exitCode;
+				}
+			}
+		}
+
+
+		public bool RunLoopCore()
+		{
+			if (_exit)
+			{
+				return false;
+			}
+			Input.Instance.Update();
+
+			// handle events and dispatch as a hotkey action, or a hotkey button, or an input button
+			ProcessInput();
+			Global.ClientControls.LatchFromPhysical(_hotkeyCoalescer);
+
+			Global.ActiveController.LatchFromPhysical(Global.ControllerInputCoalescer);
+
+			Global.ActiveController.ApplyAxisConstraints(
+				(Emulator is N64 && Global.Config.N64UseCircularAnalogConstraint) ? "Natural Circle" : null);
+
+			Global.ActiveController.OR_FromLogical(Global.ClickyVirtualPadController);
+			Global.AutoFireController.LatchFromPhysical(Global.ControllerInputCoalescer);
+
+			if (Global.ClientControls["Autohold"])
+			{
+				Global.StickyXORAdapter.MassToggleStickyState(Global.ActiveController.PressedButtons);
+				Global.AutofireStickyXORAdapter.MassToggleStickyState(Global.AutoFireController.PressedButtons);
+			}
+			else if (Global.ClientControls["Autofire"])
+			{
+				Global.AutofireStickyXORAdapter.MassToggleStickyState(Global.ActiveController.PressedButtons);
 			}
 
-			Shutdown();
-			return _exitCode;
+			// autohold/autofire must not be affected by the following inputs
+			Global.ActiveController.Overrides(Global.LuaAndAdaptor);
+
+				if (GlobalWin.Tools.Has<LuaConsole>() && !SuppressLua)
+			{
+				GlobalWin.Tools.LuaConsole.ResumeScripts(false);
+			}
+
+			StepRunLoop_Core();
+			StepRunLoop_Throttle();
+
+			Render();
+
+			CheckMessages();
+
+			if (_exitRequestPending)
+			{
+				_exitRequestPending = false;
+				Close();
+				_exit = true;
+			}
+
+			if (Global.Config.DispSpeedupFeatures != 0)
+			{
+				Thread.Sleep(0);
+			}
+
+			return true;
 		}
 
 		/// <summary>
@@ -696,6 +726,14 @@ namespace BizHawk.Client.EmuHawk
 		/// </summary>
 		public bool AllowInput(bool yieldAlt)
 		{
+#if !WINDOWS
+			//On Windows, ActiveForm would be null if main form is not active.
+			//In Mono WinForms, ActiveForm retains the last active form when the app goes into the background.
+			//Thus we check up front if the App is active before letting everything else continue.
+			if (!GlobalWin.IsApplicationActive && !Global.Config.AcceptBackgroundInput) {
+				return false;
+			}
+#endif
 			// the main form gets input
 			if (ActiveForm == this)
 			{
@@ -775,6 +813,11 @@ namespace BizHawk.Client.EmuHawk
 
 			for (;;)
 			{
+#if !WINDOWS				
+				// HACK: Calling the input polling function here in a single thread,
+				// even though it was originally designed for multithreading.
+				Input.Instance.UpdateThreadProc ();
+#endif
 				// loop through all available events
 				var ie = Input.Instance.DequeueEvent();
 				if (ie == null)
@@ -2144,13 +2187,11 @@ namespace BizHawk.Client.EmuHawk
 
 		private void OpenRom()
 		{
-			var ofd = new OpenFileDialog
-			{
-				InitialDirectory = PathManager.GetRomsPath(Emulator.SystemId),
-				Filter = RomFilter,
-				RestoreDirectory = false,
-				FilterIndex = _lastOpenRomFilter
-			};
+			var ofd = HawkDialogFactory.CreateOpenFileDialog();
+			ofd.InitialDirectory = PathManager.GetRomsPath(Global.Emulator.SystemId);
+			ofd.InitialDirectory = PathManager.GetRomsPath(Emulator.SystemId);
+			ofd.RestoreDirectory = false;
+			ofd.FilterIndex = _lastOpenRomFilter;
 
 			var result = ofd.ShowHawkDialog();
 			if (result != DialogResult.OK)
@@ -2713,6 +2754,7 @@ namespace BizHawk.Client.EmuHawk
 		// Alt key hacks
 		protected override void WndProc(ref Message m)
 		{
+#if WINDOWS
 			switch (m.Msg)
 			{
 				case WmDevicechange:
@@ -2720,6 +2762,7 @@ namespace BizHawk.Client.EmuHawk
 					GamePad360.Initialize();
 					break;
 			}
+#endif
 
 			// this is necessary to trap plain alt keypresses so that only our hotkey system gets them
 			if (m.Msg == 0x0112) // WM_SYSCOMMAND
@@ -3213,7 +3256,7 @@ namespace BizHawk.Client.EmuHawk
 					}
 					else
 					{
-						var sfd = new SaveFileDialog();
+						var sfd = HawkDialogFactory.CreateSaveFileDialog();
 						if (Global.Game != null)
 						{
 							sfd.FileName = PathManager.FilesystemSafeName(Global.Game) + "." + ext; // dont use Path.ChangeExtension, it might wreck game names with dots in them
@@ -3652,7 +3695,9 @@ namespace BizHawk.Client.EmuHawk
 					}
 
 					Global.Config.RecentRoms.Add(loaderName);
+					#if WINDOWS
 					JumpLists.AddRecentItem(loaderName, ioa.DisplayName);
+					#endif
 
 					// Don't load Save Ram if a movie is being loaded
 					if (!Global.MovieSession.MovieIsQueued && File.Exists(PathManager.SaveRamPath(loader.Game)))
@@ -4077,14 +4122,12 @@ namespace BizHawk.Client.EmuHawk
 				file.Directory.Create();
 			}
 
-			var sfd = new SaveFileDialog
-			{
-				AddExtension = true,
-				DefaultExt = "State",
-				Filter = "Save States (*.State)|*.State|All Files|*.*",
-				InitialDirectory = path,
-				FileName = PathManager.SaveStatePrefix(Global.Game) + "." + "QuickSave0.State"
-			};
+			var sfd = HawkDialogFactory.CreateSaveFileDialog ();
+			sfd.AddExtension = true;
+			sfd.DefaultExt = "State";
+			sfd.Filter = "Save States (*.State)|*.State|All Files|*.*";
+			sfd.InitialDirectory = path;
+			sfd.FileName = PathManager.SaveStatePrefix (Global.Game) + "." + "QuickSave0.State";
 
 			var result = sfd.ShowHawkDialog();
 			if (result == DialogResult.OK)
@@ -4111,12 +4154,10 @@ namespace BizHawk.Client.EmuHawk
 				return;
 			}
 
-			var ofd = new OpenFileDialog
-			{
-				InitialDirectory = PathManager.GetSaveStatePath(Global.Game),
-				Filter = "Save States (*.State)|*.State|All Files|*.*",
-				RestoreDirectory = true
-			};
+			var ofd = HawkDialogFactory.CreateOpenFileDialog ();
+			ofd.InitialDirectory = PathManager.GetSaveStatePath (Global.Game);
+			ofd.Filter = "Save States (*.State)|*.State|All Files|*.*";
+			ofd.RestoreDirectory = true;
 
 			var result = ofd.ShowHawkDialog();
 			if (result != DialogResult.OK)

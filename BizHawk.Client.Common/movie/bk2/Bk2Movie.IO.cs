@@ -24,10 +24,18 @@ namespace BizHawk.Client.Common
 			backupName = backupName.Insert(Filename.LastIndexOf("."), $".{DateTime.Now:yyyy-MM-dd HH.mm.ss}");
 			backupName = Path.Combine(Global.Config.PathEntries["Global", "Movie backups"].Path, Path.GetFileName(backupName));
 
-			var directoryInfo = new FileInfo(backupName).Directory;
-			if (directoryInfo != null)
+			if (backupName.StartsWith("./"))
 			{
-				Directory.CreateDirectory(directoryInfo.FullName);
+				//Mono is being stupid and tries to create /Movies/ at the root of the drive when tell it to 
+				//create via Directory.Create("./Movies/"). Since it doesn't have access to /, it fails.
+				//If the path is relative, I need to fix it myself as a work-around.
+				string actualBase = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+				backupName = Path.Combine(actualBase, backupName.Substring(2));
+			}
+
+			if (!Directory.Exists(Path.GetDirectoryName(backupName)))
+			{
+				Directory.CreateDirectory(Path.GetDirectoryName(backupName));
 			}
 
 			Write(backupName, backup: true);

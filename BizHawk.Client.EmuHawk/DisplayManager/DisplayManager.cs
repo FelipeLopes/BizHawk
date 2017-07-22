@@ -13,7 +13,9 @@ using BizHawk.Client.EmuHawk.FilterManager;
 using BizHawk.Bizware.BizwareGL;
 
 using OpenTK;
+#if WINDOWS
 using BizHawk.Bizware.BizwareGL.Drivers.SlimDX;
+#endif
 using BizHawk.Bizware.BizwareGL.Drivers.GdiPlus;
 
 namespace BizHawk.Client.EmuHawk
@@ -65,7 +67,12 @@ namespace BizHawk.Client.EmuHawk
 			using (var fceux = typeof(Program).Assembly.GetManifestResourceStream("BizHawk.Client.EmuHawk.Resources.fceux.ttf"))
 				LoadCustomFont(fceux);
 
+#if WINDOWS
+
 			if (GL is BizHawk.Bizware.BizwareGL.Drivers.OpenTK.IGL_TK || GL is BizHawk.Bizware.BizwareGL.Drivers.SlimDX.IGL_SlimDX9)
+#else
+			if (GL is BizHawk.Bizware.BizwareGL.Drivers.OpenTK.IGL_TK)
+#endif
 			{
 				var fiHq2x = new FileInfo(Path.Combine(PathManager.GetExeDirectoryAbsolute(), "Shaders/BizHawk/hq2x.cgp"));
 				if (fiHq2x.Exists)
@@ -76,8 +83,10 @@ namespace BizHawk.Client.EmuHawk
 					using (var stream = fiScanlines.OpenRead())
 						ShaderChain_scanlines = new Filters.RetroShaderChain(GL, new Filters.RetroShaderPreset(stream), Path.Combine(PathManager.GetExeDirectoryAbsolute(), "Shaders/BizHawk"));
 				string bicubic_path = "Shaders/BizHawk/bicubic-fast.cgp";
+#if WINDOWS
 				if(GL is BizHawk.Bizware.BizwareGL.Drivers.SlimDX.IGL_SlimDX9)
 					bicubic_path = "Shaders/BizHawk/bicubic-normal.cgp";
+#endif
 				var fiBicubic = new FileInfo(Path.Combine(PathManager.GetExeDirectoryAbsolute(), bicubic_path));
 				if (fiBicubic.Exists)
 					using (var stream = fiBicubic.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -727,7 +736,9 @@ namespace BizHawk.Client.EmuHawk
 			bool vsync = false;
 			bool alternateVsync = false;
 			//only used by alternate vsync
+#if WINDOWS
 			IGL_SlimDX9 dx9 = null;
+#endif
 
 			if (!job.offscreen)
 			{
@@ -743,6 +754,7 @@ namespace BizHawk.Client.EmuHawk
 					vsync = false;
 
 				//for now, it's assumed that the presentation panel is the main window, but that may not always be true
+#if WINDOWS
 				if (vsync && Global.Config.DispAlternateVsync && Global.Config.VSyncThrottle)
 				{
 					dx9 = GL as IGL_SlimDX9;
@@ -753,6 +765,7 @@ namespace BizHawk.Client.EmuHawk
 						vsync = false;
 					}
 				}
+#endif
 
 				//TODO - whats so hard about triple buffering anyway? just enable it always, and change api to SetVsync(enable,throttle)
 				//maybe even SetVsync(enable,throttlemethod) or just SetVsync(enable,throttle,advanced)
@@ -838,14 +851,18 @@ namespace BizHawk.Client.EmuHawk
 			{
 				Debug.Assert(inFinalTarget);
 
+				#if WINDOWS
 				//wait for vsync to begin
 				if (alternateVsync) dx9.AlternateVsyncPass(0);
+				#endif
 
 				//present and conclude drawing
 				presentationPanel.GraphicsControl.SwapBuffers();
 
+				#if WINDOWS
 				//wait for vsync to end
 				if (alternateVsync) dx9.AlternateVsyncPass(1);
+				#endif
 
 				//nope. dont do this. workaround for slow context switching on intel GPUs. just switch to another context when necessary before doing anything
 				//presentationPanel.GraphicsControl.End();

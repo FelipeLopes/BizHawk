@@ -345,14 +345,11 @@ namespace BizHawk.Client.EmuHawk
 
 			/*************************/
 			/* CLONE OF CODE FROM OpenRom (mostly) */
-			var ofd = new OpenFileDialog
-			{
-				InitialDirectory = PathManager.GetRomsPath(Emulator.SystemId),
-				Filter = filter,
-				RestoreDirectory = false,
-				FilterIndex = _lastOpenRomFilter,
-				Title = "Open Advanced"
-			};
+			var ofd = HawkDialogFactory.CreateOpenFileDialog();
+			ofd.InitialDirectory = PathManager.GetRomsPath(Emulator.SystemId);
+			ofd.RestoreDirectory = false;
+			ofd.FilterIndex = _lastOpenRomFilter;
+			ofd.Title = "Open Advanced";
 
 			var result = ofd.ShowHawkDialog();
 			if (result != DialogResult.OK)
@@ -519,11 +516,9 @@ namespace BizHawk.Client.EmuHawk
 
 		private void ImportMovieMenuItem_Click(object sender, EventArgs e)
 		{
-			var ofd = new OpenFileDialog
-			{
-				InitialDirectory = PathManager.GetRomsPath(Emulator.SystemId),
-				Multiselect = true,
-				Filter = FormatFilter(
+			var ofd = HawkDialogFactory.CreateOpenFileDialog();
+			ofd.InitialDirectory = PathManager.GetRomsPath(Emulator.SystemId);
+			ofd.Filter = FormatFilter(
 					"Movie Files", "*.fm2;*.mc2;*.mcm;*.mmv;*.gmv;*.vbm;*.lsmv;*.fcm;*.fmv;*.vmv;*.nmv;*.smv;*.ymv;*.zmv;*.bkm;*.pjm;*.pxm",
 					"FCEUX", "*.fm2",
 					"PCEjin/Mednafen", "*.mc2;*.mcm",
@@ -541,9 +536,8 @@ namespace BizHawk.Client.EmuHawk
 					"PSXjin", "*.pjm",
 					"PCSX", "*.pxm",
 					"BizHawk Bkm", "*.bkm",
-					"All Files", "*.*"),
-				RestoreDirectory = false
-			};
+					"All Files", "*.*");
+			ofd.RestoreDirectory = false;
 
 			var result = ofd.ShowHawkDialog();
 			if (result == DialogResult.OK)
@@ -656,12 +650,10 @@ namespace BizHawk.Client.EmuHawk
 		{
 			var path = string.Format(PathManager.ScreenshotPrefix(Global.Game) + ".{0:yyyy-MM-dd HH.mm.ss}.png", DateTime.Now);
 
-			var sfd = new SaveFileDialog
-			{
-				InitialDirectory = Path.GetDirectoryName(path),
-				FileName = Path.GetFileName(path),
-				Filter = "PNG File (*.png)|*.png"
-			};
+			var sfd = HawkDialogFactory.CreateSaveFileDialog();
+			sfd.InitialDirectory = Path.GetDirectoryName(path);
+			sfd.FileName = Path.GetFileName(path);
+			sfd.Filter = "PNG File (*.png)|*.png";
 
 			var result = sfd.ShowHawkDialog();
 			if (result == DialogResult.OK)
@@ -1330,6 +1322,7 @@ namespace BizHawk.Client.EmuHawk
 				InitControls(); // rebind hotkeys
 				GlobalWin.OSD.AddMessage("Config file loaded: " + ofd.FileName);
 			}
+
 		}
 
 		#endregion
@@ -1413,7 +1406,13 @@ namespace BizHawk.Client.EmuHawk
 
 		private void RamSearchMenuItem_Click(object sender, EventArgs e)
 		{
+			// Disabling RAM search because loading it would import some classes
+			// that load user32.dll, which is Windows-specific.
+#if WINDOWS			
 			GlobalWin.Tools.Load<RamSearch>();
+#else
+			MessageBox.Show ("Sorry, RAM Search is not supported on this platform.", "RAM Search not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#endif
 		}
 
 		private void LuaConsoleMenuItem_Click(object sender, EventArgs e)
@@ -1428,8 +1427,11 @@ namespace BizHawk.Client.EmuHawk
 				MessageBox.Show("Current core does not support input polling. TAStudio can't be used.");
 				return;
 			}
-
+#if WINDOWS
 			GlobalWin.Tools.Load<TAStudio>();
+#else
+			MessageBox.Show ("Sorry, TAStudio is not supported on this platform.", "TAStudio not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#endif
 		}
 
 		private void HexEditorMenuItem_Click(object sender, EventArgs e)
@@ -1469,7 +1471,13 @@ namespace BizHawk.Client.EmuHawk
 
 		private void CheatsMenuItem_Click(object sender, EventArgs e)
 		{
+			// Disabling RAM search because loading it would import some classes
+			// that load user32.dll, which is Windows-specific.
+#if WINDOWS
 			GlobalWin.Tools.Load<Cheats>();
+#else
+			MessageBox.Show ("Sorry, cheats are not supported on this platform.", "Cheats not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#endif
 		}
 
 		private void CheatCodeConverterMenuItem_Click(object sender, EventArgs e)
@@ -1494,7 +1502,11 @@ namespace BizHawk.Client.EmuHawk
 
 		private void NewHexEditorMenuItem_Click(object sender, EventArgs e)
 		{
+#if WINDOWS			
 			GlobalWin.Tools.Load<NewHexEditor>();
+#else
+			MessageBox.Show ("Sorry, new Hex Editor is not supported on this platform.", "New Hex Editor not supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#endif
 		}
 
 		#endregion
@@ -1594,7 +1606,7 @@ namespace BizHawk.Client.EmuHawk
 		{
 			if (Emulator is NES && ((NES)Emulator).IsVS)
 			{
-				new NesVsSettings().ShowHawkDialog();
+				new NesVsSettings().ShowHawkDialog(this);
 			}
 		}
 
@@ -1920,12 +1932,10 @@ namespace BizHawk.Client.EmuHawk
 		private void LoadTIFileMenuItem_Click(object sender, EventArgs e)
 		{
 			var ti83 = (TI83)Emulator;
-			var ofd = new OpenFileDialog
-			{
-				InitialDirectory = PathManager.GetRomsPath(Emulator.SystemId),
-				Filter = "TI-83 Program Files (*.83p,*.8xp)|*.83P;*.8xp|All Files|*.*",
-				RestoreDirectory = true
-			};
+			var ofd = HawkDialogFactory.CreateOpenFileDialog();
+			ofd.InitialDirectory = PathManager.GetRomsPath(Emulator.SystemId);
+			ofd.Filter = "TI-83 Program Files (*.83p,*.8xp)|*.83P;*.8xp|All Files|*.*";
+			ofd.RestoreDirectory = true;
 
 			if (ofd.ShowDialog() == DialogResult.OK)
 			{

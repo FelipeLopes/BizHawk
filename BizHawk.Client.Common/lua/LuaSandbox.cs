@@ -48,9 +48,9 @@ namespace BizHawk.Client.Common
 				fixed (byte* pstr = &System.Text.Encoding.Unicode.GetBytes(target + "\0")[0])
 					return SetCurrentDirectoryW(pstr);
 			#else
-				if (System.IO.Directory.Exists(CurrentDirectory)) // race condition for great justice
+				if (System.IO.Directory.Exists(_currentDirectory)) // race condition for great justice
 				{
-					Environment.CurrentDirectory = CurrentDirectory; // thats right, you can't set a directory as current that doesnt exist because .net's got to do SENSELESS SLOW-ASS SECURITY CHECKS on it and it can't do that on a NONEXISTENT DIRECTORY
+					Environment.CurrentDirectory = _currentDirectory; // thats right, you can't set a directory as current that doesnt exist because .net's got to do SENSELESS SLOW-ASS SECURITY CHECKS on it and it can't do that on a NONEXISTENT DIRECTORY
 					return true;
 				}
 				else

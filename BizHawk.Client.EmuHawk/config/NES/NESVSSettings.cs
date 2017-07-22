@@ -6,7 +6,7 @@ using BizHawk.Emulation.Cores.Nintendo.NES;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class NesVsSettings : Form
+    public partial class NesVsSettings : Form, IHasShowDialog
 	{
 		private NES.NESSyncSettings _settings;
 		private NES _nes;

@@ -66,6 +66,10 @@ namespace BizHawk.Client.EmuHawk
 					continue;
 				if (!ServiceInjector.IsAvailable(Emulator.ServiceProvider, t))
 					continue;
+#if !WINDOWS
+				if (t == typeof (NewHexEditor) || t == typeof (TAStudio))
+					continue;
+#endif
 
 				var instance = Activator.CreateInstance(t);
 

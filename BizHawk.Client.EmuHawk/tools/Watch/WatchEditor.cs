@@ -9,7 +9,7 @@ using Emu = BizHawk.Emulation.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
-	public partial class WatchEditor : Form
+	public partial class WatchEditor : Form, IHasShowDialog
 	{
 		public enum Mode { New, Duplicate, Edit };
 

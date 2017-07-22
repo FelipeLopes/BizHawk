@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 #if WINDOWS
 using SlimDX.DirectInput;
+#else
+using OpenTK.Input;
 #endif
 
 using BizHawk.Common;
@@ -14,48 +16,44 @@ namespace BizHawk.Client.EmuHawk
 	//coalesces events back into instantaneous states
 	public class InputCoalescer : SimpleController
 	{
-		public void Receive(Input.InputEvent ie)
+		public void Receive (Input.InputEvent ie)
 		{
 			bool state = ie.EventType == Input.InputEventType.Press;
-			
-			string button = ie.LogicalButton.ToString();
-			Buttons[button] = state;
+
+			string button = ie.LogicalButton.ToString ();
+			Buttons [button] = state;
 
 			//when a button is released, all modified variants of it are released as well
-			if (!state)
-			{
-				var releases = Buttons.Where(kvp => kvp.Key.Contains("+") && kvp.Key.EndsWith(ie.LogicalButton.Button)).ToArray();
+			if (!state) {
+				var releases = Buttons.Where (kvp => kvp.Key.Contains ("+") && kvp.Key.EndsWith (ie.LogicalButton.Button)).ToArray ();
 				foreach (var kvp in releases)
-					Buttons[kvp.Key] = false;
+					Buttons [kvp.Key] = false;
 			}
 		}
 	}
 
 	public class ControllerInputCoalescer : SimpleController
 	{
-		public void Receive(Input.InputEvent ie)
+		public void Receive (Input.InputEvent ie)
 		{
 			bool state = ie.EventType == Input.InputEventType.Press;
 
-			string button = ie.LogicalButton.ToString();
-			Buttons[button] = state;
+			string button = ie.LogicalButton.ToString ();
+			Buttons [button] = state;
 
 			//For controller input, we want Shift+X to register as both Shift and X (for Keyboard controllers)
-			string[] subgroups = button.Split('+');
-			if (subgroups.Length > 0)
-			{
-				foreach (string s in subgroups)
-				{
-					Buttons[s] = state;
+			string [] subgroups = button.Split ('+');
+			if (subgroups.Length > 0) {
+				foreach (string s in subgroups) {
+					Buttons [s] = state;
 				}
 			}
 
 			//when a button is released, all modified variants of it are released as well
-			if (!state)
-			{
-				var releases = Buttons.Where((kvp) => kvp.Key.Contains("+") && kvp.Key.EndsWith(ie.LogicalButton.Button)).ToArray();
+			if (!state) {
+				var releases = Buttons.Where ((kvp) => kvp.Key.Contains ("+") && kvp.Key.EndsWith (ie.LogicalButton.Button)).ToArray ();
 				foreach (var kvp in releases)
-					Buttons[kvp.Key] = false;
+					Buttons [kvp.Key] = false;
 			}
 		}
 	}
@@ -77,13 +75,13 @@ namespace BizHawk.Client.EmuHawk
 		/// Why is this receiving a control, but actually using it as a Form (where the WantingMouseFocus is checked?)
 		/// Because later we might change it to work off the control, specifically, if a control is supplied (normally actually a Form will be supplied)
 		/// </summary>
-		public void ControlInputFocus(System.Windows.Forms.Control c, InputFocus types, bool wants)
+		public void ControlInputFocus (System.Windows.Forms.Control c, InputFocus types, bool wants)
 		{
-			if (types.HasFlag(InputFocus.Mouse) && wants) WantingMouseFocus.Add(c);
-			if (types.HasFlag(InputFocus.Mouse) && !wants) WantingMouseFocus.Remove(c);
+			if (types.HasFlag (InputFocus.Mouse) && wants) WantingMouseFocus.Add (c);
+			if (types.HasFlag (InputFocus.Mouse) && !wants) WantingMouseFocus.Remove (c);
 		}
 
-		HashSet<System.Windows.Forms.Control> WantingMouseFocus = new HashSet<System.Windows.Forms.Control>();
+		HashSet<System.Windows.Forms.Control> WantingMouseFocus = new HashSet<System.Windows.Forms.Control> ();
 
 		[Flags]
 		public enum ModifierKey
@@ -112,9 +110,9 @@ namespace BizHawk.Client.EmuHawk
 		public static Input Instance { get; private set; }
 		readonly Thread UpdateThread;
 
-		private Input()
+		private Input ()
 		{
-#if WINDOWS
+#if WINDOWS			
 			UpdateThread = new Thread(UpdateThreadProc)
 			{
 				IsBackground = true, 
@@ -124,18 +122,20 @@ namespace BizHawk.Client.EmuHawk
 #endif
 		}
 
-		public static void Initialize()
+		public static void Initialize ()
 		{
 #if WINDOWS
 			KeyInput.Initialize();
-			IPCKeyInput.Initialize();
 			GamePad.Initialize();
 			GamePad360.Initialize();
+#else
+			OTK_Keyboard.Initialize ();
+			OTK_GamePad.Initialize ();
 #endif
-			Instance = new Input();
+			Instance = new Input ();
 		}
 
-		public static void Cleanup()
+		public static void Cleanup ()
 		{
 #if WINDOWS
 			KeyInput.Cleanup();
@@ -149,7 +149,7 @@ namespace BizHawk.Client.EmuHawk
 		}
 		public struct LogicalButton
 		{
-			public LogicalButton(string button, ModifierKey modifiers)
+			public LogicalButton (string button, ModifierKey modifiers)
 			{
 				Button = button;
 				Modifiers = modifiers;
@@ -161,7 +161,7 @@ namespace BizHawk.Client.EmuHawk
 			public bool Control { get { return ((Modifiers & ModifierKey.Control) != 0); } }
 			public bool Shift { get { return ((Modifiers & ModifierKey.Shift) != 0); } }
 
-			public override string ToString()
+			public override string ToString ()
 			{
 				string ret = "";
 				if (Control) ret += "Ctrl+";
@@ -170,20 +170,20 @@ namespace BizHawk.Client.EmuHawk
 				ret += Button;
 				return ret;
 			}
-			public override bool Equals(object obj)
+			public override bool Equals (object obj)
 			{
 				var other = (LogicalButton)obj;
 				return other == this;
 			}
-			public override int GetHashCode()
+			public override int GetHashCode ()
 			{
-				return Button.GetHashCode() ^ Modifiers.GetHashCode();
+				return Button.GetHashCode () ^ Modifiers.GetHashCode ();
 			}
-			public static bool operator ==(LogicalButton lhs, LogicalButton rhs)
+			public static bool operator == (LogicalButton lhs, LogicalButton rhs)
 			{
 				return lhs.Button == rhs.Button && lhs.Modifiers == rhs.Modifiers;
 			}
-			public static bool operator !=(LogicalButton lhs, LogicalButton rhs)
+			public static bool operator != (LogicalButton lhs, LogicalButton rhs)
 			{
 				return !(lhs == rhs);
 			}
@@ -192,31 +192,34 @@ namespace BizHawk.Client.EmuHawk
 		{
 			public LogicalButton LogicalButton;
 			public InputEventType EventType;
-			public override string ToString()
+			public override string ToString ()
 			{
-				return string.Format("{0}:{1}", EventType.ToString(), LogicalButton.ToString());
+				return string.Format ("{0}:{1}", EventType.ToString (), LogicalButton.ToString ());
 			}
 		}
 
-		private readonly WorkingDictionary<string, object> ModifierState = new WorkingDictionary<string, object>();
-		private readonly WorkingDictionary<string, bool> LastState = new WorkingDictionary<string, bool>();
-		private readonly WorkingDictionary<string, bool> UnpressState = new WorkingDictionary<string, bool>();
+		private readonly WorkingDictionary<string, object> ModifierState = new WorkingDictionary<string, object> ();
+		private readonly WorkingDictionary<string, bool> LastState = new WorkingDictionary<string, bool> ();
+		private readonly WorkingDictionary<string, bool> UnpressState = new WorkingDictionary<string, bool> ();
+#if WINDOWS
 		private readonly HashSet<string> IgnoreKeys = new HashSet<string>(new[] { "LeftShift", "RightShift", "LeftControl", "RightControl", "LeftAlt", "RightAlt" });
-		private readonly WorkingDictionary<string, float> FloatValues = new WorkingDictionary<string, float>();
-		private readonly WorkingDictionary<string, float> FloatDeltas = new WorkingDictionary<string, float>();
+#else
+		private readonly HashSet<string> IgnoreKeys = new HashSet<string> (new [] { "ShiftLeft", "ShiftRight", "ControlLeft", "ControlRight", "AltLeft", "AltRight" });
+#endif
+		private readonly WorkingDictionary<string, float> FloatValues = new WorkingDictionary<string, float> ();
+		private readonly WorkingDictionary<string, float> FloatDeltas = new WorkingDictionary<string, float> ();
 		private bool trackdeltas = false;
 
-		void HandleButton(string button, bool newState)
+		void HandleButton (string button, bool newState)
 		{
-			bool isModifier = IgnoreKeys.Contains(button);
+			bool isModifier = IgnoreKeys.Contains (button);
 			if (EnableIgnoreModifiers && isModifier) return;
-			if (LastState[button] && newState) return;
-			if (!LastState[button] && !newState) return;
+			if (LastState [button] && newState) return;
+			if (!LastState [button] && !newState) return;
 
 			//apply 
 			//NOTE: this is not quite right. if someone held leftshift+rightshift it would be broken. seems unlikely, though.
-			if (button == "LeftShift")
-			{
+			if (button == "LeftShift") {
 				_Modifiers &= ~ModifierKey.Shift;
 				if (newState)
 					_Modifiers |= ModifierKey.Shift;
@@ -227,31 +230,38 @@ namespace BizHawk.Client.EmuHawk
 			if (button == "LeftAlt") { _Modifiers &= ~ModifierKey.Alt; if (newState) _Modifiers |= ModifierKey.Alt; }
 			if (button == "RightAlt") { _Modifiers &= ~ModifierKey.Alt; if (newState) _Modifiers |= ModifierKey.Alt; }
 
-			if (UnpressState.ContainsKey(button))
-			{
+			if (UnpressState.ContainsKey (button)) {
 				if (newState) return;
-				Console.WriteLine("Removing Unpress {0} with newState {1}", button, newState);
-				UnpressState.Remove(button);
-				LastState[button] = false;
+				Console.WriteLine ("Removing Unpress {0} with newState {1}", button, newState);
+				UnpressState.Remove (button);
+				LastState [button] = false;
 				return;
 			}
 
 
 			//dont generate events for things like Ctrl+LeftControl
 			ModifierKey mods = _Modifiers;
+#if WINDOWS
 			if (button == "LeftShift") mods &= ~ModifierKey.Shift;
 			if (button == "RightShift") mods &= ~ModifierKey.Shift;
 			if (button == "LeftControl") mods &= ~ModifierKey.Control;
 			if (button == "RightControl") mods &= ~ModifierKey.Control;
 			if (button == "LeftAlt") mods &= ~ModifierKey.Alt;
 			if (button == "RightAlt") mods &= ~ModifierKey.Alt;
+#else
+			if (button == "ShiftLeft") mods &= ~ModifierKey.Shift;
+			if (button == "ShiftRight") mods &= ~ModifierKey.Shift;
+			if (button == "ControlLeft") mods &= ~ModifierKey.Control;
+			if (button == "ControlRight") mods &= ~ModifierKey.Control;
+			if (button == "AltLeft") mods &= ~ModifierKey.Alt;
+			if (button == "AltRight") mods &= ~ModifierKey.Alt;
+#endif
 
-			var ie = new InputEvent
-				{
-					EventType = newState ? InputEventType.Press : InputEventType.Release,
-					LogicalButton = new LogicalButton(button, mods)
-				};
-			LastState[button] = newState;
+			var ie = new InputEvent {
+				EventType = newState ? InputEventType.Press : InputEventType.Release,
+				LogicalButton = new LogicalButton (button, mods)
+			};
+			LastState [button] = newState;
 
 			//track the pressed events with modifiers that we send so that we can send corresponding unpresses with modifiers
 			//this is an interesting idea, which we may need later, but not yet.
@@ -260,91 +270,91 @@ namespace BizHawk.Client.EmuHawk
 			//this code relates the releases to the original presses.
 			//UPDATE - this is necessary for the frame advance key, which has a special meaning when it gets stuck down
 			//so, i am adding it as of 11-sep-2011
-			if (newState)
-			{
-				ModifierState[button] = ie.LogicalButton;
-			}
-			else
-			{
-				if (ModifierState[button] != null)
-				{
+			if (newState) {
+				ModifierState [button] = ie.LogicalButton;
+			} else {
+				if (ModifierState [button] != null) {
 					LogicalButton alreadyReleased = ie.LogicalButton;
-					var ieModified = new InputEvent
-						{
-							LogicalButton = (LogicalButton)ModifierState[button],
-							EventType = InputEventType.Release
-						};
+					var ieModified = new InputEvent {
+						LogicalButton = (LogicalButton)ModifierState [button],
+						EventType = InputEventType.Release
+					};
 					if (ieModified.LogicalButton != alreadyReleased)
-						_NewEvents.Add(ieModified);
+						_NewEvents.Add (ieModified);
 				}
-				ModifierState[button] = null;
+				ModifierState [button] = null;
 			}
 
-			_NewEvents.Add(ie);
+			_NewEvents.Add (ie);
 		}
 
 		ModifierKey _Modifiers;
-		private readonly List<InputEvent> _NewEvents = new List<InputEvent>();
+		private readonly List<InputEvent> _NewEvents = new List<InputEvent> ();
 
 		//do we need this?
-		public void ClearEvents()
+		public void ClearEvents ()
 		{
-			lock (this)
-			{
-				InputEvents.Clear();
+			lock (this) {
+				InputEvents.Clear ();
 			}
 		}
 
-		private readonly Queue<InputEvent> InputEvents = new Queue<InputEvent>();
-		public InputEvent DequeueEvent()
+		private readonly Queue<InputEvent> InputEvents = new Queue<InputEvent> ();
+		public InputEvent DequeueEvent ()
 		{
-			lock (this)
-			{
+			lock (this) {
 				if (InputEvents.Count == 0) return null;
-				else return InputEvents.Dequeue();
+				else return InputEvents.Dequeue ();
 			}
 		}
-		void EnqueueEvent(InputEvent ie)
+		void EnqueueEvent (InputEvent ie)
 		{
-			lock (this)
-			{
-				InputEvents.Enqueue(ie);
+			lock (this) {
+				InputEvents.Enqueue (ie);
 			}
 		}
 
-		public List<Tuple<string, float>> GetFloats()
+		public List<Tuple<string, float>> GetFloats ()
 		{
-			List<Tuple<string, float>> FloatValuesCopy = new List<Tuple<string,float>>();
-			lock (FloatValues)
-			{
+			List<Tuple<string, float>> FloatValuesCopy = new List<Tuple<string, float>> ();
+			lock (FloatValues) {
 				foreach (var kvp in FloatValues)
-					FloatValuesCopy.Add(new Tuple<string, float>(kvp.Key, kvp.Value));
+					FloatValuesCopy.Add (new Tuple<string, float> (kvp.Key, kvp.Value));
 			}
 			return FloatValuesCopy;
 		}
 
-#if WINDOWS
-		void UpdateThreadProc()
+		public void UpdateThreadProc ()
 		{
+#if WINDOWS
 			for (; ; )
 			{
 				var keyEvents = KeyInput.Update().Concat(IPCKeyInput.Update());
 				GamePad.UpdateAll();
 				GamePad360.UpdateAll();
+#else
+			OTK_Keyboard.Update ();
+				OTK_GamePad.UpdateAll ();
+#endif
 
 				//this block is going to massively modify data structures that the binding method uses, so we have to lock it all
-				lock (this)
-				{
-					_NewEvents.Clear();
+				lock (this) {
+					_NewEvents.Clear ();
 
+#if WINDOWS
 					//analyze keys
 					foreach (var ke in keyEvents)
 						HandleButton(ke.Key.ToString(), ke.Pressed);
+#else
+					foreach (Key kb in Enum.GetValues (typeof (Key))) {
+						HandleButton (kb.ToString (), OTK_Keyboard.IsPressed (kb));
+					}
+#endif
 
-					lock (FloatValues)
-					{
+					lock (FloatValues) {
 						//FloatValues.Clear();
 
+#if WINDOWS
 						//analyze xinput
 						foreach (var pad in GamePad360.EnumerateDevices())
 						{
@@ -378,31 +388,43 @@ namespace BizHawk.Client.EmuHawk
 								FloatValues[n] = f;
 							}
 						}
+#else
+						//analyze joysticks
+						for (int i = 0; i < OTK_GamePad.Devices.Count; i++) {
+							var pad = OTK_GamePad.Devices [i];
+							string jname = "J" + (i + 1) + " ";
 
+							for (int b = 0; b < pad.NumButtons; b++)
+								HandleButton (jname + pad.ButtonName (b), pad.Pressed (b));
+							foreach (var sv in pad.GetFloats ()) {
+								string n = jname + sv.Item1;
+								float f = sv.Item2;
+								if (trackdeltas)
+									FloatDeltas [n] += Math.Abs (f - FloatValues [n]);
+								FloatValues [n] = f;
+							}
+						}
+#endif
 						// analyse moose
 						// other sorts of mouse api (raw input) could easily be added as a separate listing under a different class
-						if (WantingMouseFocus.Contains(System.Windows.Forms.Form.ActiveForm))
-						{
+						if (WantingMouseFocus.Contains (System.Windows.Forms.Form.ActiveForm)) {
 							var P = System.Windows.Forms.Control.MousePosition;
-							if (trackdeltas)
-							{
+							if (trackdeltas) {
 								// these are relative to screen coordinates, but that's not terribly important
-								FloatDeltas["WMouse X"] += Math.Abs(P.X - FloatValues["WMouse X"]) * 50;
-								FloatDeltas["WMouse Y"] += Math.Abs(P.Y - FloatValues["WMouse Y"]) * 50;
+								FloatDeltas ["WMouse X"] += Math.Abs (P.X - FloatValues ["WMouse X"]) * 50;
+								FloatDeltas ["WMouse Y"] += Math.Abs (P.Y - FloatValues ["WMouse Y"]) * 50;
 							}
 							// coordinate translation happens later
-							FloatValues["WMouse X"] = P.X;
-							FloatValues["WMouse Y"] = P.Y;
+							FloatValues ["WMouse X"] = P.X;
+							FloatValues ["WMouse Y"] = P.Y;
 
 							var B = System.Windows.Forms.Control.MouseButtons;
-							HandleButton("WMouse L", (B & System.Windows.Forms.MouseButtons.Left) != 0);
-							HandleButton("WMouse C", (B & System.Windows.Forms.MouseButtons.Middle) != 0);
-							HandleButton("WMouse R", (B & System.Windows.Forms.MouseButtons.Right) != 0);
-							HandleButton("WMouse 1", (B & System.Windows.Forms.MouseButtons.XButton1) != 0);
-							HandleButton("WMouse 2", (B & System.Windows.Forms.MouseButtons.XButton2) != 0);
-						}
-						else
-						{
+							HandleButton ("WMouse L", (B & System.Windows.Forms.MouseButtons.Left) != 0);
+							HandleButton ("WMouse C", (B & System.Windows.Forms.MouseButtons.Middle) != 0);
+							HandleButton ("WMouse R", (B & System.Windows.Forms.MouseButtons.Right) != 0);
+							HandleButton ("WMouse 1", (B & System.Windows.Forms.MouseButtons.XButton1) != 0);
+							HandleButton ("WMouse 2", (B & System.Windows.Forms.MouseButtons.XButton2) != 0);
+						} else {
 							//dont do this: for now, it will interfere with the virtualpad. dont do something similar for the mouse position either
 							//unpress all buttons
 							//HandleButton("WMouse L", false);
@@ -414,41 +436,33 @@ namespace BizHawk.Client.EmuHawk
 
 					}
 
-					bool swallow = !GlobalWin.MainForm.AllowInput(false);
+					bool swallow = !GlobalWin.MainForm.AllowInput (false);
 
-					foreach (var ie in _NewEvents)
-					{
+					foreach (var ie in _NewEvents) {
 						//events are swallowed in some cases:
-						if (ie.LogicalButton.Alt && !GlobalWin.MainForm.AllowInput(true))
-						{ }
-						else if (ie.EventType == InputEventType.Press && swallow)
-						{ }
-						else
-							EnqueueEvent(ie);
+						if (ie.LogicalButton.Alt && !GlobalWin.MainForm.AllowInput (true)) { } else if (ie.EventType == InputEventType.Press && swallow) { } else
+							EnqueueEvent (ie);
 					}
 				} //lock(this)
-
-				//arbitrary selection of polling frequency:
-				Thread.Sleep(10);
-			}
-		}
+			  //arbitrary selection of polling frequency:
+#if WINDOWS
+			  Thread.Sleep(10);
+			  }
 #endif
+		}
 
-		public void StartListeningForFloatEvents()
+		public void StartListeningForFloatEvents ()
 		{
-			lock (FloatValues)
-			{
-				FloatDeltas.Clear();
+			lock (FloatValues) {
+				FloatDeltas.Clear ();
 				trackdeltas = true;
 			}
 		}
 
-		public string GetNextFloatEvent()
+		public string GetNextFloatEvent ()
 		{
-			lock (FloatValues)
-			{
-				foreach (var kvp in FloatDeltas)
-				{
+			lock (FloatValues) {
+				foreach (var kvp in FloatDeltas) {
 					// need to wiggle the stick a bit
 					if (kvp.Value >= 20000.0f)
 						return kvp.Key;
@@ -457,37 +471,34 @@ namespace BizHawk.Client.EmuHawk
 			return null;
 		}
 
-		public void StopListeningForFloatEvents()
+		public void StopListeningForFloatEvents ()
 		{
-			lock (FloatValues)
-			{
+			lock (FloatValues) {
 				trackdeltas = false;
 			}
 		}
 
-		public void Update()
+		public void Update ()
 		{
 			//TODO - for some reason, we may want to control when the next event processing step happens
 			//so i will leave this method here for now..
 		}
 
 		//returns the next Press event, if available. should be useful
-		public string GetNextBindEvent()
+		public string GetNextBindEvent ()
 		{
 			//this whole process is intimately involved with the data structures, which can conflict with the input thread.
-			lock (this)
-			{
+			lock (this) {
 				if (InputEvents.Count == 0) return null;
-				if (!GlobalWin.MainForm.AllowInput(false)) return null;
+				if (!GlobalWin.MainForm.AllowInput (false)) return null;
 
 				//we only listen to releases for input binding, because we need to distinguish releases of pure modifierkeys from modified keys
 				//if you just pressed ctrl, wanting to bind ctrl, we'd see: pressed:ctrl, unpressed:ctrl
 				//if you just pressed ctrl+c, wanting to bind ctrl+c, we'd see: pressed:ctrl, pressed:ctrl+c, unpressed:ctrl+c, unpressed:ctrl
 				//so its the first unpress we need to listen for
 
-				while (InputEvents.Count != 0)
-				{
-					var ie = DequeueEvent();
+				while (InputEvents.Count != 0) {
+					var ie = DequeueEvent ();
 
 					//as a special perk, we'll accept escape immediately
 					if (ie.EventType == InputEventType.Press && ie.LogicalButton.Button == "Escape")
@@ -495,19 +506,18 @@ namespace BizHawk.Client.EmuHawk
 
 					if (ie.EventType == InputEventType.Press) continue;
 
-				ACCEPT:
-					Console.WriteLine("Bind Event: {0} ", ie);
+					ACCEPT:
+					Console.WriteLine ("Bind Event: {0} ", ie);
 
 					foreach (var kvp in LastState)
-						if (kvp.Value)
-						{
-							Console.WriteLine("Unpressing " + kvp.Key);
-							UnpressState[kvp.Key] = true;
+						if (kvp.Value) {
+							Console.WriteLine ("Unpressing " + kvp.Key);
+							UnpressState [kvp.Key] = true;
 						}
 
-					InputEvents.Clear();
+					InputEvents.Clear ();
 
-					return ie.LogicalButton.ToString();
+					return ie.LogicalButton.ToString ();
 				}
 
 				return null;
@@ -520,13 +530,14 @@ namespace BizHawk.Client.EmuHawk
 		public bool EnableIgnoreModifiers = false;
 
 		//sets a key as unpressed for the binding system
-		public void BindUnpress(System.Windows.Forms.Keys key)
+		public void BindUnpress (System.Windows.Forms.Keys key)
 		{
 			//only validated for Return
-			string keystr = key.ToString();
-			UnpressState[keystr] = true;
-			LastState[keystr] = true;
+			string keystr = key.ToString ();
+			UnpressState [keystr] = true;
+			LastState [keystr] = true;
 		}
 
 	}
 }
+

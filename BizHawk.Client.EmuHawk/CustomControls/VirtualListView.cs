@@ -447,6 +447,7 @@ namespace BizHawk.Client.EmuHawk
 			// virtual listviews must be Details or List view with no sorting
 			View = View.Details;
 			Sorting = SortOrder.None;
+			RetrieveVirtualItem += (sender, e) => { e.Item = GetItem(e.ItemIndex); };
 
 			UseCustomBackground = true;
 
@@ -472,16 +473,16 @@ namespace BizHawk.Client.EmuHawk
 		/// </summary>
 		/// <param name="index">Listview item's index.</param>
 		/// <param name="selected">Select the passed item?</param>
-		public void SelectItem(int index, bool selected) 
-		{
-			var ptrItem = IntPtr.Zero;
+		public void SelectItem(int index, bool selected) {
+			#if Windows
+			IntPtr ptrItem = IntPtr.Zero;
 
 			try 
 			{
-				// Determine whether selecting or unselecting.
-				uint select = selected ? (uint)ListViewCallBackMask.LVIS_SELECTED : 0;
+			// Determine whether selecting or unselecting.
+			uint select = selected ? (uint)ListViewCallBackMask.LVIS_SELECTED : 0;
 
-				// Fill in the LVITEM structure with state fields.
+			// Fill in the LVITEM structure with state fields.
 				var stateItem = new LvItem
 				{
 					Mask = (uint)ListViewItemMask.LVIF_STATE,
@@ -491,11 +492,11 @@ namespace BizHawk.Client.EmuHawk
 					StateMask = (uint)ListViewCallBackMask.LVIS_SELECTED
 				};
 
-				// Copy the structure to unmanaged memory.
-				ptrItem = Marshal.AllocHGlobal(Marshal.SizeOf(stateItem.GetType()));
-				Marshal.StructureToPtr(stateItem, ptrItem, true);
+			// Copy the structure to unmanaged memory.
+			ptrItem = Marshal.AllocHGlobal(Marshal.SizeOf(stateItem.GetType()));
+			Marshal.StructureToPtr(stateItem, ptrItem, true);
 
-				// Send the message to the control window.
+			// Send the message to the control window.
 				Win32.SendMessage(
 					this.Handle,
 					(int)ListViewMessages.LVM_SETITEMSTATE,
@@ -504,28 +505,32 @@ namespace BizHawk.Client.EmuHawk
 			} 
 			catch (Exception ex) 
 			{
-				System.Diagnostics.Trace.WriteLine("VirtualListView.SetItemState error=" + ex.Message);
+			System.Diagnostics.Trace.WriteLine("VirtualListView.SetItemState error=" + ex.Message);
 				
-				// TODO: should this eat any exceptions?
+			// TODO: should this eat any exceptions?
 				throw;
 			} 
 			finally 
 			{
-				// Always release the unmanaged memory.
+			// Always release the unmanaged memory.
 				if (ptrItem != IntPtr.Zero) 
 				{
-					Marshal.FreeHGlobal(ptrItem);
-				}
+			Marshal.FreeHGlobal(ptrItem);
 			}
+			}
+			#endif
 		}
 
 		private void SetVirtualItemCount() 
 		{
+			#if WINDOWS
 			Win32.SendMessage(
-				this.Handle,
-				(int)ListViewMessages.LVM_SETITEMCOUNT,
+			this.Handle,
+			(int)ListViewMessages.LVM_SETITEMCOUNT,
 				(IntPtr)this._itemCount,
 				IntPtr.Zero);
+			#endif
+			this.VirtualListSize = _itemCount;
 		}
 
 		protected void OnDispInfoNotice(ref Message m, bool useAnsi)
@@ -585,6 +590,7 @@ namespace BizHawk.Client.EmuHawk
 
 		protected void OnCustomDrawNotice(ref Message m) 
 		{
+			#if WINDOWS
 			var cd = (NmLvCustomDraw)m.GetLParam(typeof(NmLvCustomDraw));
 			switch (cd.Nmcd.dwDrawStage) 
 			{
@@ -604,6 +610,7 @@ namespace BizHawk.Client.EmuHawk
 					m.Result = new IntPtr((int)CustomDrawReturnFlags.CDRF_DODEFAULT);
 					break;
 			}
+			#endif
 		}
 		
 		/// <summary>
@@ -618,6 +625,7 @@ namespace BizHawk.Client.EmuHawk
 				handler(this, e);
 			}
 		}
+		#if WINDOWS
 
 		[DllImport("user32.dll", CharSet = CharSet.Auto)]
 		public static extern int GetScrollPos(IntPtr hWnd, Orientation nBar);
@@ -690,6 +698,12 @@ namespace BizHawk.Client.EmuHawk
 				}
 			}
 		}
+		#else
+		public int VScrollPos
+		{
+			get { return AutoScrollOffset.Y; }
+		}
+		#endif
 
 		public bool BlazingFast { get; set; }
 		public bool UseCustomBackground { get; set; }
@@ -701,6 +715,21 @@ namespace BizHawk.Client.EmuHawk
 			{
 				QueryItem(idx, out item);
 			}
+
+#if !WINDOWS
+			if (QueryItemText != null)
+			{
+				//This is needed for Mono, which doesn't have any of the magic drawing stuff that windows has
+				string text = string.Empty;
+				QueryItemText(idx, 0, out text);
+				item = new ListViewItem(){ Text = text };
+				int colCount = this.Columns.Count;
+				for(int x=1; x<colCount; x++){
+					QueryItemText(idx, x, out text);
+					item.SubItems.Add(text);
+				}
+			}
+#endif
 
 			if (item == null) 
 			{
@@ -756,7 +785,10 @@ namespace BizHawk.Client.EmuHawk
 
 		public void ensureVisible(int index) 
 		{
+			#if WINDOWS
 			Win32.SendMessage(Handle, (int)ListViewMessages.LVM_ENSUREVISIBLE, (IntPtr)index, (IntPtr)1);
+			#endif
+			this.VirtualListSize = _itemCount;
 		}
 
 		public void ensureVisible() 

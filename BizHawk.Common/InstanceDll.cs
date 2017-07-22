@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace BizHawk.Common
 {
-	public class InstanceDll : IDisposable, IImportResolver
+	public class InstanceDll : IDisposable, IInstanceDll, IImportResolver
 	{
 		[DllImport("kernel32.dll")]
 		public static extern UInt32 GetLastError();

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleIconFile</key>
+	<string>BizHawk.icns</string>
+	<key>CFBundleIconFiles</key>
+	<array>
+		<string>BizHawk.icns</string>
+	</array>
+	<key>CFBundleIdentifier</key>
+	<string>org.tasvideos.BizHawk</string>
+	<key>CFBundleName</key>
+	<string>BizHawk</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.13.0</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.7</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>BizHawk Developers</string>
+	<key>CFBundleDisplayName</key>
+	<string>BizHawk</string>
+	<key>CFBundleVersion</key>
+	<string>macOS</string>
+</dict>
+</plist>

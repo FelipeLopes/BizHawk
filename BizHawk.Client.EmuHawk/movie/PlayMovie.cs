@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Drawing;
@@ -87,24 +87,31 @@ namespace BizHawk.Client.EmuHawk
 					return null;
 				}
 				
-				var movie = PreLoadMovieFile(file, force);
-				if (movie == null)
+				var index = IsDuplicateOf(filename);
+				if (!index.HasValue)
 				{
-					return null;
-				}
-
-				int? index;
-				lock (_movieList)
-				{
+					#if !WINDOWS
+					file.Unbind(); //Mono can't handle file sharing, must only be open once.
+					#endif
+					var movie = PreLoadMovieFile(file, force);
+					if (movie == null)
+					{
+						return null;
+					}
+					
+					lock (_movieList)
+					{
 					// need to check IsDuplicateOf within the lock
-					index = IsDuplicateOf(filename);
 					if (index.HasValue)
 					{
 						return index;
 					}
+						_movieList.Add(movie);
+						index = _movieList.Count - 1;
+					}
 
-					_movieList.Add(movie);
-					index = _movieList.Count - 1;
+					_sortReverse = false;
+					_sortedCol = string.Empty;
 				}
 
 				_sortReverse = false;
@@ -618,13 +625,11 @@ namespace BizHawk.Client.EmuHawk
 
 		private void BrowseMovies_Click(object sender, EventArgs e)
 		{
-			var ofd = new OpenFileDialog
-			{
-				Filter = "Movie Files (*." + MovieService.DefaultExtension + ")|*." + MovieService.DefaultExtension +
-					"|TAS project Files (*." + TasMovie.Extension + ")|*." + TasMovie.Extension +
-					"|All Files|*.*",
-				InitialDirectory = PathManager.MakeAbsolutePath(Global.Config.PathEntries.MoviesPathFragment, null)
-			};
+			var ofd = HawkDialogFactory.CreateOpenFileDialog();
+			ofd.Filter = "Movie Files (*." + MovieService.DefaultExtension + ")|*." + MovieService.DefaultExtension +
+			"|TAS project Files (*." + TasMovie.Extension + ")|*." + TasMovie.Extension +
+			"|All Files|*.*";
+			ofd.InitialDirectory = PathManager.MakeAbsolutePath(Global.Config.PathEntries.MoviesPathFragment, null);
 
 			var result = ofd.ShowHawkDialog();
 			if (result == DialogResult.OK)

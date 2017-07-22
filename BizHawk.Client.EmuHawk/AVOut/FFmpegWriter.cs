@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 using BizHawk.Client.Common;
 using BizHawk.Emulation.Common;
+using BizHawk.Emulation.DiscSystem;
 
 namespace BizHawk.Client.EmuHawk
 {
@@ -85,14 +86,10 @@ namespace BizHawk.Client.EmuHawk
 			try
 			{
 				_ffmpeg = new Process();
-#if WINDOWS
-				_ffmpeg.StartInfo.FileName = Path.Combine(PathManager.GetDllDirectory(), "ffmpeg.exe");
-#else
-				ffmpeg.StartInfo.FileName = "ffmpeg"; // expecting native version to be in path
-#endif
+				_ffmpeg.StartInfo.FileName = FFMpeg.FFMpegPath;
 
-				string filename = $"{_baseName}_{_segment,4:D4}{_ext}";
-				_ffmpeg.StartInfo.Arguments = string.Format("-y -f nut -i - {1} \"{0}\"", filename, _token.Commandline);
+				string filename = String.Format("{0}_{1,4:D4}{2}", _baseName, _segment, _ext);
+				_ffmpeg.StartInfo.Arguments = String.Format("-y -f nut -i - {1} \"{0}\"", filename, _token.Commandline);
 				_ffmpeg.StartInfo.CreateNoWindow = true;
 
 				// ffmpeg sends informative display to stderr, and nothing to stdout

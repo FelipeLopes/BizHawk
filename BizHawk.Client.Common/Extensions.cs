@@ -2,7 +2,9 @@
 using BizHawk.Bizware.BizwareGL;
 using BizHawk.Bizware.BizwareGL.Drivers.GdiPlus;
 using BizHawk.Bizware.BizwareGL.Drivers.OpenTK;
+#if WINDOWS
 using BizHawk.Bizware.BizwareGL.Drivers.SlimDX;
+#endif
 
 namespace BizHawk.Client.Common
 {
@@ -14,11 +16,13 @@ namespace BizHawk.Client.Common
 			{
 				return new GuiRenderer(gl);
 			}
+#if WINDOWS
 
 			if (gl is IGL_SlimDX9)
 			{
 				return new GuiRenderer(gl);
 			}
+#endif
 
 			if (gl is IGL_GdiPlus)
 			{

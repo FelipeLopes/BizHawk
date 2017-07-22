@@ -217,11 +217,10 @@ namespace BizHawk.Client.EmuHawk
 				system = null;
 			}
 
-			var f = new FolderBrowserEx
-			{
-				Description = "Set the directory for " + name,
-				SelectedPath = PathManager.MakeAbsolutePath(box.Text, system)
-			};
+			var f = HawkDialogFactory.CreateFolderBrowserDialog();
+			f.Description = "Set the directory for " + name;
+			f.SelectedPath = PathManager.MakeAbsolutePath(box.Text, system);
+
 			var result = f.ShowDialog();
 			if (result == DialogResult.OK)
 			{

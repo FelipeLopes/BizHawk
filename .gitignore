@@ -1,4 +1,3 @@
-
 /snes9xgit
 
 svnrev.cs
@@ -48,10 +47,17 @@ svnrev.cs
 /libsnes/vs2015/.vs
 /libsnes/vs2015/.obj
 
+/output/*.mdb
+/output/dll/*.mdb
+/output/dll/SharpCompress.dll
 /References/*.xml
+
+/output64/cgc
+/Version/svnrev.cs.tmp
 
 *.opensdf
 *.user
+*.userprefs
 *.suo
 *.sdf
 *.ipch
@@ -60,6 +66,24 @@ svnrev.cs
 .hgignore
 .hgtags
 
+libsnes/xcode/libsnes.xcodeproj/project.xcworkspace/xcuserdata
+libsnes/xcode/libsnes.xcodeproj/xcuserdata
+MonoMacWrapper/bin
+MonoMacWrapper/obj
+*.resources
+output/dll/OpenTK.dll.config
+output/OpenTK.dll.config
+/BizHawk.Client.EtoHawk/EtoHawk.Desktop/bin/*
+/BizHawk.Client.EtoHawk/EtoHawk.Desktop/obj/*
+/BizHawk.Client.EtoHawk/EtoHawk.Mac/bin/*
+/BizHawk.Client.EtoHawk/EtoHawk.Mac/obj/*
+libgambatte/xcode/gambatte.xcodeproj/project.xcworkspace/xcuserdata
+libgambatte/xcode/gambatte.xcodeproj/xcuserdata
+libgambatte/libgambatte.so
+blip_buf/libblip_buf.so
+quicknes/mingw/libquicknes.so
+psx/octoshock/bizhawk/octoshock.xcodeproj/xcuserdata
+psx/octoshock/bizhawk/octoshock.xcodeproj/project.xcworkspace/xcuserdata
 /LuaInterface/Lua/src/.libs
 /LuaInterface/Lua/src/Release-LUAPERKS
 /LuaInterface/Release-LUAPERKS

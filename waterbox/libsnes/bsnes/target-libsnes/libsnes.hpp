@@ -112,7 +112,7 @@ void snes_init(void);
 void snes_term(void);
 void snes_power(void);
 void snes_reset(void);
-void snes_run(void);
+static void snes_run(void);
 
 bool snes_load_cartridge_normal(
   const char *rom_xml, const uint8_t *rom_data, unsigned rom_size

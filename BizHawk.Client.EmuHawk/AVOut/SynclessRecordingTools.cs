@@ -30,11 +30,9 @@ namespace BizHawk.Client.EmuHawk
 
 		public void Run()
 		{
-			var ofd = new OpenFileDialog
-			{
-				FileName = PathManager.FilesystemSafeName(Global.Game) + ".syncless.txt",
-				InitialDirectory = PathManager.MakeAbsolutePath(Global.Config.PathEntries.AvPathFragment, null)
-			};
+			var ofd = HawkDialogFactory.CreateOpenFileDialog();
+            ofd.FileName = PathManager.FilesystemSafeName(Global.Game) + ".syncless.txt";
+            ofd.InitialDirectory = PathManager.MakeAbsolutePath(Global.Config.PathEntries.AvPathFragment, null);
 
 			if (ofd.ShowDialog() == DialogResult.Cancel)
 			{
@@ -105,10 +103,8 @@ namespace BizHawk.Client.EmuHawk
 				height = bmp.Height;
 			}
 
-			var sfd = new SaveFileDialog
-			{
-				FileName = Path.ChangeExtension(mSynclessConfigFile, ".avi")
-			};
+			var sfd = HawkDialogFactory.CreateSaveFileDialog();
+            sfd.FileName = Path.ChangeExtension(mSynclessConfigFile, ".avi");
 			sfd.InitialDirectory = Path.GetDirectoryName(sfd.FileName);
 			if (sfd.ShowDialog() == DialogResult.Cancel)
 			{

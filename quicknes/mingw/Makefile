@@ -1,3 +1,5 @@
+# TODO: get rid of this and use Autotools
+
 CXX = g++
 RM = rm
 CP = cp
@@ -13,11 +15,15 @@ endif
 
 CXXFLAGS_32 = -march=pentium4 -mtune=core2
 CXXFLAGS_64 =
-CXXFLAGS = -Wall -DDISABLE_AUTO_FILE -D__LIBRETRO__ -DNDEBUG -I.. -O3 -Wno-multichar -fno-exceptions -fomit-frame-pointer -flto $(CXXFLAGS_$(ARCH)) 
-# TODO: include these as options in the Makefile
-# -fprofile-generate
-# -fprofile-use
-TARGET = libquicknes.dll
+
+ifeq ($(OS),Windows_NT)	
+	CXXFLAGS = -Wall -DDISABLE_AUTO_FILE -D__LIBRETRO__ -DNDEBUG -I.. -O3 -Wno-multichar -fno-exceptions -fomit-frame-pointer -flto $(CXXFLAGS_$(ARCH))
+	TARGET = libgambatte.dll
+else
+	CXXFLAGS = -Wall -DDISABLE_AUTO_FILE -D__LIBRETRO__ -DNDEBUG -I.. -O3 -Wno-multichar -fno-exceptions -fomit-frame-pointer -fPIC $(CXXFLAGS_$(ARCH))
+	TARGET = libquicknes.so
+endif
+
 LDFLAGS_32 = -static -static-libgcc -static-libstdc++
 LDFLAGS_64 =
 LDFLAGS = -shared $(LDFLAGS_$(ARCH)) $(CXXFLAGS)
