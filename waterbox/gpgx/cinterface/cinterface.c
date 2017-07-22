@@ -581,6 +581,8 @@ GPGX_EX int gpgx_init(const char *feromextension, ECL_ENTRY int (*feload_archive
 	update_viewport();
 	gpgx_clear_sram();
 
+	load_archive_cb = NULL; // don't hold onto load_archive_cb for longer than we need it for
+
 	return 1;
 }
 
@@ -712,4 +714,10 @@ GPGX_EX int gpgx_getregs(gpregister_t *regs)
 	}
 
 	return ret;
+}
+
+// at the moment, this dummy is not called
+int main(void)
+{
+	return 0;
 }

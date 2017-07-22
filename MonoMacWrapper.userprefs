@@ -1,0 +1,26 @@
+﻿<Properties StartupItem="BizHawk.Client.EmuHawk/BizHawk.Client.EmuHawk.csproj">
+  <MonoDevelop.Ide.Workbench ActiveDocument="BizHawk.Client.Common/SevenZipSharpArchiveHandler.cs">
+    <Files>
+      <File FileName="BizHawk.Client.Common/SevenZipSharpArchiveHandler.cs" Line="5" Column="9" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="MonoMacWrapper" expanded="True">
+            <Node name="BizHawk.Client.Common" expanded="True">
+              <Node name="References" expanded="True">
+                <Node name="SharpCompress" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x64" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.BizHawk.Client.EmuHawk PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>

@@ -87,19 +87,13 @@ namespace BizHawk.Client.EmuHawk
 				// N64
 				var n64Settings = GetSyncSettings<N64, N64SyncSettings>();
 				n64Settings.Rsp = N64SyncSettings.RspType.Rsp_Hle;
-				n64Settings.Core = N64SyncSettings.CoreType.Dynarec;
+				//n64Settings.Core = N64SyncSettings.CoreType.Dynarec;
+				n64Settings.Core = N64SyncSettings.CoreType.Interpret;
 				Global.Config.N64UseCircularAnalogConstraint = true;
 				PutSyncSettings<N64>(n64Settings);
 
 				// SNES
-				var snesSettings = GetSyncSettings<LibsnesCore, LibsnesCore.SnesSyncSettings>();
-				snesSettings.Profile = "Performance";
-				PutSyncSettings<LibsnesCore>(snesSettings);
-
-				// Saturn
-				var saturnSettings = GetSyncSettings<Yabause, Yabause.SaturnSyncSettings>();
-				saturnSettings.SkipBios = false;
-				PutSyncSettings<Yabause>(saturnSettings);
+				Global.Config.SNES_InSnes9x = true;
 
 				// Genesis
 				var genesisSettings = GetSyncSettings<GPGX, GPGX.GPGXSyncSettings>();
@@ -142,20 +136,12 @@ namespace BizHawk.Client.EmuHawk
 
 				// N64
 				var n64Settings = GetSyncSettings<N64, N64SyncSettings>();
-				n64Settings.Rsp = N64SyncSettings.RspType.Rsp_Z64_hlevideo;
 				n64Settings.Core = N64SyncSettings.CoreType.Pure_Interpret;
 				Global.Config.N64UseCircularAnalogConstraint = true;
 				PutSyncSettings<N64>(n64Settings);
 
 				// SNES
-				var snesSettings = GetSyncSettings<LibsnesCore, LibsnesCore.SnesSyncSettings>();
-				snesSettings.Profile = "Compatibility";
-				PutSyncSettings<LibsnesCore>(snesSettings);
-
-				// Saturn
-				var saturnSettings = GetSyncSettings<Yabause, Yabause.SaturnSyncSettings>();
-				saturnSettings.SkipBios = false;
-				PutSyncSettings<Yabause>(saturnSettings);
+				Global.Config.SNES_InSnes9x = false;
 
 				// Genesis
 				var genesisSettings = GetSyncSettings<GPGX, GPGX.GPGXSyncSettings>();
@@ -201,20 +187,12 @@ namespace BizHawk.Client.EmuHawk
 
 				// N64
 				var n64Settings = GetSyncSettings<N64, N64SyncSettings>();
-				n64Settings.Rsp = N64SyncSettings.RspType.Rsp_Z64_hlevideo;
 				n64Settings.Core = N64SyncSettings.CoreType.Pure_Interpret;
 				Global.Config.N64UseCircularAnalogConstraint = false;
 				PutSyncSettings<N64>(n64Settings);
 
 				// SNES
-				var snesSettings = GetSyncSettings<LibsnesCore, LibsnesCore.SnesSyncSettings>();
-				snesSettings.Profile = "Compatibility";
-				PutSyncSettings<LibsnesCore>(snesSettings);
-
-				// Saturn
-				var saturnSettings = GetSyncSettings<Yabause, Yabause.SaturnSyncSettings>();
-				saturnSettings.SkipBios = true;
-				PutSyncSettings<Yabause>(saturnSettings);
+				Global.Config.SNES_InSnes9x = false;
 
 				// Genesis
 				var genesisSettings = GetSyncSettings<GPGX, GPGX.GPGXSyncSettings>();
@@ -266,14 +244,7 @@ namespace BizHawk.Client.EmuHawk
 				PutSyncSettings<N64>(n64Settings);
 
 				// SNES
-				var snesSettings = GetSyncSettings<LibsnesCore, LibsnesCore.SnesSyncSettings>();
-				snesSettings.Profile = "Compatibility";
-				PutSyncSettings<LibsnesCore>(snesSettings);
-
-				// Saturn
-				var saturnSettings = GetSyncSettings<Yabause, Yabause.SaturnSyncSettings>();
-				saturnSettings.SkipBios = true;
-				PutSyncSettings<Yabause>(saturnSettings);
+				Global.Config.SNES_InSnes9x = false;
 
 				// Genesis
 				var genesisSettings = GetSyncSettings<GPGX, GPGX.GPGXSyncSettings>();
