@@ -84,7 +84,14 @@ namespace BizHawk.Client.Common
 
 		public void ExtractFile(int index, Stream stream)
 		{
-			var data = _extractor.GetEntry(index).OpenEntryStream();
+			var iterator = 0;
+			Stream data = null;
+			foreach (var afd in _extractor.Entries) {
+				if (iterator == index) {
+					data = afd.OpenEntryStream ();
+				}
+				iterator++;
+			}
 			byte[] buffer = new byte[1024];
 			int amt = 0;
 			while((amt = data.Read(buffer, 0, buffer.Length)) > 0){
