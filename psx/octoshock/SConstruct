@@ -1,0 +1,52 @@
+env = Environment(
+    CXX = 'clang',
+    CXXFLAGS = '-O3'
+)
+
+env.SharedLibrary('octoshock', 
+    [
+        'endian.cpp',
+        'error.cpp',
+        'octoshock.cpp',
+        'Stream.cpp'
+    ] + [
+        'emuware/emuware.cpp',
+        'emuware/EW_state.cpp'
+    ] + [
+        'video/convert.cpp',
+        'video/Deinterlacer.cpp',
+        'video/surface.cpp'
+    ] + [
+        'cdrom/CDUtility.cpp',
+        'cdrom/crc32.cpp',
+        'cdrom/galois.cpp',
+        'cdrom/l-ec.cpp',
+        'cdrom/lec.cpp',
+        'cdrom/recover-raw.cpp'
+    ] + [
+        'psx/cdc.cpp',
+        'psx/cpu.cpp',
+        'psx/dis.cpp',
+        'psx/dma.cpp',
+        'psx/frontio.cpp',
+        'psx/gpu.cpp',
+        'psx/gpu_line.cpp',
+        'psx/gpu_polygon.cpp',
+        'psx/gpu_sprite.cpp',
+        'psx/gte.cpp',
+        'psx/input/dualanalog.cpp',
+        'psx/input/dualshock.cpp',
+        'psx/input/gamepad.cpp',
+        'psx/input/guncon.cpp',
+        'psx/input/justifier.cpp',
+        'psx/input/memcard.cpp',
+        'psx/input/mouse.cpp',
+        'psx/input/multitap.cpp',
+        'psx/input/negcon.cpp',
+        'psx/irq.cpp',
+        'psx/mdec.cpp',
+        'psx/psx.cpp',
+        'psx/sio.cpp',
+        'psx/spu.cpp',
+        'psx/timer.cpp'
+    ])
