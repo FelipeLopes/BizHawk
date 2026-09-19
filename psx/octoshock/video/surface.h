@@ -1,6 +1,8 @@
 #ifndef __MDFN_SURFACE_H
 #define __MDFN_SURFACE_H
 
+#include "../emuware/emuware.h"
+
 struct MDFN_Rect
 {
  int32 x, y, w, h;

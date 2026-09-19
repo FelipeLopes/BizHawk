@@ -21,13 +21,13 @@
 
 #pragma once
 
-#include "octoshock.h"
-#include "emuware/emuware.h"
-#include "video/surface.h"
+#include "../octoshock.h"
+#include "../emuware/emuware.h"
+#include "../video/surface.h"
+#include "../endian.h"
+#include "../emuware/EW_state.h"
+#include "../math_ops.h"
 #include "masmem.h"
-#include "endian.h"
-#include "emuware/EW_state.h"
-#include "math_ops.h"
 
 //
 // Comment out these 2 defines for extra speeeeed.
@@ -346,6 +346,10 @@ struct ShockStateTransaction
 
 	//originally this was a pointer, however, we had problems getting it to marshal correctly
 	EW::FPtrs ff;
+};
+
+struct ShockAddressBreakpoint {
+	u32 address, flags;
 };
 
 //Creates a ShockDiscRef (representing a disc) with the given properties. Returns it in the specified output pointer.

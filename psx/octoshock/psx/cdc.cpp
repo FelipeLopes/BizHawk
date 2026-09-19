@@ -71,7 +71,7 @@
 #include "psx.h"
 #include "cdc.h"
 #include "spu.h"
-#include "endian.h"
+#include "../endian.h"
 
 using namespace CDUtility;
 

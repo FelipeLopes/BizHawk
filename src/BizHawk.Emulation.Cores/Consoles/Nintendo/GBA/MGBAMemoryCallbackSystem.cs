@@ -46,6 +46,9 @@ namespace BizHawk.Emulation.Cores.Nintendo.GBA
 		public bool HasExecutesForScope(string scope)
 			=> _callbacks.Exists(c => c.Callback.Type is MemoryCallbackType.Execute && c.Callback.Scope == scope);
 
+		public List<CallbackBreakpoint> GetCallbackBreakpoints()
+			=> new List<CallbackBreakpoint>();
+
 		public void Add(IMemoryCallback callback)
 		{
 			if (_mgba is null) return; // disposed

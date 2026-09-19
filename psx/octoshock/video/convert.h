@@ -23,7 +23,8 @@
 #define __MDFN_VIDEO_CONVERT_H
 
 #include <memory>
-#include "octoshock.h"
+#include "../octoshock.h"
+#include "../endian.h"
 #include "surface.h"
 
  class MDFN_PixelFormatConverter

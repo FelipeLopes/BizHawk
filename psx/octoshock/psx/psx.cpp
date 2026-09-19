@@ -19,19 +19,19 @@
 ** 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "octoshock.h"
+#include "../octoshock.h"
 #include "psx.h"
 #include "mdec.h"
 #include "frontio.h"
 #include "timer.h"
 #include "sio.h"
 #include "cdc.h"
-#include "Stream.h"
+#include "../Stream.h"
 #include "spu.h"
-#include "error.h"
-#include "tests.h"
-#include "endian.h"
-#include "emuware/EW_state.h"
+#include "../error.h"
+#include "../tests.h"
+#include "../endian.h"
+#include "../emuware/EW_state.h"
 
 #include "input/dualshock.h"
 #include "input/dualanalog.h"
@@ -59,7 +59,7 @@ int16 soundbuf[1024 * 1024]; //how big? big enough.
 int VTBackBuffer = 0;
 bool GpuFrameForLag = false;
 static MDFN_Rect VTDisplayRects[2];
-#include	"video/Deinterlacer.h"
+#include	"../video/Deinterlacer.h"
 static bool PrevInterlaced;
 static Deinterlacer deint;
 static EmulateSpecStruct espec;
@@ -2611,18 +2611,18 @@ s32 ShockDiscRef::ReadLBA2048(s32 lba, void* dst2048)
 			u8 subcode[96];
 		};
 		u8 buf2448[2448];
-	};
+	} u;
 
-	s32 ret = InternalReadLBA2448(lba,buf2448,false);
+	s32 ret = InternalReadLBA2448(lba,u.buf2448,false);
 	if(ret != SHOCK_OK)
 		return ret;
 
-	if(sector.mode == 1)
-		memcpy(dst2048,sector.data2048,2048);
+	if(u.sector.mode == 1)
+		memcpy(dst2048,u.sector.data2048,2048);
 	else
-		memcpy(dst2048,xasector.form1.data2048,2048);
+		memcpy(dst2048,u.xasector.form1.data2048,2048);
 
-	return sector.mode;
+	return u.sector.mode;
 }
 
 //Returns information about a memory buffer for peeking (main memory, spu memory, etc.)
@@ -2807,7 +2807,6 @@ EW_EXPORT s32 shock_SetRenderOptions(void* pxs, ShockRenderOptions* opts)
 extern void* g_ShockTraceCallbackOpaque;
 extern ShockCallback_Trace g_ShockTraceCallback;
 extern ShockCallback_Mem g_ShockMemCallback;
-extern eShockMemCb g_ShockMemCbType;
 
 //Sets the callback to be used for CPU tracing
 EW_EXPORT s32 shock_SetTraceCallback(void* psx, void* opaque, ShockCallback_Trace callback)
@@ -2818,11 +2817,20 @@ EW_EXPORT s32 shock_SetTraceCallback(void* psx, void* opaque, ShockCallback_Trac
 	return SHOCK_OK;
 }
 
+extern std::vector<ShockAddressBreakpoint> g_breakpoints;
+
 //Sets the callback to be used for memory hook events
-EW_EXPORT s32 shock_SetMemCb(void* psx, ShockCallback_Mem callback, eShockMemCb cbMask)
+EW_EXPORT s32 shock_SetMemCb(void* psx, ShockCallback_Mem callback, uint addr, eShockMemCb cbMask)
 {
 	g_ShockMemCallback = callback;
-	g_ShockMemCbType = cbMask;
+	if (callback == NULL) {
+		g_breakpoints.clear();
+		return SHOCK_OK;
+	}
+	ShockAddressBreakpoint bp;
+	bp.address = addr;
+	bp.flags = cbMask;
+	g_breakpoints.push_back(bp);
 	return SHOCK_OK;
 }
 

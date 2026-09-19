@@ -25,7 +25,7 @@
 
 #include "psx.h"
 #include "timer.h"
-#include "math_ops.h"
+#include "../math_ops.h"
 
 /* FIXME: Respect horizontal timing register values in relation to hsync/hblank/hretrace/whatever signal sent to the timers */
 

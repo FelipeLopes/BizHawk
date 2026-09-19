@@ -10,7 +10,7 @@ namespace BizHawk.Emulation.Cores.Sony.PSX
 	public static unsafe class OctoshockDll
 	{
 		private const CallingConvention cc = CallingConvention.Cdecl;
-		private const string dd = "octoshock.dll";
+		private const string dd = "liboctoshock.so";
 
 		public enum eRegion : int
 		{
@@ -290,7 +290,7 @@ namespace BizHawk.Emulation.Cores.Sony.PSX
 		public static extern int shock_SetTraceCallback(IntPtr psx, IntPtr opaque, ShockCallback_Trace callback);
 
 		[DllImport(dd, CallingConvention = cc)]
-		public static extern int shock_SetMemCb(IntPtr psx, ShockCallback_Mem cb, eShockMemCb cbMask);
+		public static extern int shock_SetMemCb(IntPtr psx, ShockCallback_Mem cb, uint address, uint cbMask);
 
 		[DllImport(dd, CallingConvention = cc)]
 		public static extern int shock_SetLEC(IntPtr psx, bool enable);

@@ -22,6 +22,9 @@
 #ifndef __MDFN_ENDIAN_H
 #define __MDFN_ENDIAN_H
 
+#include <algorithm>
+#include <string.h>
+
 void Endian_A16_Swap(void *src, uint32 nelements);
 void Endian_A32_Swap(void *src, uint32 nelements);
 void Endian_A64_Swap(void *src, uint32 nelements);

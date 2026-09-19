@@ -21,7 +21,6 @@
 #include <assert.h>
 
 #include "dvdisaster.h"
-#include "octoshock.h"
 #include "CDUtility.h"
 
 //  Kill_LEC_Correct();

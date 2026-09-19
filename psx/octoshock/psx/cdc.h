@@ -22,8 +22,8 @@
 #ifndef __MDFN_PSX_CDC_H
 #define __MDFN_PSX_CDC_H
 
-#include "cdrom/CDUtility.h"
-#include "cdrom/SimpleFIFO.h"
+#include "../cdrom/CDUtility.h"
+#include "../cdrom/SimpleFIFO.h"
 
 class ShockDiscRef;
 

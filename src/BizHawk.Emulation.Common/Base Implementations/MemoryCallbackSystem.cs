@@ -133,6 +133,33 @@ namespace BizHawk.Emulation.Common
 			return _execs.Any(e => e.Scope == scope);
 		}
 
+		public List<CallbackBreakpoint> GetCallbackBreakpoints() {
+			Dictionary<uint, uint> addressMasks = new Dictionary<uint, uint>();
+			foreach (var cb in _reads) {
+				uint addr = cb.Address.Value;
+				uint mask = addressMasks.GetValueOrDefault<uint, uint>(addr, 0);
+				addressMasks[addr] = (mask | 0x01);
+			}
+			foreach (var cb in _writes) {
+				uint addr = cb.Address.Value;
+				uint mask = addressMasks.GetValueOrDefault<uint, uint>(addr, 0);
+				addressMasks[addr] = (mask | 0x02);
+			}
+			foreach (var cb in _execs) {
+				uint addr = cb.Address.Value;
+				uint mask = addressMasks.GetValueOrDefault<uint, uint>(addr, 0);
+				addressMasks[addr] = (mask | 0x04);
+			}
+			List<CallbackBreakpoint> ans = new List<CallbackBreakpoint>();
+			foreach (var item in addressMasks) {
+				CallbackBreakpoint bp = new CallbackBreakpoint();
+				bp.Address = item.Key;
+				bp.Mask = item.Value;
+				ans.Add(bp);
+			}
+			return ans;
+		}
+
 		private bool UpdateHasVariables()
 		{
 			bool hadReads = HasReads;

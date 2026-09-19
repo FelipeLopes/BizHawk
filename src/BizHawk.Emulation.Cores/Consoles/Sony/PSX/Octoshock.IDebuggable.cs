@@ -118,11 +118,10 @@ namespace BizHawk.Emulation.Cores.Sony.PSX
 
 		private void RefreshMemCallbacks()
 		{
-			OctoshockDll.eShockMemCb mask = OctoshockDll.eShockMemCb.None;
-			if (MemoryCallbacks.HasReads) mask |= OctoshockDll.eShockMemCb.Read;
-			if (MemoryCallbacks.HasWrites) mask |= OctoshockDll.eShockMemCb.Write;
-			if (MemoryCallbacks.HasExecutes) mask |= OctoshockDll.eShockMemCb.Execute;
-			OctoshockDll.shock_SetMemCb(psx, mem_cb, mask);
+			OctoshockDll.shock_SetMemCb(psx, null, 0, 0);
+			foreach (var bp in MemoryCallbacks.GetCallbackBreakpoints()) {
+				OctoshockDll.shock_SetMemCb(psx, mem_cb, bp.Address, bp.Mask);
+			}
 		}
 
 		private void SetMemoryDomains()

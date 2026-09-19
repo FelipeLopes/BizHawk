@@ -26,10 +26,10 @@
 #define __MDFN_PSX_GPU_H
 
 #include "FastFIFO.h"
-#include "git.h"
+#include "../git.h"
 #include "psx.h"
-#include "octoshock.h"
-#include "emuware/emuware.h"
+#include "../octoshock.h"
+#include "../emuware/emuware.h"
 
 struct ShockRenderOptions;
 namespace MDFN_IEN_PSX

@@ -35,7 +35,7 @@
  *** Everything #includeable is rolled up herein...
  */
 
-#include "octoshock.h"
+#include "../octoshock.h"
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>

@@ -64,7 +64,7 @@
 #include "psx.h"
 #include "mdec.h"
 #include "FastFIFO.h"
-#include "math_ops.h"
+#include "../math_ops.h"
 
 #include "masmem.h"
 

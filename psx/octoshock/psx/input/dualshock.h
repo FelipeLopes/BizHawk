@@ -22,7 +22,7 @@
 #ifndef __MDFN_PSX_INPUT_DUALSHOCK_H
 #define __MDFN_PSX_INPUT_DUALSHOCK_H
 
-#include "octoshock.h"
+#include "../../octoshock.h"
 
 namespace MDFN_IEN_PSX
 {

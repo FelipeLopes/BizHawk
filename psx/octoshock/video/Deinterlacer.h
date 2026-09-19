@@ -19,6 +19,7 @@
 #define __MDFN_DEINTERLACER_H
 
 #include <vector>
+#include <string.h>
 
 class Deinterlacer
 {

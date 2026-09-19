@@ -22,7 +22,7 @@
 #include <assert.h>
 #include "psx.h"
 #include "cpu.h"
-#include "math_ops.h"
+#include "../math_ops.h"
 
 #if 0
  #define EXP_ILL_CHECK(n) {n;}
@@ -34,7 +34,7 @@
 void* g_ShockTraceCallbackOpaque = NULL;
 ShockCallback_Trace g_ShockTraceCallback = NULL;
 ShockCallback_Mem g_ShockMemCallback;
-eShockMemCb g_ShockMemCbType;
+std::vector<ShockAddressBreakpoint> g_breakpoints;
 char disasm_buf[128];
 
 /* TODO
@@ -245,6 +245,33 @@ void PS_CPU::PokeMemory(uint32 address, T value)
   PSX_MemPoke32(address, value);
 }
 
+bool PS_CPU::BreakOnRead(uint32 address) {
+	for (int i=0; i<g_breakpoints.size(); i++) {
+		if (address == g_breakpoints[i].address && (g_breakpoints[i].flags & eShockMemCb_Read)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool PS_CPU::BreakOnWrite(uint32 address) {
+	for (int i=0; i<g_breakpoints.size(); i++) {
+		if (address == g_breakpoints[i].address && (g_breakpoints[i].flags & eShockMemCb_Write)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool PS_CPU::BreakOnExec(uint32 address) {
+	for (int i=0; i<g_breakpoints.size(); i++) {
+		if (address == g_breakpoints[i].address && (g_breakpoints[i].flags & eShockMemCb_Execute)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 template<typename T>
 INLINE T PS_CPU::ReadMemory(pscpu_timestamp_t &timestamp, uint32 address, bool DS24, bool LWC_timing)
 {
@@ -304,7 +331,7 @@ INLINE T PS_CPU::ReadMemory(pscpu_timestamp_t &timestamp, uint32 address, bool D
   else
    ret = ScratchRAM.Read<T>(address & 0x3FF);
 
-  if (g_ShockMemCallback && (g_ShockMemCbType & eShockMemCb_Read))
+  if (g_ShockMemCallback && BreakOnRead(address))
    g_ShockMemCallback(address, eShockMemCb_Read, DS24 ? 24 : sizeof(T) * 8, ret);
   return(ret);
  }
@@ -335,7 +362,7 @@ INLINE T PS_CPU::ReadMemory(pscpu_timestamp_t &timestamp, uint32 address, bool D
  LDAbsorb = (lts - timestamp);
  timestamp = lts;
 
- if (g_ShockMemCallback && (g_ShockMemCbType & eShockMemCb_Read))
+ if (g_ShockMemCallback && BreakOnRead(address))
   g_ShockMemCallback(address, eShockMemCb_Read, DS24 ? 24 : sizeof(T) * 8, ret);
  return(ret);
 }
@@ -343,7 +370,7 @@ INLINE T PS_CPU::ReadMemory(pscpu_timestamp_t &timestamp, uint32 address, bool D
 template<typename T>
 INLINE void PS_CPU::WriteMemory(pscpu_timestamp_t &timestamp, uint32 address, uint32 value, bool DS24)
 {
-	if (g_ShockMemCallback && (g_ShockMemCbType & eShockMemCb_Write))
+	if (g_ShockMemCallback && BreakOnWrite(address))
 		g_ShockMemCallback(address, eShockMemCb_Write, DS24 ? 24 : sizeof(T) * 8, value);
 
  if(MDFN_LIKELY(!(CP0.SR & 0x10000)))
@@ -635,7 +662,7 @@ pscpu_timestamp_t PS_CPU::RunReal(pscpu_timestamp_t timestamp_in)
     g_ShockTraceCallback(NULL, PC, instr, disasm_buf);
    }
 
-   if (g_ShockMemCallback && (g_ShockMemCbType & eShockMemCb_Execute))
+   if (g_ShockMemCallback && BreakOnExec(PC))
 	   g_ShockMemCallback(PC, eShockMemCb_Execute, 32, instr);
 
 

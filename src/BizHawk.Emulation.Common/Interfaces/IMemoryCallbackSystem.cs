@@ -57,6 +57,8 @@ namespace BizHawk.Emulation.Common
 		/// </returns>
 		uint CallMemoryCallbacks(uint addr, uint value, uint flags, string scope);
 
+		List<CallbackBreakpoint> GetCallbackBreakpoints();
+
 		/// <summary>
 		/// Removes the given callback from the list
 		/// </summary>
@@ -102,6 +104,11 @@ namespace BizHawk.Emulation.Common
 		Read,
 		Write,
 		Execute,
+	}
+
+	public struct CallbackBreakpoint {
+		public uint Address;
+		public uint Mask;
 	}
 
 #pragma warning disable RCS1191 //TODO this is genuinely broken but needs some dedicated thinking to fix

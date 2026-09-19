@@ -20,7 +20,6 @@
 */
 
 #include <stdio.h>
-#include <algorithm>
 #include "octoshock.h"
 #include "endian.h"
 
