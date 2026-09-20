@@ -60,10 +60,8 @@ namespace BizHawk.Emulation.Common
 					break;
 			}
 
-			if (UpdateHasVariables())
-			{
-				Changes();
-			}
+			UpdateHasVariables();
+			Changes();
 		}
 
 		private static uint Call(MemoryCallbackCollection cbs, uint addr, uint value, uint flags, string scope, Func<IMemoryCallback, uint, bool> executes)

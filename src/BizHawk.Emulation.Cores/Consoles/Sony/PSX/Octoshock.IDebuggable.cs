@@ -97,7 +97,6 @@ namespace BizHawk.Emulation.Cores.Sony.PSX
 
 		private void ShockMemCallback(uint address, OctoshockDll.eShockMemCb type, uint size, uint value)
 		{
-			address &= address_mask[address >> 29];
 			MemoryCallbackFlags flags = 0;
 			switch (type)
 			{
