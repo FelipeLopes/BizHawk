@@ -245,37 +245,34 @@ void PS_CPU::PokeMemory(uint32 address, T value)
   PSX_MemPoke32(address, value);
 }
 
-int32 PS_CPU::BreakOnRead(uint32 address) {
+bool PS_CPU::BreakOnRead(uint32 address) {
 	address &= addr_mask[address >> 29];
 	for (int i=0; i<g_breakpoints.size(); i++) {
-		u32 bp_address = (g_breakpoints[i].address & addr_mask[g_breakpoints[i].address >> 29]);
-		if (address == bp_address && (g_breakpoints[i].flags & eShockMemCb_Read)) {
-			return i;
+		if (address == g_breakpoints[i].address && (g_breakpoints[i].flags & eShockMemCb_Read)) {
+			return true;
 		}
 	}
-	return -1;
+	return false;
 }
 
-int32 PS_CPU::BreakOnWrite(uint32 address) {
+bool PS_CPU::BreakOnWrite(uint32 address) {
 	address &= addr_mask[address >> 29];
 	for (int i=0; i<g_breakpoints.size(); i++) {
-		u32 bp_address = (g_breakpoints[i].address & addr_mask[g_breakpoints[i].address >> 29]);
-		if (address == bp_address && (g_breakpoints[i].flags & eShockMemCb_Write)) {
-			return i;
+		if (address == g_breakpoints[i].address && (g_breakpoints[i].flags & eShockMemCb_Write)) {
+			return true;
 		}
 	}
-	return -1;
+	return false;
 }
 
-int32 PS_CPU::BreakOnExec(uint32 address) {
+bool PS_CPU::BreakOnExec(uint32 address) {
 	address &= addr_mask[address >> 29];
 	for (int i=0; i<g_breakpoints.size(); i++) {
-		u32 bp_address = (g_breakpoints[i].address & addr_mask[g_breakpoints[i].address >> 29]);
-		if (address == bp_address && (g_breakpoints[i].flags & eShockMemCb_Execute)) {
-			return i;
+		if (address == g_breakpoints[i].address && (g_breakpoints[i].flags & eShockMemCb_Execute)) {
+			return true;
 		}
 	}
-	return -1;
+	return false;
 }
 
 template<typename T>
@@ -326,11 +323,9 @@ INLINE T PS_CPU::ReadMemory(pscpu_timestamp_t &timestamp, uint32 address, bool D
  //
  //
 
-  if (g_ShockMemCallback) {
-	int32 bp = BreakOnRead(address);
-	if (bp >= 0) {
-   		g_ShockMemCallback(g_breakpoints[bp].address, eShockMemCb_Read, DS24 ? 24 : sizeof(T) * 8, ret);
-	}
+  if (g_ShockMemCallback && BreakOnRead(address)) {
+	uint32 cb_addr = (address & addr_mask[address >> 29]);
+   	g_ShockMemCallback(cb_addr, eShockMemCb_Read, DS24 ? 24 : sizeof(T) * 8, ret);
   }
 
  address &= addr_mask[address >> 29];
@@ -378,11 +373,9 @@ INLINE T PS_CPU::ReadMemory(pscpu_timestamp_t &timestamp, uint32 address, bool D
 template<typename T>
 INLINE void PS_CPU::WriteMemory(pscpu_timestamp_t &timestamp, uint32 address, uint32 value, bool DS24)
 {
-	if (g_ShockMemCallback){
-		int32 bp = BreakOnWrite(address);
-		if (bp >= 0) {
-			g_ShockMemCallback(g_breakpoints[bp].address, eShockMemCb_Write, DS24 ? 24 : sizeof(T) * 8, value);
-		}
+	if (g_ShockMemCallback && BreakOnWrite(address)){
+		uint32 cb_addr = (address & addr_mask[address >> 29]);
+		g_ShockMemCallback(cb_addr, eShockMemCb_Write, DS24 ? 24 : sizeof(T) * 8, value);
 	}
 
  if(MDFN_LIKELY(!(CP0.SR & 0x10000)))
@@ -674,11 +667,9 @@ pscpu_timestamp_t PS_CPU::RunReal(pscpu_timestamp_t timestamp_in)
     g_ShockTraceCallback(NULL, PC, instr, disasm_buf);
    }
 
-   if (g_ShockMemCallback) {
-		int32 bp = BreakOnExec(PC);
-		if (bp >= 0) {
-			g_ShockMemCallback(g_breakpoints[bp].address, eShockMemCb_Execute, 32, instr);
-		}
+   if (g_ShockMemCallback && BreakOnExec(PC)) {
+		uint32 cb_addr = (PC & addr_mask[PC >> 29]);
+		g_ShockMemCallback(cb_addr, eShockMemCb_Execute, 32, instr);
    }
 
 

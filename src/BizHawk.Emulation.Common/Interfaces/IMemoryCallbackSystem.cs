@@ -57,6 +57,8 @@ namespace BizHawk.Emulation.Common
 		/// </returns>
 		uint CallMemoryCallbacks(uint addr, uint value, uint flags, string scope);
 
+		uint CallMemoryCallbacks(uint addr, uint value, uint flags, string scope, Func<IMemoryCallback, uint, bool> executes);
+
 		List<CallbackBreakpoint> GetCallbackBreakpoints();
 
 		/// <summary>

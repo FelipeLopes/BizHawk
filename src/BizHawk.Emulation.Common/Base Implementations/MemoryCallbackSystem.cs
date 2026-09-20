@@ -66,12 +66,12 @@ namespace BizHawk.Emulation.Common
 			}
 		}
 
-		private static uint Call(MemoryCallbackCollection cbs, uint addr, uint value, uint flags, string scope)
+		private static uint Call(MemoryCallbackCollection cbs, uint addr, uint value, uint flags, string scope, Func<IMemoryCallback, uint, bool> executes)
 		{
 			uint cbReturn = value; //By default, if no callback is called, it will return the value sent by the core unmodified.
 			foreach (var cb in cbs)
 			{
-				if (!cb.Address.HasValue || (cb.Scope == scope && cb.Address == (addr & cb.AddressMask)))
+				if (!cb.Address.HasValue || (cb.Scope == scope && executes(cb, addr)))
 				{
 					if (cb.Callback(addr, value, flags) is uint n) cbReturn = n; //If many callbacks are registered to the same address, no matter the order, if one of them overrides the original value, that new value will be sent to the core, even if a second, third etc. callback doesn't return anything. If many callbacks try to override, only the last will be sent to the core.
 				}
@@ -80,6 +80,11 @@ namespace BizHawk.Emulation.Common
 		}
 
 		public uint CallMemoryCallbacks(uint addr, uint value, uint flags, string scope)
+		{
+			return CallMemoryCallbacks(addr, value, flags, scope, (cb, addr) => (cb.Address.Value == (addr & cb.AddressMask)));
+		}
+
+		public uint CallMemoryCallbacks(uint addr, uint value, uint flags, string scope, Func<IMemoryCallback, uint, bool> executes)
 		{
 			if (!_hasAny)
 			{
@@ -90,7 +95,7 @@ namespace BizHawk.Emulation.Common
 			{
 				if ((flags & (uint) MemoryCallbackFlags.AccessRead) != 0)
 				{
-					value = Call(_reads, addr, value, flags, scope);
+					value = Call(_reads, addr, value, flags, scope, executes);
 				}
 			}
 
@@ -98,7 +103,7 @@ namespace BizHawk.Emulation.Common
 			{
 				if ((flags & (uint) MemoryCallbackFlags.AccessWrite) != 0)
 				{
-					value = Call(_writes, addr, value, flags, scope);
+					value = Call(_writes, addr, value, flags, scope, executes);
 				}
 			}
 
@@ -106,7 +111,7 @@ namespace BizHawk.Emulation.Common
 			{
 				if ((flags & (uint) MemoryCallbackFlags.AccessExecute) != 0)
 				{
-					value = Call(_execs, addr, value, flags, scope);
+					value = Call(_execs, addr, value, flags, scope, executes);
 				}
 			}
 			return value;

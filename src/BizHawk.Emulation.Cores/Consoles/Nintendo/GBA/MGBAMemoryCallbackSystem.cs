@@ -171,6 +171,12 @@ namespace BizHawk.Emulation.Cores.Nintendo.GBA
 		IEnumerator IEnumerable.GetEnumerator()
 			=> GetEnumerator();
 
+		public uint CallMemoryCallbacks(uint addr, uint value, uint flags, string scope, Func<IMemoryCallback, uint, bool> executes)
+		{
+			throw new NotSupportedException("Memory callbacks not supported.");
+			// Not a thing in this implementation
+		}
+
 		public uint CallMemoryCallbacks(uint addr, uint value, uint flags, string scope)
 		{
 			throw new NotSupportedException("Memory callbacks not supported.");

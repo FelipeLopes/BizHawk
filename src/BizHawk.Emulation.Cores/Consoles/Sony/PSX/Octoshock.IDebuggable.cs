@@ -91,8 +91,13 @@ namespace BizHawk.Emulation.Cores.Sony.PSX
 
 		private OctoshockDll.ShockCallback_Mem mem_cb;
 
+		private uint[] address_mask = 
+			{ 	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+				0x7FFFFFFF, 0x1FFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF };
+
 		private void ShockMemCallback(uint address, OctoshockDll.eShockMemCb type, uint size, uint value)
 		{
+			address &= address_mask[address >> 29];
 			MemoryCallbackFlags flags = 0;
 			switch (type)
 			{
@@ -107,7 +112,13 @@ namespace BizHawk.Emulation.Cores.Sony.PSX
 					break;
 			}
 
-			MemoryCallbacks.CallMemoryCallbacks(address, value, (uint)flags, "System Bus");
+			MemoryCallbacks.CallMemoryCallbacks(address, value, (uint)flags, "System Bus", (cb, addr) => {
+				if (!cb.Address.HasValue) {
+					return true;
+				}
+				uint cb_addr = (cb.Address.Value & address_mask[cb.Address.Value >> 29]);
+				return cb_addr == addr;
+			});
 		}
 
 		private void InitMemCallbacks()
@@ -120,7 +131,8 @@ namespace BizHawk.Emulation.Cores.Sony.PSX
 		{
 			OctoshockDll.shock_SetMemCb(psx, null, 0, 0);
 			foreach (var bp in MemoryCallbacks.GetCallbackBreakpoints()) {
-				OctoshockDll.shock_SetMemCb(psx, mem_cb, bp.Address, bp.Mask);
+				uint address = (bp.Address & address_mask[bp.Address >> 29]);
+				OctoshockDll.shock_SetMemCb(psx, mem_cb, address, bp.Mask);
 			}
 		}
 
