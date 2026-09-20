@@ -274,9 +274,9 @@ class PS_CPU
  void PokeMem16(uint32 A, uint16 V);
  void PokeMem32(uint32 A, uint32 V);
 
- bool BreakOnRead(uint32 A);
- bool BreakOnWrite(uint32 A);
- bool BreakOnExec(uint32 A);
+ int32 BreakOnRead(uint32 A);
+ int32 BreakOnWrite(uint32 A);
+ int32 BreakOnExec(uint32 A);
 
  private:
  void (*CPUHook)(const pscpu_timestamp_t timestamp, uint32 pc);
